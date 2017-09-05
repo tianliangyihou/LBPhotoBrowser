@@ -12,7 +12,7 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 
 效果图如下: 
 
-![](http://upload-images.jianshu.io/upload_images/2306467-4edb6c8abedd9d34.gif?imageMogr2/auto-orient/strip)
+![](https://github.com/tianliangyihou/zhuxian/blob/master/2306467-14a8a6771dad3b5c.gif?raw=true)
 
 
 # 使用(usage)
