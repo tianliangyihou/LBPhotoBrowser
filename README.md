@@ -1,6 +1,6 @@
 # LBPhotoBrowser
 
-一行代码即可搞定下面效果的浏览器.  简书地址:[http://www.jianshu.com/p/cf72690b46a8](http://www.jianshu.com/p/cf72690b46a8)(详细说明)
+一行代码即可搞定下面效果的浏览器.  简书地址:[http://www.jianshu.com/p/00f4b7b20dc4](http://www.jianshu.com/p/00f4b7b20dc4)(详细说明)
 
 LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 
