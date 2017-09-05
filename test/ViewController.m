@@ -78,12 +78,12 @@
    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:_urls fromImageViews: _imageViews andSelectedIndex:(int)tap.view.tag andImageViewSuperView:self.view];
     // 添加长按手势的效果
     [[[LBPhotoBrowserManager defaultManager] addLongPressShowTitles:self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-        LBPhotoBrowseLog(@"%@ %@ %@",image,indexPath,title);
+        LBPhotoBrowserLog(@"%@ %@ %@",image,indexPath,title);
     }].style = LBMaximalImageViewOnDragDismmissStyleOne; // 默认的就是LBMaximalImageViewOnDragDismmissStyleOne
     
     // 给每张图片添加占位图
     [[LBPhotoBrowserManager defaultManager] addPlaceHoldImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
-        LBPhotoBrowseLog(@"%@",indexPath);
+        LBPhotoBrowserLog(@"%@",indexPath);
         return [UIImage imageNamed:@"LBLoading.png"];
     }].lowGifMemory = YES; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存
     

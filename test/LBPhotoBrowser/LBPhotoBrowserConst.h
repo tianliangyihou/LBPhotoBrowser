@@ -17,11 +17,11 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 #ifdef DEBUG
 
-#define LBPhotoBrowseLog(...) NSLog(__VA_ARGS__)
+#define LBPhotoBrowserLog(...) NSLog(__VA_ARGS__)
 
 #else
 
-#define LBPhotoBrowseLog(...)
+#define LBPhotoBrowserLog(...)
 
 #endif
 

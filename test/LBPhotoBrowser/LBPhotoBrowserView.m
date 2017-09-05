@@ -258,11 +258,11 @@ LB_CurrentSelectImageViewIndex
         // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
         weak_self;
         [[SDWebImageManager sharedManager] loadImageWithURL:self.urls[indexPath.row] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            LBPhotoBrowseLog(@"LBPhotoBrowseView line 255 log: %d -- %d",(int)receivedSize ,(int)expectedSize);
+            LBPhotoBrowserLog(@"LBPhotoBrowseView line 255 log: %d -- %d",(int)receivedSize ,(int)expectedSize);
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (error) {
                 image = mgr.errorImage;
-                LBPhotoBrowseLog(@"%@",error);
+                LBPhotoBrowserLog(@"%@",error);
             }
             model.currentPageImage = image;
             if (image.images.count > 0) {
