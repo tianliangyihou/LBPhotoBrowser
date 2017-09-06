@@ -72,7 +72,6 @@
     
 }
 
-
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
     
    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:_urls fromImageViews: _imageViews andSelectedIndex:(int)tap.view.tag andImageViewSuperView:self.view];

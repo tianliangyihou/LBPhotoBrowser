@@ -150,6 +150,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         
     }else {
         self.imageView.frame = photoImageViewFrame;
+        self.imageView.center = [UIApplication sharedApplication].keyWindow.center;
     }
     // if not clear this image ,gif image may have some thing wrong
     self.imageView.image = nil;

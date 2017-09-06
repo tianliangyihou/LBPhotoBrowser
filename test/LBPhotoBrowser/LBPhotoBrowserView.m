@@ -172,15 +172,14 @@ LB_CurrentSelectImageViewIndex
 }
 
 #pragma mark - 监听通知
-
+// this have someting able to reduce memory 
 - (void)remove{
     
     for (UIImageView *imageView in [LBPhotoBrowserManager defaultManager].imageViews) {
         imageView.hidden = NO;
     }
     [self removeFromSuperview];
-    [[LBPhotoBrowserManager defaultManager].imageViews removeAllObjects];
-    [[LBPhotoBrowserManager defaultManager].urls removeAllObjects];
+    
 }
 
 - (void)collectionViewStopScrollEnable {
@@ -226,7 +225,6 @@ LB_CurrentSelectImageViewIndex
     return cell;
 }
 
-// ---> 每次解压
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     LBScrollViewStatusModel *model = self.models[indexPath.item];
     LBPhotoCollectionViewCell *currentCell = (LBPhotoCollectionViewCell *)cell;
@@ -258,7 +256,7 @@ LB_CurrentSelectImageViewIndex
         // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
         weak_self;
         [[SDWebImageManager sharedManager] loadImageWithURL:self.urls[indexPath.row] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            LBPhotoBrowserLog(@"LBPhotoBrowseView line 255 log: %d -- %d",(int)receivedSize ,(int)expectedSize);
+            //LBPhotoBrowserLog(@"LBPhotoBrowseView line 255 log: %d -- %d",(int)receivedSize ,(int)expectedSize);
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (error) {
                 image = mgr.errorImage;
