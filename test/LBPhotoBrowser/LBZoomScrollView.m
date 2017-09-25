@@ -97,14 +97,15 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 }
 
 
-- (void)showWithURL:(NSURL *)url andwithAnimation:(BOOL)animation andWithStatusModel:(id)model{
 
+- (void)showWithURL:(NSURL *)url andwithAnimation:(BOOL)animation andWithStatusModel:(id)model{
+    
     _url = url;
     _shouldAnimation = animation;
     _statusModel = model;
     
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    if (animation) {
+    if (animation && mgr.showBrowserWithAnimation) {
         UIImageView *animationImageView = (UIImageView *)mgr.imageViews[mgr.selectedIndex];
         animationImageView.hidden = YES;
         CGRect rect = [mgr.imageViewSuperView convertRect: animationImageView.frame toView:[UIApplication sharedApplication].keyWindow];
@@ -136,7 +137,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     CGRect photoImageViewFrame;
     photoImageViewFrame.origin = CGPointZero;
     photoImageViewFrame.size = self.imageSize;
-    if (self.shouldAnimation) {
+    if (self.shouldAnimation && [LBPhotoBrowserManager defaultManager].showBrowserWithAnimation) {
         self.imageViewIsMoving = YES;
         self.imageView.frame = self.oldFrame;
         
@@ -157,6 +158,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     self.imageView.image = image;
     self.contentSize = photoImageViewFrame.size;
     [self setNeedsLayout];
+    [LBPhotoBrowserManager defaultManager].showBrowserWithAnimation = YES;
 }
 
 - (void)resetScrollViewStatus {

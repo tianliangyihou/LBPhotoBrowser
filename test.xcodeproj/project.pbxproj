@@ -24,6 +24,7 @@
 		267AD8991F5E3B3A00DC6D9F /* LBZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88C1F5E3B3A00DC6D9F /* LBZoomScrollView.m */; };
 		267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */; };
 		267AD89B1F5E3B3A00DC6D9F /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */; };
+		26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */; };
 		32BF97956CD6003C5D78629E /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1472DF34D1E9CA8AAD44F40D /* libPods-test.a */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,8 @@
 		267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LBDecoder.m"; sourceTree = "<group>"; };
 		267AD88F1F5E3B3A00DC6D9F /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
 		267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		26DAE5DD1F78CEEA003DB86B /* LB3DTouchVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LB3DTouchVC.h; sourceTree = "<group>"; };
+		26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LB3DTouchVC.m; sourceTree = "<group>"; };
 		52839D449824474097575972 /* Pods-test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig"; sourceTree = "<group>"; };
 		7258DD35A57A1219D711F5E6 /* Pods-test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.release.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,6 +130,8 @@
 				267AD8801F5E3B3A00DC6D9F /* LBLoadingView.m */,
 				267AD8811F5E3B3A00DC6D9F /* LBOptionView.h */,
 				267AD8821F5E3B3A00DC6D9F /* LBOptionView.m */,
+				26DAE5DD1F78CEEA003DB86B /* LB3DTouchVC.h */,
+				26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */,
 				267AD8831F5E3B3A00DC6D9F /* LBPhotoBrowserConst.h */,
 				267AD8841F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m */,
 				267AD8851F5E3B3A00DC6D9F /* LBPhotoBrowserManager.h */,
@@ -196,6 +201,7 @@
 				TargetAttributes = {
 					2657DB601E77BCDD00F324C3 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = M974WD5VWM;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -294,6 +300,7 @@
 				267AD8991F5E3B3A00DC6D9F /* LBZoomScrollView.m in Sources */,
 				267AD8971F5E3B3A00DC6D9F /* LBPhotoBrowserView.m in Sources */,
 				267AD8941F5E3B3A00DC6D9F /* LBOptionView.m in Sources */,
+				26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */,
 				2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */,
 				267AD8951F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m in Sources */,
 				267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */,
@@ -417,14 +424,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = M974WD5VWM;
 				INFOPLIST_FILE = test/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vcyber.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "5708d420-ede9-4a6a-a1e5-bf1da6459c84";
+				PROVISIONING_PROFILE_SPECIFIER = CYW_ALL_APP_Development;
 			};
 			name = Debug;
 		};

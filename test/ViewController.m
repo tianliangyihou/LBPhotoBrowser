@@ -10,9 +10,9 @@
 #import "UIView+Frame.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LBPhotoBrowserManager.h"
+#import "LB3DTouchVC.h"
 #import <ImageIO/ImageIO.h>
-
-@interface ViewController ()
+@interface ViewController ()<LBTouchVCPreviewingDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView1;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView2;
@@ -55,7 +55,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     _imageViews = @[ _imageView1,_imageView2,_imageView3,_imageView4,_imageView5 ,_imageView6];
     
     _titles = @[ @"发送朋友",@"收藏",@"保存图片",@"识别二维码",@"编辑",@"取消" ];
@@ -69,7 +69,9 @@
         NSURL *url = [NSURL URLWithString:self.urls[i]];
         [imageView sd_setImageWithURL:url];
     }
-    
+    // 添加3d touch功能 --> LB3DTouchVC 已经把该做的都做了 只管用就好
+    [self lb_registerForPreviewingWithDelegate:self sourceViews:_imageViews previewActionTitles:@[@"保存图片",@"分享",@"识别二维码",@"取消"]];
+
 }
 
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
@@ -85,7 +87,21 @@
         LBPhotoBrowserLog(@"%@",indexPath);
         return [UIImage imageNamed:@"LBLoading.png"];
     }].lowGifMemory = YES; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存
-    
+}
 
+#pragma mark - LBTouchVCPreviewingDelegate
+
+- (UIPreviewActionStyle)lb_previewActionStyleForActionTitle:(NSString *)title index:(NSInteger)index inTitles:(NSArray<NSString *> *)titles {
+    if (index == titles.count - 1) {
+        return UIPreviewActionStyleDestructive;
+    }
+    return UIPreviewActionStyleDefault;
+}
+
+- (void)lb_userDidSelectedPreviewTitle:(NSString *)title {
+    LBPhotoBrowserLog(@"%@",title);
+}
+- (void)lb_showPhotoBrowserFormImageView:(UIImageView *)imageView {
+    [self imageViewClick:imageView.gestureRecognizers.lastObject];
 }
 @end

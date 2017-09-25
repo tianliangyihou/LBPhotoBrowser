@@ -103,6 +103,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self = [super init];
     if (self) {
         self.isNeedBounces = YES;
+        self.showBrowserWithAnimation = YES;
         self.errorImage = [UIImage imageNamed:@"LBLoadError.jpg"];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayLinkInvalidate) name:LBImageViewWillDismissNot object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopDisplayLink) name:LBAddCoverImageViewNot object:nil];
@@ -260,30 +261,32 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 }
 
 - (void)startAnimation {
-
     self.displayLink.paused = YES;
     weak_self;
+    UIView *superView = wself.currentShowImageView.superview;
+    if (![superView isKindOfClass:[UIScrollView class]]) return;
+    NSURL *currentUrl = [superView valueForKeyPath:@"url"];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        UIView *superView = wself.currentShowImageView.superview;
-        if (![superView isKindOfClass:[UIScrollView class]]) return ;
-        
-        NSURL *currentUrl = [superView valueForKeyPath:@"url"];
         [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
-            wself.currentGifImage = image;
-            if (image.images.count == 0) {
-                return ;
-            }
-            if (!data) {
-                data = wself.spareData;
-            }
-            if (!data) {
-                return;
-            }
-            wself.currentShowImageView.image = image.images.firstObject;
-            [image lb_animatedGIFData:data];
-            wself.accumulator = 0;
-            wself.displayLink.paused = NO;
-            wself.spareData = nil;
+            __block NSData *data_block = data;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                wself.currentGifImage = image;
+                if (image.images.count == 0) {
+                    return ;
+                }
+                if (!data_block) {
+                    data_block = wself.spareData;
+                }
+                if (!data_block) {
+                    return;
+                }
+                wself.currentShowImageView.image = image.images.firstObject;
+                [image lb_animatedGIFData:data_block];
+                wself.accumulator = 0;
+                wself.displayLink.paused = NO;
+                wself.spareData = nil;
+            });
         }];
     });
 }

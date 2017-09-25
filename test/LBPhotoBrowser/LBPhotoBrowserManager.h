@@ -70,6 +70,9 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 // 当前图片浏览器正在展示的imageView
 @property (nonatomic , strong)UIImageView *currentShowImageView;
 
+// 第一次展示图片浏览器的时候 是否需要动画 default is YES
+@property (nonatomic , assign)BOOL showBrowserWithAnimation;
+
 /**
  返回当前的一个单例(不完全单利)
  */
