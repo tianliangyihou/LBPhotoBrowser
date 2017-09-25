@@ -99,10 +99,14 @@ Example:
 
 除此之外:LBPhotoBrowser对图片放大到超过屏幕尺寸时候 拖动的消失方式,也提供了两种方式`LBMaximalImageViewOnDragDismmissStyle`默认的`LBMaximalImageViewOnDragDismmissStyleOne`
 
-##3DTouch功能
+#3DTouch功能
+
 3DTouch功能的实现,采用了代理模式 即3步
+
 1 注册代理 
+
 2 遵守协议 
+
 3 实现代理方法
 
  ```obj-c
@@ -133,10 +137,3 @@ Example:
 @end
  
  ```
-
-
-
-
-
-
-
