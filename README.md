@@ -25,6 +25,8 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 ```
 通过`LBPhotoBrowserManager`的`lowGifMemory`属性控制.
 
+支持3Dtouch预览图片和进行操作
+
 效果图如下: 
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/2306467-14a8a6771dad3b5c.gif?raw=true)
@@ -97,3 +99,46 @@ Example:
 
 除此之外:LBPhotoBrowser对图片放大到超过屏幕尺寸时候 拖动的消失方式,也提供了两种方式`LBMaximalImageViewOnDragDismmissStyle`默认的`LBMaximalImageViewOnDragDismmissStyleOne`
 
+#3DTouch功能
+
+3DTouch功能的实现,采用了代理模式 即3步
+
+1 注册代理 
+
+2 遵守协议 
+
+3 实现代理方法
+
+ ```obj-c
+ LBPhotoBrowser默认不支持3Dtouch功能,如果需要添加3DTouch功能 则需要给需要添加3Dtouch的控制器`#import "LB3DTouchVC.h"  
+ 
+1 实现下面这个方法(注册代理)
+ - (void)lb_registerForPreviewingWithDelegate:(id  <UIViewControllerPreviewingDelegate>)delegate sourceViews:(NSArray<UIView *> *)sourceViews previewActionTitles:(NSArray <NSString *>*)titles;
+
+ Example:
+    [self lb_registerForPreviewingWithDelegate:self sourceViews:_imageViews previewActionTitles:@[@"保存图片",@"分享",@"识别二维码",@"取消"]];
+    
+ 2 给对应的控制器 遵守协议 <UIViewControllerPreviewingDelegate>  
+ 
+ 3 实现代理方法 , 代理方法
+@protocol LBTouchVCPreviewingDelegate <UIViewControllerPreviewingDelegate>
+
+@required
+
+// 3Dtouch触发后的事件--> 即接下来应该展示什么
+- (void)lb_showPhotoBrowserFormImageView:(UIImageView *_Nullable)imageView;
+
+@optional
+
+// 3Dtouch下面的操作按钮的点击事件
+- (void)lb_userDidSelectedPreviewTitle:(NSString *_Nullable)title;
+
+// 3Dtouch下面的操作按钮的样式 不实现该方法,采用默认样式
+- (UIPreviewActionStyle)lb_previewActionStyleForActionTitle:(NSString *_Nullable)title index:(NSInteger)index inTitles:(NSArray <NSString *>*_Nullable)titles;
+
+// 当3dTouch预览图片还没有加载出来显示的图片  不实现该方法 采用默认样式
+- (UIImage *)lb_3DTouchPlaceholderImageForImageView:(UIImageView *)imageView;
+
+@end
+ 
+ ```
