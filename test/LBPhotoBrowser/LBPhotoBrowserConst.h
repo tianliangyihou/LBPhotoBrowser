@@ -41,31 +41,13 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 #define LB_DISMISS_DISTENCE SCREEN_HEIGHT
 
-#define LBcurrentSelectImageViewIndex \
-static inline int currentSelectImageViewIndex() { \
-    UICollectionView *currentCollectionView = [LBPhotoBrowserManager defaultManager].currentCollectionView;\
-    return (int)(currentCollectionView.contentOffset.x / SCREEN_WIDTH);\
-}\
-
-#define LBLastMovedOrAnimationedImageView  \
-static UIImageView* lastMovedOrAnimationedImageView() {\
-    for (UIImageView *imageView in [LBPhotoBrowserManager defaultManager].imageViews) {\
-        if (imageView.hidden == YES) {\
-            return imageView;\
-        }\
-    }\
-    return nil;\
-}\
-
-#define LB_CurrentSelectImageViewIndex LBcurrentSelectImageViewIndex
-#define LB_LastMovedOrAnimationedImageView LBLastMovedOrAnimationedImageView
-
+UIKIT_EXTERN int lb_currentSelectImageViewIndex();
+UIKIT_EXTERN UIImageView * lb_lastMovedOrAnimationedImageView();
 
 UIKIT_EXTERN NSString * const LBImageViewBeiginDragNot;
 UIKIT_EXTERN NSString * const LBImageViewEndDragNot;
 UIKIT_EXTERN NSString * const LBImageViewWillDismissNot;
 UIKIT_EXTERN NSString * const LBImageViewDidDismissNot;
-
 
 UIKIT_EXTERN NSString * const LBAddCoverImageViewNot;
 UIKIT_EXTERN NSString * const LBRemoveCoverImageViewNot;

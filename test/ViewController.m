@@ -55,7 +55,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     _imageViews = @[ _imageView1,_imageView2,_imageView3,_imageView4,_imageView5 ,_imageView6];
     
     _titles = @[ @"发送朋友",@"收藏",@"保存图片",@"识别二维码",@"编辑",@"取消" ];
@@ -71,22 +70,23 @@
     }
     // 添加3d touch功能 --> LB3DTouchVC 已经把该做的都做了 只管用就好
     [self lb_registerForPreviewingWithDelegate:self sourceViews:_imageViews previewActionTitles:@[@"保存图片",@"分享",@"识别二维码",@"取消"]];
-
 }
 
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
+    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:_urls fromImageViews:_imageViews selectedIndex:(int)tap.view.tag imageViewSuperView:self.view];
     
-   [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:_urls fromImageViews: _imageViews andSelectedIndex:(int)tap.view.tag andImageViewSuperView:self.view];
-    // 添加长按手势的效果
+    // 添加图片浏览器长按手势的效果
     [[[LBPhotoBrowserManager defaultManager] addLongPressShowTitles:self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
         LBPhotoBrowserLog(@"%@ %@ %@",image,indexPath,title);
     }].style = LBMaximalImageViewOnDragDismmissStyleOne; // 默认的就是LBMaximalImageViewOnDragDismmissStyleOne
     
     // 给每张图片添加占位图
-    [[LBPhotoBrowserManager defaultManager] addPlaceHoldImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
+    [[[LBPhotoBrowserManager defaultManager] addPlaceHoldImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
         LBPhotoBrowserLog(@"%@",indexPath);
         return [UIImage imageNamed:@"LBLoading.png"];
-    }].lowGifMemory = YES; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存
+    }]addPhotoBrowserWillDismissBlock:^{
+        LBPhotoBrowserLog(@" LBPhotoBrowser --> 即将销毁 ");
+    }].lowGifMemory = YES; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存;
 }
 
 #pragma mark - LBTouchVCPreviewingDelegate
@@ -101,7 +101,9 @@
 - (void)lb_userDidSelectedPreviewTitle:(NSString *)title {
     LBPhotoBrowserLog(@"%@",title);
 }
+
 - (void)lb_showPhotoBrowserFormImageView:(UIImageView *)imageView {
     [self imageViewClick:imageView.gestureRecognizers.lastObject];
 }
+
 @end

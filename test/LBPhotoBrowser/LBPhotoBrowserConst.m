@@ -10,6 +10,22 @@
 #define __LBPhotoBrowserConst__M__
 
 #import <Foundation/Foundation.h>
+#import "LBPhotoBrowserConst.h"
+#import "LBPhotoBrowserManager.h"
+
+inline int lb_currentSelectImageViewIndex() {
+    UICollectionView *currentCollectionView = [LBPhotoBrowserManager defaultManager].currentCollectionView;
+    return (int)(currentCollectionView.contentOffset.x / SCREEN_WIDTH);
+}
+
+UIImageView * lb_lastMovedOrAnimationedImageView() {
+    for (UIImageView *imageView in [LBPhotoBrowserManager defaultManager].imageViews) {
+        if (imageView.hidden == YES) {
+            return imageView;
+        }
+    }
+    return nil;
+}
 
 NSString * const LBImageViewBeiginDragNot = @"LBImageViewBeiginDragNot";
 NSString * const LBImageViewEndDragNot = @"LBImageViewEndDragNot";

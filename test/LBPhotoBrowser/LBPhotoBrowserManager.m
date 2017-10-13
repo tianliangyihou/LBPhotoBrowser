@@ -39,11 +39,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 @interface LBPhotoBrowserManager () {
     NSOperationQueue *_requestQueue;
     dispatch_semaphore_t _lock;
-
 }
 @property (nonatomic , copy)void (^titleClickBlock)(UIImage *, NSIndexPath *, NSString *);
 
-@property (nonatomic , copy)UIView *(^LongPressCustomViewBlock)(UIImage *, NSIndexPath *);
+@property (nonatomic , copy)UIView *(^longPressCustomViewBlock)(UIImage *, NSIndexPath *);
+
+@property (nonatomic , copy)void(^dismissBlock)(void);
 
 @property (nonatomic , strong)NSArray *titles;
 
@@ -115,7 +116,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
-- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews andSelectedIndex:(int)index andImageViewSuperView:(UIView *)superView {
+- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView {
     
     if (urls.count == 0 || !urls) return;
     if (imageViews.count == 0 || !imageViews) return;
@@ -168,12 +169,17 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 - (instancetype)addLongPressCustomViewBlock:(UIView *(^)(UIImage *, NSIndexPath *))longPressBlock {
-    _LongPressCustomViewBlock = longPressBlock;
+    _longPressCustomViewBlock = longPressBlock;
     return self;
 }
 
 - (instancetype)addPlaceHoldImageCallBackBlock:(UIImage *(^)(NSIndexPath * indexPath))placeHoldImageCallBackBlock {
     _placeHoldImageCallBackBlock = placeHoldImageCallBackBlock;
+    return self;
+}
+
+- (instancetype)addPhotoBrowserWillDismissBlock:(void (^)(void))dismissBlock {
+    _dismissBlock = dismissBlock;
     return self;
 }
 
@@ -185,8 +191,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return _titleClickBlock;
 }
 
-- (UIView *(^)(UIImage *, NSIndexPath *))LongPressCustomViewBlock {
-    return _LongPressCustomViewBlock;
+- (UIView *(^)(UIImage *, NSIndexPath *))longPressCustomViewBlock {
+    return _longPressCustomViewBlock;
 }
 
 
@@ -209,6 +215,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.currentGifImage = nil;
     if (_requestQueue) {
         [_requestQueue cancelAllOperations];
+    }
+    if(_dismissBlock) {
+        _dismissBlock();
     }
 }
 - (void)changeKeyframe:(CADisplayLink *)displayLink

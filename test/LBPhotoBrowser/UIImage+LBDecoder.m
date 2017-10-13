@@ -147,6 +147,7 @@ static int64_t _YYDeviceMemoryFree() {
     
     return animatedImage;
 }
+
 + (float)sdOverdue_frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
     float frameDuration = 0.1f;
     CFDictionaryRef cfFrameProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil);

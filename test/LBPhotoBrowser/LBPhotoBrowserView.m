@@ -24,9 +24,6 @@
 
 #endif
 
-LB_LastMovedOrAnimationedImageView
-LB_CurrentSelectImageViewIndex
-
 @interface LBScrollViewStatusModel : NSObject
 
 @property (nonatomic , strong)NSNumber *scale;
@@ -256,7 +253,7 @@ LB_CurrentSelectImageViewIndex
         // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
         weak_self;
         [[SDWebImageManager sharedManager] loadImageWithURL:self.urls[indexPath.row] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            //LBPhotoBrowserLog(@"LBPhotoBrowseView line 255 log: %d -- %d",(int)receivedSize ,(int)expectedSize);
+            LBPhotoBrowserLog(@"LBPhotoBrowseView line %d log: %d -- %d",__LINE__,(int)receivedSize ,(int)expectedSize);
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (error) {
                 image = mgr.errorImage;
@@ -324,9 +321,9 @@ LB_CurrentSelectImageViewIndex
 }
 #pragma mark - 修改cell子控件的状态 的状态
 - (void)changeImageViewsHideStatus {
-    UIImageView *lastImageView = lastMovedOrAnimationedImageView();
+    UIImageView *lastImageView = lb_lastMovedOrAnimationedImageView();
     lastImageView.hidden = NO;
-    int selectedIndex = currentSelectImageViewIndex();
+    int selectedIndex = lb_currentSelectImageViewIndex();
     UIImageView *currentImageView = [LBPhotoBrowserManager defaultManager].imageViews[selectedIndex];
     currentImageView.hidden = YES;
     [self changeModelOfCellInRow:selectedIndex];

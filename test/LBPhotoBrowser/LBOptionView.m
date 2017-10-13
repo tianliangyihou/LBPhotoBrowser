@@ -18,6 +18,7 @@ static CGFloat cellHeight = 50;
 static inline LBPhotoBrowserManager * photoBrowseManager() {
     return [LBPhotoBrowserManager defaultManager];
 }
+
 @interface LBOptionView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic , weak)UITableView *tableView;

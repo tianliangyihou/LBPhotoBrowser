@@ -11,6 +11,5 @@
 @interface LBPhotoBrowserView : UIView
 
 - (void)showImageViewsWithURLs:(LBUrlsMutableArray *)urls fromImageView:(LBImageViewsArray *)imageViews andSelectedIndex:(int)index andImageViewSuperView:(UIView *)superView;
-
 @end
 

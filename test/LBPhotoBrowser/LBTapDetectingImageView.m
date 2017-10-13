@@ -44,8 +44,8 @@
 - (UIView *)optionView {
     if (_optionView) return _optionView;
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    if (mgr.LongPressCustomViewBlock) {
-        UIView *optionView = mgr.LongPressCustomViewBlock(self.image,[self currentIndexPath]);
+    if (mgr.longPressCustomViewBlock) {
+        UIView *optionView = mgr.longPressCustomViewBlock(self.image,[self currentIndexPath]);
         [[UIApplication sharedApplication].keyWindow addSubview:optionView];
         _optionView = optionView;
     }else {

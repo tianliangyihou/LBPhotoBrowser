@@ -12,9 +12,6 @@
 #import "LBLoadingView.h"
 #import "LBTapDetectingImageView.h"
 
-LB_LastMovedOrAnimationedImageView
-LB_CurrentSelectImageViewIndex
-
 static CGFloat scrollViewMinZoomScale = 1.0;
 static CGFloat scrollViewMaxZoomScale = 3.0;
 
@@ -277,10 +274,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     
-    UIImageView *movedImageView = lastMovedOrAnimationedImageView();
+    UIImageView *movedImageView = lb_lastMovedOrAnimationedImageView();
     movedImageView.hidden = NO;
     
-    int selectIndex = currentSelectImageViewIndex();
+    int selectIndex = lb_currentSelectImageViewIndex();
     UIImageView *currentMovedImageView  = mgr.imageViews[selectIndex];
     
     currentMovedImageView.hidden = YES;

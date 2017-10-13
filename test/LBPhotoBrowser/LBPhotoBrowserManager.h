@@ -67,6 +67,7 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 
 // 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
 @property (nonatomic , assign)BOOL lowGifMemory;
+
 // 当前图片浏览器正在展示的imageView
 @property (nonatomic , strong)UIImageView *currentShowImageView;
 
@@ -79,14 +80,13 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 + (instancetype)defaultManager;
 
 /**
- 展示图片
+ 展示 网络图片
  @param urls 需要加载的图片的URL数组
  @param imageViews 传入需要大图显示的imageViews 因为将来需要在对应的地方imageView用动画消除掉,主要是取imageView的frame
  @param index 点击图片的index
  @param superView 当前View的父View
  */
-- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews andSelectedIndex:(int)index andImageViewSuperView:(UIView *)superView;
-
+- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView;
 
 #pragma mark - 自定义图片长按按钮的Block 类似TableViewCell的代理
 // 添加默认的长按控件
@@ -97,11 +97,13 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 - (instancetype)addLongPressCustomViewBlock:(UIView *(^)(UIImage *image, NSIndexPath *indexPath))longPressBlock;
 // 为每张图片添加占位图
 - (instancetype)addPlaceHoldImageCallBackBlock:(UIImage *(^)(NSIndexPath * indexPath))placeHoldImageCallBackBlock;
+// 图片浏览器将要消失的Block
+- (instancetype)addPhotoBrowserWillDismissBlock:(void(^)(void))dismissBlock;
 
 - (NSArray<NSString *> *)currentTitles;
 
 - (void (^)(UIImage *, NSIndexPath *, NSString *))titleClickBlock;
 
-- (UIView *(^)(UIImage *,NSIndexPath *))LongPressCustomViewBlock;
+- (UIView *(^)(UIImage *,NSIndexPath *))longPressCustomViewBlock;
 
 @end

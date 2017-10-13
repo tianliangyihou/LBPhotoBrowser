@@ -34,7 +34,10 @@
 + (UIImage *)sdOverdue_animatedGIFWithData:(NSData *)data;
 
 - (void)lb_animatedGIFData:(NSData *)data;
+
 - (NSTimeInterval)animatedImageDurationAtIndex:(int)index;
+
 - (UIImage *)animatedImageFrameAtIndex:(int)index;
+
 - (void)imageViewShowFinsished;
 @end
