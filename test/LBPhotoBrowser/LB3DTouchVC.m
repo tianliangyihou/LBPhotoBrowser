@@ -91,7 +91,7 @@
 
 - (void)adjustPreviewingWithImage:(UIImage *)image {
     self.showImageView.image = image;
-    CGSize newSize = [self newSizeForImageViewWithImage:image];
+    CGSize newSize = [self newSizeForImageViewWithImage:image];    
     self.preferredContentSize = newSize;
     self.showImageView.frame = CGRectMake(0, 0, newSize.width, newSize.height);
 }
@@ -126,7 +126,9 @@
     float height = 0;
     float maxWidth = SCREEN_WIDTH;
     float maxHeight = SCREEN_HEIGHT;
-    
+    if(LB_IS_IPHONEX){
+        maxHeight = SCREEN_HEIGHT - LB_BOTTOM_MARGIN_IPHONEX - LB_STUATUS_BAR_HEIGHT_IPHONEX;
+    }
     float scale=(float)image.size.width/image.size.height;
     float newScale=(float)maxWidth/maxHeight;
     if (scale >= newScale) {

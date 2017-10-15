@@ -31,8 +31,8 @@ static inline CGFloat getTableViewHeight() {
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,getTableViewHeight())];
-        tableView.bottom = self.bottom;
+        UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,getTableViewHeight() + LB_BOTTOM_MARGIN)];
+        tableView.bottom = LB_IS_IPHONEX ? self.bottom - LB_BOTTOM_MARGIN_IPHONEX : self.bottom;
         tableView.dataSource = self;
         tableView.delegate = self;
         tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -48,7 +48,7 @@ static inline CGFloat getTableViewHeight() {
     [[UIApplication sharedApplication].keyWindow addSubview:view];
     CGFloat tableViewHeight = getTableViewHeight();
     [UIView animateWithDuration:0.25 animations:^{
-        view.tableView.top = SCREEN_HEIGHT - tableViewHeight;
+        view.tableView.top = SCREEN_HEIGHT - tableViewHeight - LB_BOTTOM_MARGIN;
     }];
     return view;
 }

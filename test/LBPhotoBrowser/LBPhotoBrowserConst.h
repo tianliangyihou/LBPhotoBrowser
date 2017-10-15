@@ -39,7 +39,18 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 #endif
 
+#define IS_IPHONE [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+
 #define LB_DISMISS_DISTENCE SCREEN_HEIGHT
+
+
+#define LB_BOTTOM_MARGIN_IPHONEX 34
+
+#define LB_STUATUS_BAR_HEIGHT_IPHONEX 44
+
+#define LB_IS_IPHONEX (SCREEN_HEIGHT == 812 && IS_IPHONE)
+
+#define LB_BOTTOM_MARGIN (LB_IS_IPHONEX ? 34 : 0)
 
 UIKIT_EXTERN int lb_currentSelectImageViewIndex();
 UIKIT_EXTERN UIImageView * lb_lastMovedOrAnimationedImageView();

@@ -15,7 +15,6 @@
 static CGFloat scrollViewMinZoomScale = 1.0;
 static CGFloat scrollViewMaxZoomScale = 3.0;
 
-
 @interface LBZoomScrollView ()<UIScrollViewDelegate,LBTapDetectingImageViewDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic , weak)LBTapDetectingImageView *imageView;
@@ -46,7 +45,8 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 - (UIImageView *)appearanceImageView {
     if (!_appearanceImageView) {
         UIImageView *imageView  = [[UIImageView alloc]initWithImage:self.imageView.image];
-        imageView.frame = CGRectMake(-self.contentOffset.x + self.imageView.left,30, self.imageView.width, self.imageView.height);
+        CGFloat imageViewY = LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX + 30 : 30;
+        imageView.frame = CGRectMake(-self.contentOffset.x + self.imageView.left,imageViewY, self.imageView.width, self.imageView.height);
         [[UIApplication sharedApplication].keyWindow addSubview:imageView];
         _appearanceImageView = imageView;
         _dragBeginScrollViewContentOffsetX = imageView.left;
@@ -194,10 +194,15 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 
 #pragma mark - 比例尺寸处理
 - (CGSize)newSizeForImageViewWithImage:(UIImage *)image {
+    
     float width = 0;
     float height = 0;
     float maxWidth = SCREEN_WIDTH;
     float maxHeight = SCREEN_HEIGHT;
+    
+    if(LB_IS_IPHONEX){
+        maxHeight = SCREEN_HEIGHT - LB_STUATUS_BAR_HEIGHT_IPHONEX - LB_BOTTOM_MARGIN_IPHONEX;
+    }
     
     float scale=(float)image.size.width/image.size.height;
     float newScale=(float)maxWidth/maxHeight;
@@ -329,7 +334,9 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 #pragma mark - 手势的代理  为放大高度超过屏幕的ImageView添加拖拽消失手势-
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (self.contentOffset.y == 0 && self.imageView.height > SCREEN_HEIGHT && gestureRecognizer.numberOfTouches == 1) {
+    CGFloat actualHeight = LB_IS_IPHONEX ? (SCREEN_HEIGHT - LB_STUATUS_BAR_HEIGHT_IPHONEX -LB_BOTTOM_MARGIN_IPHONEX) : SCREEN_HEIGHT;
+    CGFloat actualContentOffsetY = LB_IS_IPHONEX ? -LB_STUATUS_BAR_HEIGHT_IPHONEX : 0;
+    if (self.contentOffset.y == actualContentOffsetY && self.imageView.height > actualHeight && gestureRecognizer.numberOfTouches == 1) {
         if ([LBPhotoBrowserManager defaultManager].style == LBMaximalImageViewOnDragDismmissStyleOne) {
             [gestureRecognizer addTarget:self action:@selector(lb_touchMoveStyleOne:)];
         }else {
@@ -369,7 +376,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         
         if (deviationY > 30) {
             self.imageView.hidden = YES;
-            self.appearanceImageView.top = deviationY;
+            self.appearanceImageView.top =LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX + deviationY: deviationY;
             self.appearanceImageView.width = self.imageView.width * ratio;
             self.appearanceImageView.height = self.imageView.height * ratio;
             self.appearanceImageView.centerX = self.dragBeginImageViewCenterX + deviationX;
@@ -394,10 +401,11 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         weak_self;
         self.dragBeginScrollViewContentOffsetX = self.contentOffset.x;
         [UIView animateWithDuration:0.35 animations:^{
+            CGFloat appearanceImageViewY = LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX :0;
             [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor blackColor];
-            wself.appearanceImageView.frame = CGRectMake(- wself.contentOffset.x + wself.imageView.left, 0, wself.imageView.width, wself.imageView.height);
+            wself.appearanceImageView.frame = CGRectMake(- wself.contentOffset.x + wself.imageView.left, appearanceImageViewY, wself.imageView.width, wself.imageView.height);
         }completion:^(BOOL finished) {
-            wself.contentOffset = CGPointMake(wself.dragBeginScrollViewContentOffsetX, 0);
+            wself.contentOffset = CGPointMake(wself.dragBeginScrollViewContentOffsetX,LB_IS_IPHONEX ? -LB_STUATUS_BAR_HEIGHT_IPHONEX : 0);
             wself.imageView.hidden = NO;
             [wself.appearanceImageView removeFromSuperview];
             [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
@@ -451,7 +459,6 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         }
         
     }else if (pan.state == UIGestureRecognizerStateEnded) {
-        
         if (self.top > 200) {
             [self handlesingleTap:CGPointMake(-1, -1)];
         }
