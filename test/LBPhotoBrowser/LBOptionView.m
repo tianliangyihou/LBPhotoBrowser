@@ -1,4 +1,3 @@
-
 //
 //  LBOptionView.m
 //  test
@@ -18,7 +17,9 @@ static CGFloat cellHeight = 50;
 static inline LBPhotoBrowserManager * photoBrowseManager() {
     return [LBPhotoBrowserManager defaultManager];
 }
-
+static inline CGFloat getTableViewHeight() {
+    return [photoBrowseManager() currentTitles].count * cellHeight;
+}
 @interface LBOptionView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic , weak)UITableView *tableView;
@@ -30,7 +31,7 @@ static inline LBPhotoBrowserManager * photoBrowseManager() {
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [photoBrowseManager() currentTitles].count * cellHeight)];
+        UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,getTableViewHeight())];
         tableView.bottom = self.bottom;
         tableView.dataSource = self;
         tableView.delegate = self;
@@ -45,6 +46,10 @@ static inline LBPhotoBrowserManager * photoBrowseManager() {
 + (instancetype)showOptionView {
     LBOptionView *view = [[self alloc]init];
     [[UIApplication sharedApplication].keyWindow addSubview:view];
+    CGFloat tableViewHeight = getTableViewHeight();
+    [UIView animateWithDuration:0.25 animations:^{
+        view.tableView.top = SCREEN_HEIGHT - tableViewHeight;
+    }];
     return view;
 }
 
@@ -60,7 +65,6 @@ static inline LBPhotoBrowserManager * photoBrowseManager() {
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         self.frame = [UIScreen mainScreen].bounds;
-        [self tableView];
     }
     return self;
 }
