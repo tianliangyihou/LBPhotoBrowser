@@ -24,8 +24,22 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
      demo中（采用方式2）加载的gif包含了144张图,仍然保持较低内存和cpu,借鉴了YYImage的播放方式
 ```
 通过`LBPhotoBrowserManager`的`lowGifMemory`属性控制.
+```objc
 
 支持3Dtouch预览图片和进行操作
+
+对3Dtouch的API进行了进一步的封装,使用起来更加简单,只需关心自己的业务逻辑即可
+
+```
+```objc
+支持通过 [NSURL fileURLWithPath:@"xxx.path"]获取的图片
+
+NSString *path = [[NSBundle mainBundle] pathForResource:@"timg.gif" ofType:nil];
+
+通过在这种方式无法获取Assets.xcassets里面图片的路径 ---> 获取到的是nil
+
+xcode9中 有时你通过这种方式也无法获取其他文件夹中的图片, 这时在项目的Build Phases中的 copy bundle resources 中添加该图片即可
+```
 
 效果图如下: 
 
