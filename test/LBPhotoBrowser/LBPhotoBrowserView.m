@@ -11,17 +11,17 @@
 #import "LBPhotoBrowserView.h"
 #import "LBZoomScrollView.h"
 #import "UIImage+LBDecoder.h"
-#if __has_include(<SDWebImage/SDWebImageManager.h>)
 
+#if __has_include(<SDWebImage/SDWebImageManager.h>)
 #import <SDWebImage/SDWebImageManager.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/SDImageCacheConfig.h>
+#import <SDWebImage/UIImage+MultiFormat.h>
 #else
-
 #import "SDWebImageManager.h"
 #import "UIImageView+WebCache.h"
 #import "SDImageCacheConfig.h"
-
+#import "UIImage+MultiFormat.h"
 #endif
 
 @interface LBScrollViewStatusModel : NSObject
@@ -221,71 +221,35 @@
     LBPhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
     return cell;
 }
-
+  // 新版的SDWebImage不知支持Gif 故采用了老版Gif的方式 但是这样加载太多Gif内存容易升高 在收到内存警告的时候 可以通过这个来清理内存 [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"]
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     LBScrollViewStatusModel *model = self.models[indexPath.item];
     LBPhotoCollectionViewCell *currentCell = (LBPhotoCollectionViewCell *)cell;
-
-    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    UIImage *image =  [[SDImageCache sharedImageCache] imageFromCacheForKey:self.urls[indexPath.row].absoluteString];//  1
-    // 这里不应该重复解压 ---》 消耗内存了 就不应该再浪费CPU了
-    if (image) {
-        // 新版的SDWebImage不知支持Gif 故采用了老版Gif的方式 但是这样加载太多Gif内存容易升高       在收到内存警告的时候 可以通过这个来清理内存 [[SDImageCache sharedImageCache] setValue:nil forKey:@"memCache"]  default: showGifDynamic = NO;
-        if (image.images.count > 0) {
-       // 1 低内存 -- > 当前的Image
-        //2 不是的话 -- > 看看当前的model.currentPageImage
-        //3 存在什么不做
-            if (mgr.lowGifMemory == YES) {
-                model.currentPageImage = image;
-            }else if (!model.currentPageImage) {
-                //当SDImageCacheConfig shouldCacheImagesInMemory == YES的是时候 --> 这个Block是个同步执行的(经过1这个方法) shouldCacheImagesInMemory 默认的是YES
-                [[SDImageCache sharedImageCache] queryCacheOperationForKey:self.urls[indexPath.row].absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
-                        model.currentPageImage = [UIImage sdOverdue_animatedGIFWithData:data];
-                    if ([SDImageCache sharedImageCache].config.shouldCacheImagesInMemory == NO) {
-                        [currentCell showWithURL:self.urls[indexPath.row] withStatusModel:model andwithAnimation:indexPath.item == mgr.selectedIndex];
-                    }
-                }];
-            }
-        }else {
-            model.currentPageImage = image;
-        }
-    }else {
-        // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
-        weak_self;
-        [[SDWebImageManager sharedManager] loadImageWithURL:self.urls[indexPath.row] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            LBPhotoBrowserLog(@"LBPhotoBrowseView line %d log: %d -- %d",__LINE__,(int)receivedSize ,(int)expectedSize);
-        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            if (error) {
-                image = mgr.errorImage;
-                LBPhotoBrowserLog(@"%@",error);
-            }
-            model.currentPageImage = image;
-            if (image.images.count > 0) {
-                if (mgr.lowGifMemory) {
-                    model.currentPageImage = image;
-                }else {
-                    model.currentPageImage = [UIImage sdOverdue_animatedGIFWithData:data];
-                }
-            }
-            [currentCell showWithURL:self.urls[indexPath.row] withStatusModel:model andwithAnimation:indexPath.item == mgr.selectedIndex];
-
-            if (mgr.lowGifMemory && image.images.count >0 && indexPath.row == wself.pageControl.currentPage) { // 需要展示动画
-                UIImage *currentImage = [mgr valueForKeyPath:@"currentGifImage"];
-                if (!currentImage) {
-                    mgr.currentShowImageView = nil;
-                    [mgr setValue:data forKeyPath:@"spareData"];
-                    mgr.currentShowImageView = [currentCell.zoomScrollView valueForKeyPath:@"imageView"];
-                }
-            }
-        }];
-    }
     
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    if (!model.currentPageImage) {
+        UIImage *image = nil;
+        NSString *address = self.urls[indexPath.row].absoluteString;
+        if (isRemoteAddress(address) == NO) {
+            NSData *data = [NSData dataWithContentsOfURL:self.urls[indexPath.row]];
+            image = [UIImage sd_imageWithData:data]?:[UIImage imageNamed:@"LBLoadError.jpg"];
+        }else {
+            image =  [[SDImageCache sharedImageCache] imageFromCacheForKey:address];
+        }
+    
+        if (image) {
+            [self showLocalImage:image toCell:currentCell withModel:model atIndexPath:indexPath];
+        }else {
+            [self showRemoteImageCell:currentCell withModel:model atIndexPath:indexPath];
+        }
+        
+    }
     // Just show imageView animation once. After showed, change the index
     [currentCell showWithURL:self.urls[indexPath.row] withStatusModel:model andwithAnimation:indexPath.item == mgr.selectedIndex];
     if (mgr.selectedIndex == indexPath.item) {
         mgr.selectedIndex = -1;
     }
-    
     // Keep zooming and content off for scrollView on cell
     LBPhotoCollectionViewCell *photoCell = (LBPhotoCollectionViewCell *)cell;
     photoCell.zoomScrollView.zoomScale = model.scale.floatValue;
@@ -319,6 +283,62 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self changeImageViewsHideStatus];
 }
+#pragma mark - 处理cell中图片的显示
+
+- (void)showRemoteImageCell:(LBPhotoCollectionViewCell *)currentCell withModel:(LBScrollViewStatusModel *)model atIndexPath:(NSIndexPath *)indexPath{
+    // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
+    weak_self;
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    [[SDWebImageManager sharedManager] loadImageWithURL:self.urls[indexPath.row] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        LBPhotoBrowserLog(@"LBPhotoBrowseView line %d log: %d -- %d",__LINE__,(int)receivedSize ,(int)expectedSize);
+    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (error) {
+            image = mgr.errorImage;
+            LBPhotoBrowserLog(@"%@",error);
+        }
+        model.currentPageImage = image;
+        if (image.images.count > 0) {
+            if (mgr.lowGifMemory) {
+                model.currentPageImage = image;
+            }else {
+                model.currentPageImage = [UIImage sdOverdue_animatedGIFWithData:data];
+            }
+        }
+        [currentCell showWithURL:self.urls[indexPath.row] withStatusModel:model andwithAnimation:indexPath.item == mgr.selectedIndex];
+        if (mgr.lowGifMemory && image.images.count >0 && indexPath.row == wself.pageControl.currentPage) {
+            UIImage *currentImage = [mgr valueForKeyPath:@"currentGifImage"];
+            if (!currentImage) {
+                mgr.currentShowImageView = nil;
+                [mgr setValue:data forKeyPath:@"spareData"];
+                mgr.currentShowImageView = [currentCell.zoomScrollView valueForKeyPath:@"imageView"];
+            }
+        }
+    }];
+}
+
+- (void)showLocalImage:(UIImage *)image toCell:(LBPhotoCollectionViewCell *)currentCell withModel:(LBScrollViewStatusModel *)model atIndexPath:(NSIndexPath *)indexPath {
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    NSString *address = self.urls[indexPath.row].absoluteString;
+    if (image.images.count > 0) {
+        if (mgr.lowGifMemory == YES) {
+            model.currentPageImage = image;
+        }else{
+            if (isRemoteAddress(address)) {
+                [[SDImageCache sharedImageCache] queryCacheOperationForKey:self.urls[indexPath.row].absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
+                    model.currentPageImage = [UIImage sdOverdue_animatedGIFWithData:data];
+                    if ([SDImageCache sharedImageCache].config.shouldCacheImagesInMemory == NO) {
+                        [currentCell showWithURL:self.urls[indexPath.row] withStatusModel:model andwithAnimation:indexPath.item == mgr.selectedIndex];
+                    }
+                }];
+            }else {
+                model.currentPageImage = [UIImage sdOverdue_animatedGIFWithData:[NSData dataWithContentsOfURL:self.urls[indexPath.row]]];
+            }
+        }
+    }else {
+        model.currentPageImage = image;
+    }
+}
+
 #pragma mark - 修改cell子控件的状态 的状态
 - (void)changeImageViewsHideStatus {
     UIImageView *lastImageView = lb_lastMovedOrAnimationedImageView();

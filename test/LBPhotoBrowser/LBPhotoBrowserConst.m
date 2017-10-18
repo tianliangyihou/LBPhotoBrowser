@@ -18,6 +18,10 @@ inline int lb_currentSelectImageViewIndex() {
     return (int)(currentCollectionView.contentOffset.x / SCREEN_WIDTH);
 }
 
+inline BOOL isRemoteAddress(NSString * address) {
+    return [address hasPrefix:@"http"];
+}
+
 UIImageView * lb_lastMovedOrAnimationedImageView() {
     for (UIImageView *imageView in [LBPhotoBrowserManager defaultManager].imageViews) {
         if (imageView.hidden == YES) {

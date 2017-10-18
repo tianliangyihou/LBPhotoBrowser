@@ -9,16 +9,17 @@
 #import "LBPhotoBrowserManager.h"
 #import "UIImage+LBDecoder.h"
 #import <ImageIO/ImageIO.h>
-
 #if __has_include(<SDWebImage/SDWebImageManager.h>)
 
 #import <SDWebImage/SDWebImageManager.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImage+MultiFormat.h>
 
 #else
 
 #import "SDWebImageManager.h"
 #import "UIImageView+WebCache.h"
+#import "UIImage+MultiFormat.h"
 
 #endif
 
@@ -128,7 +129,11 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
             url = obj;
         }
         if ([obj isKindOfClass:[NSString class]]) {
-            url = [NSURL URLWithString:obj];
+            if (isRemoteAddress((NSString *)obj)){
+                url = [NSURL URLWithString:obj];
+            }else {
+                url = [NSURL fileURLWithPath:obj];
+            }
         }
         NSAssert(url, @"url数组里面的数据有问题!");
         if (url) {
@@ -155,6 +160,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     [photoBrowseView showImageViewsWithURLs:self.urls fromImageView:self.imageViews andSelectedIndex:index andImageViewSuperView:superView];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
     _photoBrowseView = photoBrowseView;
+
 }
 
 #pragma mark - longPressAction
@@ -275,6 +281,14 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     UIView *superView = wself.currentShowImageView.superview;
     if (![superView isKindOfClass:[UIScrollView class]]) return;
     NSURL *currentUrl = [superView valueForKeyPath:@"url"];
+    if (!isRemoteAddress(currentUrl.absoluteString)) {
+        NSData *imageData = [NSData dataWithContentsOfURL:currentUrl];
+        UIImage *image = [UIImage sd_imageWithData:imageData];
+        self.currentGifImage = image;
+        [image lb_animatedGIFData:imageData];
+        self.displayLink.paused = NO;
+        return;
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
@@ -298,6 +312,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
             });
         }];
     });
+    
 }
 - (void)setCurrentGifImage:(UIImage *)currentGifImage {
     if (_currentGifImage == currentGifImage) {

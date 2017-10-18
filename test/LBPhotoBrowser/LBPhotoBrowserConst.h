@@ -54,6 +54,7 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 UIKIT_EXTERN int lb_currentSelectImageViewIndex();
 UIKIT_EXTERN UIImageView * lb_lastMovedOrAnimationedImageView();
+UIKIT_EXTERN BOOL isRemoteAddress(NSString * address);
 
 UIKIT_EXTERN NSString * const LBImageViewBeiginDragNot;
 UIKIT_EXTERN NSString * const LBImageViewEndDragNot;

@@ -95,7 +95,7 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 - (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title))titleClickCallBackBlock;
 // 添加自定义的长按控件
 - (instancetype)addLongPressCustomViewBlock:(UIView *(^)(UIImage *image, NSIndexPath *indexPath))longPressBlock;
-// 为每张图片添加占位图
+// 为每张图片添加占位图 defaut ->LBLoading.png
 - (instancetype)addPlaceHoldImageCallBackBlock:(UIImage *(^)(NSIndexPath * indexPath))placeHoldImageCallBackBlock;
 // 图片浏览器将要消失的Block
 - (instancetype)addPhotoBrowserWillDismissBlock:(void(^)(void))dismissBlock;
