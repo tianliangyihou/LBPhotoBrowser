@@ -30,6 +30,8 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 
 对3Dtouch的API进行了进一步的封装,使用起来更加简单,只需关心自己的业务逻辑即可
 
+详细见下面
+
 ```
 ```objc
 支持通过 [NSURL fileURLWithPath:@"xxx.path"]获取的图片
