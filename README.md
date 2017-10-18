@@ -47,6 +47,7 @@ xcode9中 有时你通过这种方式也无法获取其他文件夹中的图片,
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/2306467-14a8a6771dad3b5c.gif?raw=true)
 
+![](https://github.com/tianliangyihou/zhuxian/blob/master/test.gif?raw=true)
 
 # 使用(usage)
 
