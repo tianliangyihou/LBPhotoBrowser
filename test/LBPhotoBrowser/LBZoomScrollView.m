@@ -107,6 +107,9 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         animationImageView.hidden = YES;
         CGRect rect = [mgr.imageViewSuperView convertRect: animationImageView.frame toView:[UIApplication sharedApplication].keyWindow];
         self.oldFrame = rect;
+    }else if (animation && !mgr.showBrowserWithAnimation) {
+        UIImageView *animationImageView = (UIImageView *)mgr.imageViews[mgr.selectedIndex];
+        animationImageView.hidden = YES;
     }
     
     UIImage *currentImage = [self.statusModel valueForKey:@"currentPageImage"];

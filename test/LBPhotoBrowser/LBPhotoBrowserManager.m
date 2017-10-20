@@ -135,10 +135,11 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
                 url = [NSURL fileURLWithPath:obj];
             }
         }
-        NSAssert(url, @"url数组里面的数据有问题!");
-        if (url) {
-            [self.urls addObject:url];
+        if (!url) {
+            url = [NSURL URLWithString:@"https://LBPhotoBrowser.error"];
+            LBPhotoBrowserLog(@"传的链接%@有误",obj);
         }
+        [self.urls addObject:url];
     }
     
     for (id obj in imageViews) {
