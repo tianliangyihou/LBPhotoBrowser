@@ -166,7 +166,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _imageViewSuperView = superView;
     
     LBPhotoBrowserView *photoBrowseView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [photoBrowseView showImageViewsWithURLs:self.urls fromImageView:self.imageViews andSelectedIndex:index andImageViewSuperView:superView];
+    [photoBrowseView showImageViewsWithURLs:self.urls andSelectedIndex:index];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
     _photoBrowseView = photoBrowseView;
     self.helper.showType = LBShowTypeViews;

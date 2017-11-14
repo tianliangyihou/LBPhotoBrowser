@@ -187,7 +187,7 @@
 }
 
 
-- (void)showImageViewsWithURLs:(LBUrlsMutableArray *)urls fromImageView:(LBImageViewsArray *)imageViews andSelectedIndex:(int)index andImageViewSuperView:(UIView *)superView{
+- (void)showImageViewsWithURLs:(LBUrlsMutableArray *)urls andSelectedIndex:(int)index{
     _urls = urls;
     if (_pageControl) {
         [_pageControl removeFromSuperview];
@@ -205,9 +205,8 @@
 }
 
 - (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
-    [self showImageViewsWithURLs:(LBUrlsMutableArray *)urls fromImageView:nil andSelectedIndex:index andImageViewSuperView:nil];
+    [self showImageViewsWithURLs:urls andSelectedIndex:index];
 }
-
 
 #pragma mark - collectionView的数据源&代理
 
