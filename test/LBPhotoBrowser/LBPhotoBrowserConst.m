@@ -13,22 +13,8 @@
 #import "LBPhotoBrowserConst.h"
 #import "LBPhotoBrowserManager.h"
 
-inline int lb_currentSelectImageViewIndex() {
-    UICollectionView *currentCollectionView = [LBPhotoBrowserManager defaultManager].currentCollectionView;
-    return (int)(currentCollectionView.contentOffset.x / SCREEN_WIDTH);
-}
-
 inline BOOL isRemoteAddress(NSString * address) {
     return [address hasPrefix:@"http"];
-}
-
-UIImageView * lb_lastMovedOrAnimationedImageView() {
-    for (UIImageView *imageView in [LBPhotoBrowserManager defaultManager].imageViews) {
-        if (imageView.hidden == YES) {
-            return imageView;
-        }
-    }
-    return nil;
 }
 
 NSString * const LBImageViewBeiginDragNot = @"LBImageViewBeiginDragNot";

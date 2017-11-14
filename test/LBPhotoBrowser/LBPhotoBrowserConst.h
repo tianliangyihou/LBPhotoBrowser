@@ -52,8 +52,6 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 #define LB_BOTTOM_MARGIN (LB_IS_IPHONEX ? 34 : 0)
 
-UIKIT_EXTERN int lb_currentSelectImageViewIndex();
-UIKIT_EXTERN UIImageView * lb_lastMovedOrAnimationedImageView();
 UIKIT_EXTERN BOOL isRemoteAddress(NSString * address);
 
 UIKIT_EXTERN NSString * const LBImageViewBeiginDragNot;

@@ -103,13 +103,13 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     if (animation && mgr.showBrowserWithAnimation) {
-        UIImageView *animationImageView = (UIImageView *)mgr.imageViews[mgr.selectedIndex];
-        animationImageView.hidden = YES;
-        CGRect rect = [mgr.imageViewSuperView convertRect: animationImageView.frame toView:[UIApplication sharedApplication].keyWindow];
+        UIView *animationView = mgr.helper.currentShowView;
+        animationView.hidden = YES;
+        CGRect rect = [mgr.imageViewSuperView convertRect: animationView.frame toView:[UIApplication sharedApplication].keyWindow];
         self.oldFrame = rect;
     }else if (animation && !mgr.showBrowserWithAnimation) {
-        UIImageView *animationImageView = (UIImageView *)mgr.imageViews[mgr.selectedIndex];
-        animationImageView.hidden = YES;
+        UIView *animationView = mgr.helper.currentShowView;
+        animationView.hidden = YES;
     }
     
     UIImage *currentImage = [self.statusModel valueForKey:@"currentPageImage"];
@@ -281,15 +281,11 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         [_loadingView removeFromSuperview];
     }
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    
-    UIImageView *movedImageView = lb_lastMovedOrAnimationedImageView();
-    movedImageView.hidden = NO;
-    
-    int selectIndex = lb_currentSelectImageViewIndex();
-    UIImageView *currentMovedImageView  = mgr.imageViews[selectIndex];
-    
-    currentMovedImageView.hidden = YES;
-    self.oldFrame = [mgr.imageViewSuperView convertRect:currentMovedImageView.frame toView:[UIApplication sharedApplication].keyWindow];
+    UIView *movedView = mgr.helper.lastShowView;
+    movedView.hidden = NO;
+    UIView *currentView  = mgr.helper.currentShowView;
+    currentView.hidden = YES;
+    self.oldFrame = [mgr.imageViewSuperView convertRect:currentView.frame toView:[UIApplication sharedApplication].keyWindow];
     
     UIView *dismissView = nil;
     if (touchPoint.x == -1 && touchPoint.y == -1) {
@@ -317,7 +313,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }completion:^(BOOL finished) {
         [dismissView removeFromSuperview];
         [wself removeFromSuperview];
-        currentMovedImageView.hidden = NO;
+        currentView.hidden = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewDidDismissNot object:nil];
     }];
 }

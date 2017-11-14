@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		264430F51FB9689E00043E0C /* CollectionViewShowVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430F41FB9689E00043E0C /* CollectionViewShowVC.m */; };
+		264430F91FB969E900043E0C /* LBCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430F71FB969E900043E0C /* LBCollectionViewCell.m */; };
+		264430FA1FB969E900043E0C /* LBCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 264430F81FB969E900043E0C /* LBCollectionViewCell.xib */; };
+		264430FD1FB9897500043E0C /* LBPhotoBrowserShowHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */; };
 		2657DB661E77BCDD00F324C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB651E77BCDD00F324C3 /* main.m */; };
 		2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB681E77BCDD00F324C3 /* AppDelegate.m */; };
 		2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB6B1E77BCDD00F324C3 /* ViewController.m */; };
@@ -24,6 +28,7 @@
 		267AD8991F5E3B3A00DC6D9F /* LBZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88C1F5E3B3A00DC6D9F /* LBZoomScrollView.m */; };
 		267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */; };
 		267AD89B1F5E3B3A00DC6D9F /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */; };
+		26B30FA61FBAD563001615CD /* LBTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B30FA51FBAD563001615CD /* LBTest.m */; };
 		26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */; };
 		26E7AC531F960B0600929530 /* loner.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 26E7AC521F960AD700929530 /* loner.jpg */; };
 		26E7AC541F960B0600929530 /* timg.gif in Resources */ = {isa = PBXBuildFile; fileRef = 26E7AC511F960AD600929530 /* timg.gif */; };
@@ -32,6 +37,13 @@
 
 /* Begin PBXFileReference section */
 		1472DF34D1E9CA8AAD44F40D /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		264430F31FB9689E00043E0C /* CollectionViewShowVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewShowVC.h; sourceTree = "<group>"; };
+		264430F41FB9689E00043E0C /* CollectionViewShowVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewShowVC.m; sourceTree = "<group>"; };
+		264430F61FB969E900043E0C /* LBCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBCollectionViewCell.h; sourceTree = "<group>"; };
+		264430F71FB969E900043E0C /* LBCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBCollectionViewCell.m; sourceTree = "<group>"; };
+		264430F81FB969E900043E0C /* LBCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LBCollectionViewCell.xib; sourceTree = "<group>"; };
+		264430FB1FB9897500043E0C /* LBPhotoBrowserShowHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBPhotoBrowserShowHelper.h; sourceTree = "<group>"; };
+		264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBPhotoBrowserShowHelper.m; sourceTree = "<group>"; };
 		2657DB611E77BCDD00F324C3 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2657DB651E77BCDD00F324C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2657DB671E77BCDD00F324C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +74,8 @@
 		267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LBDecoder.m"; sourceTree = "<group>"; };
 		267AD88F1F5E3B3A00DC6D9F /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
 		267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		26B30FA41FBAD563001615CD /* LBTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBTest.h; sourceTree = "<group>"; };
+		26B30FA51FBAD563001615CD /* LBTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBTest.m; sourceTree = "<group>"; };
 		26DAE5DD1F78CEEA003DB86B /* LB3DTouchVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LB3DTouchVC.h; sourceTree = "<group>"; };
 		26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LB3DTouchVC.m; sourceTree = "<group>"; };
 		26E7AC511F960AD600929530 /* timg.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = timg.gif; sourceTree = "<group>"; };
@@ -110,6 +124,13 @@
 				2657DB681E77BCDD00F324C3 /* AppDelegate.m */,
 				2657DB6A1E77BCDD00F324C3 /* ViewController.h */,
 				2657DB6B1E77BCDD00F324C3 /* ViewController.m */,
+				26B30FA41FBAD563001615CD /* LBTest.h */,
+				26B30FA51FBAD563001615CD /* LBTest.m */,
+				264430F31FB9689E00043E0C /* CollectionViewShowVC.h */,
+				264430F41FB9689E00043E0C /* CollectionViewShowVC.m */,
+				264430F61FB969E900043E0C /* LBCollectionViewCell.h */,
+				264430F71FB969E900043E0C /* LBCollectionViewCell.m */,
+				264430F81FB969E900043E0C /* LBCollectionViewCell.xib */,
 				2657DB6D1E77BCDD00F324C3 /* Main.storyboard */,
 				2657DB701E77BCDD00F324C3 /* Assets.xcassets */,
 				2657DB721E77BCDD00F324C3 /* LaunchScreen.storyboard */,
@@ -140,6 +161,8 @@
 				26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */,
 				267AD8831F5E3B3A00DC6D9F /* LBPhotoBrowserConst.h */,
 				267AD8841F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m */,
+				264430FB1FB9897500043E0C /* LBPhotoBrowserShowHelper.h */,
+				264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */,
 				267AD8851F5E3B3A00DC6D9F /* LBPhotoBrowserManager.h */,
 				267AD8861F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m */,
 				267AD8871F5E3B3A00DC6D9F /* LBPhotoBrowserView.h */,
@@ -240,6 +263,7 @@
 				2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */,
 				2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */,
 				267AD8911F5E3B3A00DC6D9F /* LBLoadError.jpg in Resources */,
+				264430FA1FB969E900043E0C /* LBCollectionViewCell.xib in Resources */,
 				2657DB6F1E77BCDD00F324C3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,7 +323,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				264430F91FB969E900043E0C /* LBCollectionViewCell.m in Sources */,
 				267AD89B1F5E3B3A00DC6D9F /* UIView+Frame.m in Sources */,
+				264430FD1FB9897500043E0C /* LBPhotoBrowserShowHelper.m in Sources */,
 				2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */,
 				267AD8981F5E3B3A00DC6D9F /* LBTapDetectingImageView.m in Sources */,
 				267AD8961F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m in Sources */,
@@ -307,7 +333,9 @@
 				267AD8991F5E3B3A00DC6D9F /* LBZoomScrollView.m in Sources */,
 				267AD8971F5E3B3A00DC6D9F /* LBPhotoBrowserView.m in Sources */,
 				267AD8941F5E3B3A00DC6D9F /* LBOptionView.m in Sources */,
+				264430F51FB9689E00043E0C /* CollectionViewShowVC.m in Sources */,
 				26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */,
+				26B30FA61FBAD563001615CD /* LBTest.m in Sources */,
 				2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */,
 				267AD8951F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m in Sources */,
 				267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */,

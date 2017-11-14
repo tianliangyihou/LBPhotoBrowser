@@ -204,6 +204,11 @@
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
+    [self showImageViewsWithURLs:(LBUrlsMutableArray *)urls fromImageView:nil andSelectedIndex:index andImageViewSuperView:nil];
+}
+
+
 #pragma mark - collectionView的数据源&代理
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -260,31 +265,11 @@
        mgr.currentShowImageView = [photoCell.zoomScrollView valueForKeyPath:@"imageView"];
     }
 }
-
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return  [UIScreen mainScreen].bounds.size;
-}
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat pageWidth = self.collectionView.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    self.pageControl.currentPage = page;
-    if (!LBPhotoBrowserManager.defaultManager.currentShowImageView) {
-        return;
-    }
-    LBPhotoCollectionViewCell *cell = (LBPhotoCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
-    LBPhotoBrowserManager.defaultManager.currentShowImageView = [cell.zoomScrollView valueForKeyPath:@"imageView"];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (decelerate) return;
-    [self changeImageViewsHideStatus];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self changeImageViewsHideStatus];
-}
 #pragma mark - 处理cell中图片的显示
 
+/**
+ about 3D touch, when image is loading, 3D touch should not usable
+ */
 - (void)showRemoteImageCell:(LBPhotoCollectionViewCell *)currentCell withModel:(LBScrollViewStatusModel *)model atIndexPath:(NSIndexPath *)indexPath{
     // 最新版的SDWebImage 不支持gif 默认取gif的第一帧
     weak_self;
@@ -339,17 +324,44 @@
     }
 }
 
+#pragma mark - 代理方法
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return  [UIScreen mainScreen].bounds.size;
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat pageWidth = self.collectionView.width;
+    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    self.pageControl.currentPage = page;
+    if (!LBPhotoBrowserManager.defaultManager.currentShowImageView) {
+        return;
+    }
+    LBPhotoCollectionViewCell *cell = (LBPhotoCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+    LBPhotoBrowserManager.defaultManager.currentShowImageView = [cell.zoomScrollView valueForKeyPath:@"imageView"];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (decelerate) return;
+    [self changeImageViewsHideStatus];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self changeImageViewsHideStatus];
+}
+
+
 #pragma mark - 修改cell子控件的状态 的状态
 - (void)changeImageViewsHideStatus {
-    UIImageView *lastImageView = lb_lastMovedOrAnimationedImageView();
-    lastImageView.hidden = NO;
-    int selectedIndex = lb_currentSelectImageViewIndex();
-    UIImageView *currentImageView = [LBPhotoBrowserManager defaultManager].imageViews[selectedIndex];
-    currentImageView.hidden = YES;
-    [self changeModelOfCellInRow:selectedIndex];
+    UIView *lastView = [LBPhotoBrowserManager defaultManager].helper.lastShowView;
+    lastView.hidden = NO;
+    UIView *currentView = [LBPhotoBrowserManager defaultManager].helper.currentShowView;
+    currentView.hidden = YES;
+    [self changeModelOfCellInRow:[LBPhotoBrowserManager defaultManager].helper.currentShowIndex];
 }
 
 - (void)changeModelOfCellInRow:(int)row {
+    [[LBPhotoBrowserManager defaultManager].helper adjustCollectionViewContentOffsetWithIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+    
     for (LBScrollViewStatusModel *model in self.models) {
         model.isDisplaying = NO;
     }

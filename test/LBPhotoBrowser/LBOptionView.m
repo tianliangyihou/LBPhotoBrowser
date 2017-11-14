@@ -111,7 +111,9 @@ static inline CGFloat getTableViewHeight() {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = photoBrowseManager().currentTitles[indexPath.row];
-    photoBrowseManager().titleClickBlock(self.image,indexPath,title);;
+    if (photoBrowseManager().titleClickBlock) {
+        photoBrowseManager().titleClickBlock(self.image,indexPath,title);;
+    }
     [self dismissOptionView];
 }
 @end

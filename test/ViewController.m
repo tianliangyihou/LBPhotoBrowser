@@ -36,10 +36,6 @@
 - (NSArray *)urlStrings {
     if (!_urlStrings) {
         _urlStrings = @[
-//                  @"http://pic49.nipic.com/file/20140927/19617624_230415502002_2.jpg",
-//
-//                  @"https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=100334575,2106529211&fm=117&gp=0.jpg",
-                  
                   @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503555021950&di=17c2df6a4e00eb9cd903ca4b242420e6&imgtype=0&src=http%3A%2F%2Fpic.92to.com%2Fanv%2F201606%2F27%2Feo5n02tvqa5.gif",
                   
                   // 这个gif144张 全部加载在内存中占用210M

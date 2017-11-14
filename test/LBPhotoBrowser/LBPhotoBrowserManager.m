@@ -9,6 +9,7 @@
 #import "LBPhotoBrowserManager.h"
 #import "UIImage+LBDecoder.h"
 #import <ImageIO/ImageIO.h>
+
 #if __has_include(<SDWebImage/SDWebImageManager.h>)
 
 #import <SDWebImage/SDWebImageManager.h>
@@ -47,10 +48,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @property (nonatomic , copy)void(^dismissBlock)(void);
 
+
 @property (nonatomic , strong)NSArray *titles;
 
 @property (nonatomic , strong)NSData *spareData;
-
 
 // timer
 // in ios 9 this property can be weak Replace strong
@@ -89,6 +90,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _imageViews = [[LBImageViewsArray alloc]init];
     }
     return _imageViews;
+}
+
+- (LBPhotoBrowserShowHelper *)helper {
+    if (!_helper) {
+        _helper = [[LBPhotoBrowserShowHelper alloc]init];
+    }
+    return _helper;
 }
 
 + (instancetype)defaultManager {
@@ -161,7 +169,87 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     [photoBrowseView showImageViewsWithURLs:self.urls fromImageView:self.imageViews andSelectedIndex:index andImageViewSuperView:superView];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
     _photoBrowseView = photoBrowseView;
+    self.helper.showType = LBShowTypeViews;
+    self.helper.imageViews = imageViews;
+    self.helper.lastShowIndex = self.helper.currentShowIndex = index;
+    
+}
 
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
+    if (urls.count == 0 || !urls) return;
+    if (!collectionView) return;
+    
+    resetManagerData(_photoBrowseView, self.urls, self.imageViews);
+    for (id obj in urls) {
+        NSURL *url = nil;
+        if ([obj isKindOfClass:[NSURL class]]) {
+            url = obj;
+        }
+        if ([obj isKindOfClass:[NSString class]]) {
+            if (isRemoteAddress((NSString *)obj)){
+                url = [NSURL URLWithString:obj];
+            }else {
+                url = [NSURL fileURLWithPath:obj];
+            }
+        }
+        if (!url) {
+            url = [NSURL URLWithString:@"https://LBPhotoBrowser.error"];
+            LBPhotoBrowserLog(@"传的链接%@有误",obj);
+        }
+        [self.urls addObject:url];
+    }
+    _selectedIndex = index;
+    _imageViewSuperView = collectionView;
+    
+    LBPhotoBrowserView *photoBrowseView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [photoBrowseView showImageWithURLArray:self.urls fromCollectionView:collectionView selectedIndex:index];
+    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
+    _photoBrowseView = photoBrowseView;
+    self.helper.showType = LBShowTypeCollectionView;
+    self.helper.collectioView = collectionView;
+    self.helper.lastShowIndex = self.helper.currentShowIndex = index;
+}
+
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls {
+    if (urls.count == unwantedUrls.count || urls.count < unwantedUrls.count) {
+        return;
+    }
+    NSMutableArray *originalStrings = [NSMutableArray arrayWithCapacity:urls.count];
+    NSMutableArray *unwantedStrings = [NSMutableArray arrayWithCapacity:unwantedUrls.count];
+    NSMutableArray *wantedStrings = [NSMutableArray array];
+    for (int i = 0; i < urls.count; i++) {
+        id obj = urls[i];
+        if ([obj isKindOfClass:[NSURL class]]) {
+            obj = [(NSURL *)obj absoluteString];
+        }
+        if (![obj isKindOfClass:[NSString class]]) {
+            LBPhotoBrowserLog(@"urls传入的URL 类型必须为NSURL or NSString");
+            return;
+        }
+        [originalStrings addObject:obj];
+    }
+    for (int i = 0; i < unwantedUrls.count; i++) {
+        id obj = unwantedUrls[i];
+        if ([obj isKindOfClass:[NSURL class]]) {
+            obj = [(NSURL *)obj absoluteString];
+        }
+        if (![obj isKindOfClass:[NSString class]]) {
+            LBPhotoBrowserLog(@"unwantedUrls传入的URL 类型必须为NSURL or NSString");
+            return;
+        }
+        [unwantedStrings addObject:obj];
+    }
+    for (int i = 0; i < originalStrings.count; i++) {
+        NSString *urlString = urls[i];
+        if (![unwantedStrings containsObject:urlString]) {
+            NSURL *url = isRemoteAddress(urlString) ?[NSURL URLWithString:urlString] : [NSURL fileURLWithPath:urlString];
+            [self.helper.showIndexPathDic setObject:[NSIndexPath indexPathForRow:i inSection:0] forKey:url.absoluteString];
+            [wantedStrings addObject:urlString];
+        }
+    }
+    NSString *selectedString = originalStrings[index];
+    index = (int)[wantedStrings indexOfObject:selectedString];
+    [self showImageWithURLArray:wantedStrings fromCollectionView:collectionView selectedIndex:index];
 }
 
 #pragma mark - longPressAction
@@ -214,6 +302,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 }
 
 - (void)displayLinkInvalidate {
+    
     if (_displayLink) {
         [_displayLink invalidate];
         _displayLink = nil;
@@ -226,6 +315,11 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     if(_dismissBlock) {
         _dismissBlock();
     }
+    _dismissBlock = nil;
+    _longPressCustomViewBlock = nil;
+    _titleClickBlock = nil;
+    _placeHoldImageCallBackBlock = nil;
+    _helper = nil;
 }
 - (void)changeKeyframe:(CADisplayLink *)displayLink
 {

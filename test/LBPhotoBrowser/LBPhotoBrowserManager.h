@@ -10,6 +10,7 @@
 
 #import "LBPhotoBrowserConst.h"
 #import "LBPhotoBrowserView.h"
+#import "LBPhotoBrowserShowHelper.h"
 
 /**
                             控件的基本结构
@@ -35,11 +36,14 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 
 @interface LBPhotoBrowserManager : NSObject
 
-// 传入的urls
+// 当前展示的urls
 @property (nonatomic , strong, readonly)LBUrlsMutableArray *urls;
 
 // 传入的imageViews
 @property (nonatomic , strong, readonly)LBImageViewsArray *imageViews;
+
+//工具类
+@property (nonatomic , strong)LBPhotoBrowserShowHelper *helper;
 
 // 用来展示图片的UI控件
 @property (nonatomic , weak, readonly)LBPhotoBrowserView *photoBrowseView;
@@ -71,7 +75,7 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 // 当前图片浏览器正在展示的imageView
 @property (nonatomic , strong)UIImageView *currentShowImageView;
 
-// 第一次展示图片浏览器的时候 是否需要动画 default is YES
+// 第一次展示图片浏览器的时候 是否需要动画 3Dtouch进入不需要展示 default is YES
 @property (nonatomic , assign)BOOL showBrowserWithAnimation;
 
 /**
@@ -80,13 +84,30 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 + (instancetype)defaultManager;
 
 /**
- 展示 网络图片
+ 展示 网络图片or本地图片
  @param urls 需要加载的图片的URL数组
  @param imageViews 传入需要大图显示的imageViews 因为将来需要在对应的地方imageView用动画消除掉,主要是取imageView的frame
  @param index 点击图片的index
  @param superView 当前View的父View
  */
 - (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView;
+/**
+ 展示 网络图片or本地图片
+ @param urls 需要加载的图片的URL数组
+ @param index 点击图片的index
+ @param collectionView 需要展示图片的collectionView
+ */
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
+
+/**
+ 展示 网络图片or本地图片
+ @param urls 需要加载的图片的URL数组
+ @param collectionView 需要展示图片的collectionView
+ @param index 点击图片的index
+ @param unwantedUrls 不需要展示的url
+ */
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls;
+
 
 #pragma mark - 自定义图片长按按钮的Block 类似TableViewCell的代理
 // 添加默认的长按控件
