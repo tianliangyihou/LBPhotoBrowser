@@ -36,11 +36,12 @@ typedef NS_ENUM(NSUInteger, LBScrollPosition) {
 
 @property (nonatomic , strong)NSMutableDictionary <NSString *, NSIndexPath *> *showIndexPathDic;
 
+//用户传入的collectioView的上一个展示的index
 @property (nonatomic , assign)int lastShowIndex;
-
+//用户传入的collectioView的正在展示的index
 @property (nonatomic , assign)int currentShowIndex;
 
-
+@property (nonatomic , assign)int phtotoBrowserCurrentShowIndex;
 
 - (void)adjustCollectionViewContentOffsetWithIndexPath:(NSIndexPath *)indexPath;
 

@@ -356,12 +356,13 @@
     lastView.hidden = NO;
     UIView *currentView = [LBPhotoBrowserManager defaultManager].helper.currentShowView;
     currentView.hidden = YES;
-    [self changeModelOfCellInRow:[LBPhotoBrowserManager defaultManager].helper.currentShowIndex];
+    [self changeModelOfCellInRow:[LBPhotoBrowserManager defaultManager].helper.phtotoBrowserCurrentShowIndex];
 }
 
 - (void)changeModelOfCellInRow:(int)row {
-    [[LBPhotoBrowserManager defaultManager].helper adjustCollectionViewContentOffsetWithIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-    
+     
+    LBPhotoBrowserShowHelper *helper = [LBPhotoBrowserManager defaultManager].helper;
+    [helper adjustCollectionViewContentOffsetWithIndexPath:[NSIndexPath indexPathForRow:helper.currentShowIndex inSection:0]];
     for (LBScrollViewStatusModel *model in self.models) {
         model.isDisplaying = NO;
     }

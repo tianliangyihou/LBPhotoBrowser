@@ -101,7 +101,9 @@ UIImageView * lb_lastMovedOrAnimationedImageView() {
     }
     return lb_currentSelectImageViewIndex();
 }
-
+- (int)phtotoBrowserCurrentShowIndex {
+    return lb_currentSelectImageViewIndex();
+}
 
 - (void)setCollectioView:(UICollectionView *)collectioView {
     _collectioView = collectioView;

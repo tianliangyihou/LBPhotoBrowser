@@ -71,7 +71,7 @@ static NSString * const cellID = @"lbPotoBrowser.cellID";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _contentLabel.text = @"这里可以忽略某个cell的点击事件,以及忽略该cell图片的展示 \n这里忽略了第2和6个cell \n\n当你通过拖动手势pop这个界面的时候,会发现展示动图的imageView上的image消失了 \n如果有兴趣点击测试按钮后,进行拖动";
+    _contentLabel.text = @"这里可以忽略某个cell的点击事件,以及忽略该cell图片的展示 \n这里忽略了第2和6个cell \n\n当你通过拖动手势pop这个界面的时候,会发现展示动图的imageView上的image消失了 \n如果有兴趣点击测试按钮后,进行拖动(真机有效)"; 
 }
 
 
