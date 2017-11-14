@@ -1,6 +1,7 @@
 # LBPhotoBrowser
 
 一行代码即可搞定下面效果的浏览器.  简书地址:[http://www.jianshu.com/p/00f4b7b20dc4](http://www.jianshu.com/p/00f4b7b20dc4)(详细说明)
+
 ```
 LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 
@@ -43,11 +44,53 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"timg.gif" ofType:nil];
 xcode9中 有时你通过这种方式也无法获取其他文件夹中的图片, 这时在项目的Build Phases中的 copy bundle resources 中添加该图片即可
 ```
 
-效果图如下: 
+新增collectionView图片的展示
 
-![](https://github.com/tianliangyihou/zhuxian/blob/master/2306467-14a8a6771dad3b5c.gif?raw=true)
+```objc
+ 当你需要通过LBPhotoBrowser直接展示collectionView的图片,并且实现和你的collectionView联动的时候,调用下面方法
+ 
+ /**
+ 展示 网络图片or本地图片
+ @param urls 需要加载的图片的URL数组
+ @param collectionView 需要展示图片的collectionView
+ @param index 点击图片的index
+ @param unwantedUrls 不需要展示的url
+ */
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls;
+
+
+/**
+ 展示 网络图片or本地图片
+ @param urls 需要加载的图片的URL数组
+ @param index 点击图片的index
+ @param collectionView 需要展示图片的collectionView
+ */
+- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
+
+```
+
+```objc
+关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
+
+当你在真机上运行当前版本的时候,你会发现展示gif的一个问题 => 拖动pop当前界面的时候,imageView上的图片不见了
+
+这个是SDWebImage内部的一个方法导致的,你可以在demo中找到原因和解决办法
+
+```
+
+效果图如下:
+
+最新版V1.2:
+
+![](https://github.com/tianliangyihou/zhuxian/blob/master/20171114.gif?raw=true)
+
+V1.1
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/test.gif?raw=true)
+
+v1.0
+
+![](https://github.com/tianliangyihou/zhuxian/blob/master/2306467-14a8a6771dad3b5c.gif?raw=true)
 
 # 使用(usage)
 
