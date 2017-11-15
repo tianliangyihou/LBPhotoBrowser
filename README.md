@@ -62,7 +62,7 @@ xcode9中 有时你通过这种方式也无法获取其他文件夹中的图片,
  @param urls 需要加载的图片的URL数组
  @param collectionView 需要展示图片的collectionView
  @param index 点击图片的index
- @param unwantedUrls 不需要展示的url
+ @param unwantedUrls urls中不需要展示的url
  */
 - (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls;
 
@@ -82,7 +82,7 @@ xcode9中 有时你通过这种方式也无法获取其他文件夹中的图片,
 
 当你在真机上运行当前版本的时候,你会发现展示gif的一个问题 => 拖动pop当前界面的时候,imageView上的图片不见了
 
-这个是SDWebImage内部的一个方法导致的,你可以在demo中找到原因和解决办法
+这个是SDWebImage内部的一个方法导致的,你可以在demo(右上角有个测试按钮)中找到原因和解决办法
 
 ```
 
