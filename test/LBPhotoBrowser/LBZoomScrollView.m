@@ -330,9 +330,13 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
 }
 
-#pragma mark - 手势的代理  为放大高度超过屏幕的ImageView添加拖拽消失手势-
+#pragma mark - 手势的代理 为放大高度超过屏幕的ImageView添加拖拽消失手势-
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    // Thanks for simpleIsGod finds this bug
+    if (gestureRecognizer.numberOfTouches == 2 && self.imageViewIsMoving == YES) {
+        return NO;
+    }
     CGFloat actualHeight = LB_IS_IPHONEX ? (SCREEN_HEIGHT - LB_STUATUS_BAR_HEIGHT_IPHONEX -LB_BOTTOM_MARGIN_IPHONEX) : SCREEN_HEIGHT;
     CGFloat actualContentOffsetY = LB_IS_IPHONEX ? -LB_STUATUS_BAR_HEIGHT_IPHONEX : 0;
     if (self.contentOffset.y == actualContentOffsetY && self.imageView.height > actualHeight && gestureRecognizer.numberOfTouches == 1) {
