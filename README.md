@@ -6,6 +6,8 @@
 
 这是目前的第三个版本了,如果你用的时候遇到什么问题(及时保存log)或者有什么建议的话,及时issues me,或者简书下面给我留言.
 
+同时也非常感谢一些提出好的建议的人: KevinCheinCoder,simpleIsGod ,Ryan0520,cowboyfzl等
+
 期望和你一同改进这个库.
 
 ```
