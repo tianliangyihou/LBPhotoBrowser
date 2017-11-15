@@ -42,11 +42,11 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
 // 传入的imageViews
 @property (nonatomic , strong, readonly)LBImageViewsArray *imageViews;
 
-//工具类 可以通过helper.scrollPosition 来改变photoBrowse和用户collectionView的联动方式
+//工具类 可以通过helper.scrollPosition 来改变photoBrowser和用户collectionView的联动方式
 @property (nonatomic , strong)LBPhotoBrowserShowHelper *helper;
 
 // 用来展示图片的UI控件
-@property (nonatomic , weak, readonly)LBPhotoBrowserView *photoBrowseView;
+@property (nonatomic , weak, readonly)LBPhotoBrowserView *photoBrowserView;
 
 // 传入的imageViews的共同父View
 @property (nonatomic , weak, readonly)UIView *imageViewSuperView;

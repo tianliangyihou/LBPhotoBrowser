@@ -130,7 +130,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     if (urls.count == 0 || !urls) return;
     if (imageViews.count == 0 || !imageViews) return;
     
-    resetManagerData(_photoBrowseView, self.urls, self.imageViews);
+    resetManagerData(_photoBrowserView, self.urls, self.imageViews);
     for (id obj in urls) {
         NSURL *url = nil;
         if ([obj isKindOfClass:[NSURL class]]) {
@@ -165,10 +165,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _selectedIndex = index;
     _imageViewSuperView = superView;
     
-    LBPhotoBrowserView *photoBrowseView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [photoBrowseView showImageViewsWithURLs:self.urls andSelectedIndex:index];
-    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
-    _photoBrowseView = photoBrowseView;
+    LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [photoBrowserView showImageViewsWithURLs:self.urls andSelectedIndex:index];
+    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
+    _photoBrowserView = photoBrowserView;
     self.helper.showType = LBShowTypeViews;
     self.helper.imageViews = imageViews;
     self.helper.lastShowIndex = self.helper.currentShowIndex = index;
@@ -179,7 +179,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     if (urls.count == 0 || !urls) return;
     if (!collectionView) return;
     
-    resetManagerData(_photoBrowseView, self.urls, self.imageViews);
+    resetManagerData(_photoBrowserView, self.urls, self.imageViews);
     for (id obj in urls) {
         NSURL *url = nil;
         if ([obj isKindOfClass:[NSURL class]]) {
@@ -201,10 +201,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _selectedIndex = index;
     _imageViewSuperView = collectionView;
     
-    LBPhotoBrowserView *photoBrowseView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [photoBrowseView showImageWithURLArray:self.urls fromCollectionView:collectionView selectedIndex:index];
-    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowseView];
-    _photoBrowseView = photoBrowseView;
+    LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [photoBrowserView showImageWithURLArray:self.urls fromCollectionView:collectionView selectedIndex:index];
+    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
+    _photoBrowserView = photoBrowserView;
     self.helper.showType = LBShowTypeCollectionView;
     self.helper.collectioView = collectionView;
     self.helper.lastShowIndex = self.helper.currentShowIndex = index;
