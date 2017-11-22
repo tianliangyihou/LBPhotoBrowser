@@ -11,7 +11,7 @@
 
 static inline int lb_currentSelectImageViewIndex() {
      UICollectionView *currentCollectionView = [LBPhotoBrowserManager defaultManager].currentCollectionView;
-     return (int)(currentCollectionView.contentOffset.x / SCREEN_WIDTH);
+     return (int)(currentCollectionView.contentOffset.x / currentCollectionView.width);
 
 }
 

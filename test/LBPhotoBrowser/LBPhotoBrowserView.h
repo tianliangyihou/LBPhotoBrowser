@@ -11,6 +11,6 @@
 @interface LBPhotoBrowserView : UIView
 
 - (void)showImageViewsWithURLs:(LBUrlsMutableArray *)urls andSelectedIndex:(int)index;
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
+- (void)showImageWithURLArray:(LBUrlsMutableArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
 @end
 

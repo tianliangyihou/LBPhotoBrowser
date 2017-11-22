@@ -204,7 +204,7 @@
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
+- (void)showImageWithURLArray:(LBUrlsMutableArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
     [self showImageViewsWithURLs:urls andSelectedIndex:index];
 }
 
