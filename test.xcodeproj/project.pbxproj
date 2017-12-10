@@ -118,19 +118,13 @@
 			isa = PBXGroup;
 			children = (
 				267AD87C1F5E3B3A00DC6D9F /* LBPhotoBrowser */,
+				26DF008F1FDD0E79000150FA /* showCollectionView */,
 				26E7AC521F960AD700929530 /* loner.jpg */,
 				26E7AC511F960AD600929530 /* timg.gif */,
 				2657DB671E77BCDD00F324C3 /* AppDelegate.h */,
 				2657DB681E77BCDD00F324C3 /* AppDelegate.m */,
 				2657DB6A1E77BCDD00F324C3 /* ViewController.h */,
 				2657DB6B1E77BCDD00F324C3 /* ViewController.m */,
-				26B30FA41FBAD563001615CD /* LBTest.h */,
-				26B30FA51FBAD563001615CD /* LBTest.m */,
-				264430F31FB9689E00043E0C /* CollectionViewShowVC.h */,
-				264430F41FB9689E00043E0C /* CollectionViewShowVC.m */,
-				264430F61FB969E900043E0C /* LBCollectionViewCell.h */,
-				264430F71FB969E900043E0C /* LBCollectionViewCell.m */,
-				264430F81FB969E900043E0C /* LBCollectionViewCell.xib */,
 				2657DB6D1E77BCDD00F324C3 /* Main.storyboard */,
 				2657DB701E77BCDD00F324C3 /* Assets.xcassets */,
 				2657DB721E77BCDD00F324C3 /* LaunchScreen.storyboard */,
@@ -177,6 +171,20 @@
 				267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */,
 			);
 			path = LBPhotoBrowser;
+			sourceTree = "<group>";
+		};
+		26DF008F1FDD0E79000150FA /* showCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				26B30FA41FBAD563001615CD /* LBTest.h */,
+				26B30FA51FBAD563001615CD /* LBTest.m */,
+				264430F31FB9689E00043E0C /* CollectionViewShowVC.h */,
+				264430F41FB9689E00043E0C /* CollectionViewShowVC.m */,
+				264430F61FB969E900043E0C /* LBCollectionViewCell.h */,
+				264430F71FB969E900043E0C /* LBCollectionViewCell.m */,
+				264430F81FB969E900043E0C /* LBCollectionViewCell.xib */,
+			);
+			path = showCollectionView;
 			sourceTree = "<group>";
 		};
 		61E93CE3A19FC9C16D5842BC /* Pods */ = {

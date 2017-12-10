@@ -121,6 +121,9 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         [self loadingView];
         if (mgr.placeHoldImageCallBackBlock) {
             currentImage =  mgr.placeHoldImageCallBackBlock([NSIndexPath indexPathForItem:[mgr.urls indexOfObject:url] inSection:0]);
+            if (!currentImage) {
+                currentImage =[UIImage imageNamed:@"LBLoading.png"];
+            }
         }else {
             currentImage =[UIImage imageNamed:@"LBLoading.png"];
         }
@@ -140,7 +143,6 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (self.shouldAnimation && [LBPhotoBrowserManager defaultManager].showBrowserWithAnimation) {
         self.imageViewIsMoving = YES;
         self.imageView.frame = self.oldFrame;
-        
         [ UIView animateWithDuration:0.25 animations:^{
             wself.imageView.frame = photoImageViewFrame;
             wself.imageView.center = [UIApplication sharedApplication].keyWindow.center;

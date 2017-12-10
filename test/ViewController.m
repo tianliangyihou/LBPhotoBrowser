@@ -22,7 +22,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView5;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView6;
 
-@property (nonatomic , strong)NSArray *urlStrings;
+@property (nonatomic , strong)NSArray *thumbnailUrlStrings;
+
+@property (nonatomic , strong)NSArray *largeUrlStrings;
 
 @property (nonatomic , strong)NSArray *imageViews;
 
@@ -33,30 +35,51 @@
 
 @implementation ViewController
 
-- (NSArray *)urlStrings {
-    if (!_urlStrings) {
-        _urlStrings = @[
-                  @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503555021950&di=17c2df6a4e00eb9cd903ca4b242420e6&imgtype=0&src=http%3A%2F%2Fpic.92to.com%2Fanv%2F201606%2F27%2Feo5n02tvqa5.gif",
-                  
-                  // 这个gif144张 全部加载在内存中占用210M
-                  @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504425455943&di=26c76de065684dcca127e0970254518c&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0143d4578075450000012e7eb2106a.gif",
-                  
-                  @"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1929354940,3549861327&fm=117&gp=0.jpg",
-                  
-                  [[NSBundle mainBundle] pathForResource:@"loner.jpg" ofType:nil],
-                  
-                  [[NSBundle mainBundle] pathForResource:@"timg.gif" ofType:nil],
-                  
-                  @"http://ww4.sinaimg.cn/bmiddle/406ef017jw1ec40av2nscj20ip4p0b29.jpg"
-                  ];
+- (NSArray *)thumbnailUrlStrings {
+    if (!_thumbnailUrlStrings) {
+        _thumbnailUrlStrings = @[
+                                 // 200 * 200
+                                 @"http://p2.pstatp.com/list/s200/4d500005a68341de149a",
+                                 // 200 * 200
+                                 @"http://p3.pstatp.com/list/s200/4df40000dff9b11bae66",
+                                 // 200 * 200
+                                 @"http://p7.pstatp.com/list/s200/4df20000df7ef91b0fa8",
+                                 // 200 * 200
+                                 @"http://p3.pstatp.com/list/s200/4df20000df7d5a6240c4",
+                                 // 200 * 200
+                                 @"http://p7.pstatp.com/list/s200/4d500005a686aa22dcb3",
+                                 // 200 * 200
+                                 @"http://p3.pstatp.com/list/s200/4df30000df219619c35f",
+                                 ];
     }
-    return _urlStrings;
+    return _thumbnailUrlStrings;
+}
+
+- (NSArray *)largeUrlStrings {
+    if (!_largeUrlStrings) {
+        _largeUrlStrings = @[
+                             //1080 * 912
+                             @"http://p2.pstatp.com/large/w960/4d500005a68341de149a",
+                             //767 * 1080
+                             @"http://p3.pstatp.com/large/w960/4df40000dff9b11bae66",
+                             //1322 * 734
+                             @"http://p7.pstatp.com/large/w960/4df20000df7ef91b0fa8",
+                             //1984 * 1488
+                             @"http://p3.pstatp.com/large/w960/4df20000df7d5a6240c4",
+                             //1984 * 1488
+                             @"http://p7.pstatp.com/large/w960/4d500005a686aa22dcb3",
+                             //1984 * 1488
+                             @"http://p3.pstatp.com/large/w960/4df30000df219619c35f",
+                             ];
+    }
+    return _largeUrlStrings;
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];    
     _imageViews = @[ _imageView1,_imageView2,_imageView3,_imageView4,_imageView5 ,_imageView6];
+    
     _titles = @[ @"发送朋友",@"收藏",@"保存图片",@"识别二维码",@"编辑",@"取消" ];
 
     for (int i = 0; i < _imageViews.count; i++) {
@@ -65,22 +88,17 @@
         imageView.backgroundColor = [UIColor grayColor];
         imageView.tag = i;
         [imageView addGestureRecognizer:tap];
-        BOOL isRemote = isRemoteAddress(self.urlStrings[i]);
-        if (isRemote) {
-            NSURL *url = [NSURL URLWithString:self.urlStrings[i]];
-            [imageView sd_setImageWithURL:url];
-        }else {
-            imageView.image = [UIImage imageWithContentsOfFile:self.urlStrings[i]];
-        }
-        [self addGifLabelForImageView:imageView withUrl:self.urlStrings[i]];
+        NSURL *url = [NSURL URLWithString:self.thumbnailUrlStrings[i]];
+        [imageView sd_setImageWithURL:url];
+        [self addGifLabelForImageView:imageView withUrl:self.thumbnailUrlStrings[i]];
     }
-    // 添加3d touch功能 --> LB3DTouchVC 已经把该做的都做了 只管用就好
+     //添加3d touch功能 --> LB3DTouchVC 已经把该做的都做了 只管用就好
     [self lb_registerForPreviewingWithDelegate:self sourceViews:_imageViews previewActionTitles:@[@"保存图片",@"分享",@"识别二维码",@"取消"]];
 }
  
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
 
-    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:_urlStrings fromImageViews:_imageViews selectedIndex:(int)tap.view.tag imageViewSuperView:self.view];
+    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:self.largeUrlStrings fromImageViews:_imageViews selectedIndex:(int)tap.view.tag imageViewSuperView:self.view]; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存
     
     // 添加图片浏览器长按手势的效果
     [[[LBPhotoBrowserManager defaultManager] addLongPressShowTitles:self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
@@ -93,7 +111,7 @@
         return [UIImage imageNamed:@"LBLoading.png"];
     }]addPhotoBrowserWillDismissBlock:^{
         LBPhotoBrowserLog(@" LBPhotoBrowser --> 即将销毁 ");
-    }].lowGifMemory = YES; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存;
+    }].lowGifMemory = YES;
 }
 
 #pragma mark - LBTouchVCPreviewingDelegate
@@ -128,7 +146,4 @@
     gifLabel.text = @"动图";
     [imageView addSubview:gifLabel];
 }
-
-
-
 @end

@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, LBScrollPosition) {
 
 @property (nonatomic , weak)UICollectionView *collectioView;
 
-@property (nonatomic , weak)NSArray *imageViews;
+@property (nonatomic , strong)NSArray *imageViews;
 
 @property (nonatomic , strong)NSMutableDictionary <NSString *, NSIndexPath *> *showIndexPathDic;
 

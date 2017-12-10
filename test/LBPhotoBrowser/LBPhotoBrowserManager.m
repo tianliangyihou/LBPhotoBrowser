@@ -125,10 +125,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
-- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView {
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView {
     
-    if (urls.count == 0 || !urls) return;
-    if (imageViews.count == 0 || !imageViews) return;
+    if (urls.count == 0 || !urls) return nil;
+    if (imageViews.count == 0 || !imageViews) return nil;
     
     resetManagerData(_photoBrowserView, self.urls, self.imageViews);
     for (id obj in urls) {
@@ -172,12 +172,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.helper.showType = LBShowTypeViews;
     self.helper.imageViews = imageViews;
     self.helper.lastShowIndex = self.helper.currentShowIndex = index;
+    return self;
     
 }
 
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
-    if (urls.count == 0 || !urls) return;
-    if (!collectionView) return;
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
+    if (urls.count == 0 || !urls) return nil;
+    if (!collectionView) return nil;
     
     resetManagerData(_photoBrowserView, self.urls, self.imageViews);
     for (id obj in urls) {
@@ -208,11 +209,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.helper.showType = LBShowTypeCollectionView;
     self.helper.collectioView = collectionView;
     self.helper.lastShowIndex = self.helper.currentShowIndex = index;
+    return self;
 }
 
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls {
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls {
     if (urls.count == unwantedUrls.count || urls.count < unwantedUrls.count) {
-        return;
+        return nil;
     }
     NSMutableArray *originalStrings = [NSMutableArray arrayWithCapacity:urls.count];
     NSMutableArray *unwantedStrings = [NSMutableArray arrayWithCapacity:unwantedUrls.count];
@@ -224,7 +226,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         }
         if (![obj isKindOfClass:[NSString class]]) {
             LBPhotoBrowserLog(@"urls传入的URL 类型必须为NSURL or NSString");
-            return;
+            return nil;
         }
         [originalStrings addObject:obj];
     }
@@ -235,7 +237,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         }
         if (![obj isKindOfClass:[NSString class]]) {
             LBPhotoBrowserLog(@"unwantedUrls传入的URL 类型必须为NSURL or NSString");
-            return;
+            return nil;
         }
         [unwantedStrings addObject:obj];
     }
@@ -249,7 +251,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     }
     NSString *selectedString = originalStrings[index];
     index = (int)[wantedStrings indexOfObject:selectedString];
-    [self showImageWithURLArray:wantedStrings fromCollectionView:collectionView selectedIndex:index];
+    return [self showImageWithURLArray:wantedStrings fromCollectionView:collectionView selectedIndex:index];
 }
 
 #pragma mark - longPressAction

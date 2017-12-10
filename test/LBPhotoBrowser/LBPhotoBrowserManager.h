@@ -90,14 +90,14 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
  @param index 点击图片的index
  @param superView 当前View的父View
  */
-- (void)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView;
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView;
 /**
  展示 网络图片or本地图片
  @param urls 需要加载的图片的URL数组
  @param index 点击图片的index
  @param collectionView 需要展示图片的collectionView
  */
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index;
 
 /**
  展示 网络图片or本地图片
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, LBMaximalImageViewOnDragDismmissStyle) {
  @param index 点击图片的index
  @param unwantedUrls 不需要展示的url
  */
-- (void)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls;
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls;
 
 
 #pragma mark - 自定义图片长按按钮的Block 类似TableViewCell的代理
