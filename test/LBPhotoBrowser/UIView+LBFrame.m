@@ -6,9 +6,9 @@
 //  Copyright (c) 2014年 16816. All rights reserved.
 //
 
-#import "UIView+Frame.h"
+#import "UIView+LBFrame.h"
 
-@implementation UIView (Frame)
+@implementation UIView (LBFrame)
 
 - (CGFloat)top
 {
@@ -71,11 +71,10 @@
 }
 -(void)setCenterX:(CGFloat)centerX
 {
-    
     CGPoint  center=self.center;
     center.x=centerX;
     self.center=center;
-    
+
 }
 -(CGFloat)centerX
 {

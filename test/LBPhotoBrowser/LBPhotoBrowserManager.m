@@ -8,6 +8,7 @@
 
 #import "LBPhotoBrowserManager.h"
 #import "UIImage+LBDecoder.h"
+#import "LBZoomScrollView.h"
 #import <ImageIO/ImageIO.h>
 
 #if __has_include(<SDWebImage/SDWebImageManager.h>)
@@ -30,13 +31,63 @@ dispatch_semaphore_signal(_lock);
 
 static LBPhotoBrowserManager *mgr = nil;
 
-static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsMutableArray *urls ,LBImageViewsArray *imageViews) {
+static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsMutableArray *urls ,LBFramesMutableArray *frames, LBImagesMutableArray *images) {
     [urls removeAllObjects];
-    [imageViews removeAllObjects];
+    [frames removeAllObjects];
+    [images removeAllObjects];
     if (photoBrowseView) {
         [photoBrowseView removeFromSuperview];
     }
 }
+
+@implementation LBPhotoWebItem
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _frame = CGRectZero;
+        _placeholdSize = CGSizeZero;
+        _urlString = @"";
+    }
+    return self;
+}
+- (instancetype)initWithURLString:(NSString *)url frame:(CGRect)frame {
+    LBPhotoWebItem *item  = [self init];
+    item.urlString = url;
+    item.frame = frame;
+    return item;
+}
+
+- (instancetype)initWithURLString:(NSString *)url frame:(CGRect)frame placeholdSize:(CGSize)size {
+    LBPhotoWebItem *item = [self initWithURLString:url frame:frame];
+    item.placeholdSize = size;
+    return item;
+}
+
+- (instancetype)initWithURLString:(NSString *)url frame:(CGRect)frame placeholdImage:(UIImage *)image {
+    LBPhotoWebItem *item = [self initWithURLString:url frame:frame];
+    item.placeholdImage = image;
+    return item;
+}
+
+- (instancetype)initWithURLString:(NSString *)url frame:(CGRect)frame placeholdImage:(UIImage *)image placeholdSize:(CGSize)size  {
+    LBPhotoWebItem *item = [self initWithURLString:url frame:frame placeholdImage:image];
+    item.placeholdSize = size;
+    return item;
+}
+
+@end
+
+@implementation LBPhotoLocalItem
+
+- (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame {
+    LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]init];
+    item.localImage = image;
+    item.frame = frame;
+    return item;
+}
+
+@end
 
 @interface LBPhotoBrowserManager () {
     NSOperationQueue *_requestQueue;
@@ -46,7 +97,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @property (nonatomic , copy)UIView *(^longPressCustomViewBlock)(UIImage *, NSIndexPath *);
 
-@property (nonatomic , copy)void(^dismissBlock)(void);
+@property (nonatomic , copy)void(^willDismissBlock)(void);
+
+@property (nonatomic , copy)void(^didDismissBlock)(void);
+
 
 
 @property (nonatomic , strong)NSArray *titles;
@@ -71,7 +125,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @synthesize urls = _urls;
 
-@synthesize imageViews = _imageViews;
+@synthesize frames = _frames;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -84,26 +138,18 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return _urls;
 }
 
-
-- (LBImageViewsArray *)imageViews {
-    if (!_imageViews) {
-        _imageViews = [[LBImageViewsArray alloc]init];
+- (LBFramesMutableArray *)frames {
+    if (!_frames) {
+        _frames = [[LBFramesMutableArray alloc]init];
     }
-    return _imageViews;
+    return _frames;
 }
 
-- (LBPhotoBrowserShowHelper *)helper {
-    if (!_helper) {
-        _helper = [[LBPhotoBrowserShowHelper alloc]init];
-    }
-    return _helper;
-}
 
 + (instancetype)defaultManager {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         mgr = [[self alloc]init];
-        mgr.style = LBMaximalImageViewOnDragDismmissStyleOne;
     });
     return mgr;
 }
@@ -112,150 +158,118 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 {
     self = [super init];
     if (self) {
-        self.isNeedBounces = YES;
         self.showBrowserWithAnimation = YES;
         self.errorImage = [UIImage imageNamed:@"LBLoadError.jpg"];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayLinkInvalidate) name:LBImageViewWillDismissNot object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopDisplayLink) name:LBAddCoverImageViewNot object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resumeDipaplayLink) name:LBRemoveCoverImageViewNot object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserWillDismiss) name:LBImageViewWillDismissNot object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserDidDismiss) name:LBImageViewDidDismissNot object:nil];
         _requestQueue = [[NSOperationQueue alloc] init];
         _requestQueue.maxConcurrentOperationCount = 1;
         _lock = dispatch_semaphore_create(1);
+        _cancelLoadImageWhenRemove = YES;
     }
     return self;
 }
 
-- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViews:(NSArray *)imageViews selectedIndex:(int)index imageViewSuperView:(UIView *)superView {
-    
-    if (urls.count == 0 || !urls) return nil;
-    if (imageViews.count == 0 || !imageViews) return nil;
-    
-    resetManagerData(_photoBrowserView, self.urls, self.imageViews);
-    for (id obj in urls) {
-        NSURL *url = nil;
-        if ([obj isKindOfClass:[NSURL class]]) {
-            url = obj;
-        }
-        if ([obj isKindOfClass:[NSString class]]) {
-            if (isRemoteAddress((NSString *)obj)){
-                url = [NSURL URLWithString:obj];
-            }else {
-                url = [NSURL fileURLWithPath:obj];
-            }
-        }
-        if (!url) {
-            url = [NSURL URLWithString:@"https://LBPhotoBrowser.error"];
-            LBPhotoBrowserLog(@"传的链接%@有误",obj);
-        }
-        [self.urls addObject:url];
+
+- (instancetype)showImageWithLocalItems:(NSArray<LBPhotoLocalItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView {
+    if (items.count == 0 || !items) {
+        return nil;
     }
-    
-    for (id obj in imageViews) {
-        UIImageView *imageView = nil;
-        if ([obj isKindOfClass:[UIImageView class]]) {
-            imageView = obj;
+    resetManagerData(_photoBrowserView, self.urls, self.frames, self.images);
+    for (int i = 0; i < items.count; i++) {
+        LBPhotoLocalItem *item = items[i];
+        if (item.localImage) {
+            [self.images addObject:item.localImage];
         }
-        NSAssert(imageView, @"imageView数组里面的数据有问题!");
-        if (imageView) {
-            [self.imageViews addObject:imageView];
+        if (!CGRectEqualToRect(item.frame, CGRectZero)) {
+            [self.frames addObject:[NSValue valueWithCGRect:item.frame]];
         }
     }
-    NSAssert(self.urls.count == self.imageViews.count, @"请检查传入的urls 和 imageViews数组");
+    NSAssert(self.images.count == self.frames.count, @"请检查传入item的localImage 和 frame");
     
-    _selectedIndex = index;
+    _currentPage = index;
     _imageViewSuperView = superView;
     
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [photoBrowserView showImageViewsWithURLs:self.urls andSelectedIndex:index];
+    [photoBrowserView showImageViewsWithImages:self.images andSeletedIndex:(int)index];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
     _photoBrowserView = photoBrowserView;
-    self.helper.showType = LBShowTypeViews;
-    self.helper.imageViews = imageViews;
-    self.helper.lastShowIndex = self.helper.currentShowIndex = index;
     return self;
-    
 }
 
-- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index {
-    if (urls.count == 0 || !urls) return nil;
-    if (!collectionView) return nil;
+- (instancetype)showImageWithWebItems:(NSArray<LBPhotoWebItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView {
+    NSMutableDictionary *placeHoldImageDic = [[NSMutableDictionary alloc]initWithCapacity:items.count];
+    NSMutableDictionary *placeholdSizeDic = [[NSMutableDictionary alloc]initWithCapacity:items.count];
+    NSMutableArray *frames = [[NSMutableArray alloc]initWithCapacity:items.count];
+    NSMutableArray *urls = [[NSMutableArray alloc]initWithCapacity:items.count];
+    for (int i = 0; i < items.count; i++) {
+        LBPhotoWebItem *item = items[i];
+        if (!item.urlString || CGRectEqualToRect(item.frame, CGRectZero)) {
+            return nil;
+        }
+        [urls addObject:[NSURL URLWithString:item.urlString]];
+        [frames addObject:[NSValue valueWithCGRect:item.frame]];
+        NSString *index = [NSString stringWithFormat:@"%d",i];
+        placeHoldImageDic[index] = item.placeholdImage;
+        placeholdSizeDic[index] = CGSizeEqualToSize(item.placeholdSize, CGSizeZero)? nil:[NSValue valueWithCGSize:item.placeholdSize];
+    }
+    return  [[[self showImageWithURLArray:urls fromImageViewFrames:frames selectedIndex:index imageViewSuperView:superView] addPlaceholdImageSizeBlock:^CGSize(UIImage *Image, NSIndexPath *indexpath) {
+        NSString *index = [NSString stringWithFormat:@"%ld",(long)indexpath.row];
+        CGSize size = [placeholdSizeDic[index] CGSizeValue];
+        return size;
+    }] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
+        NSString *index = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+        return placeHoldImageDic[index];
+    }] ;
+}
+
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViewFrames:(NSArray *)frames selectedIndex:(NSInteger)index imageViewSuperView:(UIView *)superView {
     
-    resetManagerData(_photoBrowserView, self.urls, self.imageViews);
+    if (urls.count == 0 || !urls) return nil;
+    if (frames.count == 0 || !frames) return nil;
+    
+    resetManagerData(_photoBrowserView, self.urls, self.frames, self.images);
     for (id obj in urls) {
         NSURL *url = nil;
         if ([obj isKindOfClass:[NSURL class]]) {
             url = obj;
         }
         if ([obj isKindOfClass:[NSString class]]) {
-            if (isRemoteAddress((NSString *)obj)){
-                url = [NSURL URLWithString:obj];
-            }else {
-                url = [NSURL fileURLWithPath:obj];
-            }
+            url = [NSURL URLWithString:obj];
         }
         if (!url) {
             url = [NSURL URLWithString:@"https://LBPhotoBrowser.error"];
-            LBPhotoBrowserLog(@"传的链接%@有误",obj);
+            LBPhotoBrowserLog(@"传入的链接%@有误",obj);
         }
         [self.urls addObject:url];
     }
-    _selectedIndex = index;
-    _imageViewSuperView = collectionView;
+    
+    for (id obj in frames) {
+        NSValue *value = nil;
+        if ([obj isKindOfClass:[NSValue class]]) {
+            value = obj;
+        }
+        if (!value) {
+            value = [NSValue valueWithCGRect:CGRectZero];
+            LBPhotoBrowserLog(@"传入的frame %@有误",obj);
+        }
+        [self.frames addObject:value];
+    }
+    NSAssert(self.urls.count == self.frames.count, @"请检查传入item的url 和 frame");
+    
+    _currentPage = index;
+    _imageViewSuperView = superView;
     
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [photoBrowserView showImageWithURLArray:self.urls fromCollectionView:collectionView selectedIndex:index];
+    [photoBrowserView showImageViewsWithURLs:self.urls andSelectedIndex:(int)index];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
     _photoBrowserView = photoBrowserView;
-    self.helper.showType = LBShowTypeCollectionView;
-    self.helper.collectioView = collectionView;
-    self.helper.lastShowIndex = self.helper.currentShowIndex = index;
     return self;
+    
 }
 
-- (instancetype)showImageWithURLArray:(NSArray *)urls fromCollectionView:(UICollectionView *)collectionView selectedIndex:(int)index unwantedUrls:(NSArray *)unwantedUrls {
-    if (urls.count == unwantedUrls.count || urls.count < unwantedUrls.count) {
-        return nil;
-    }
-    NSMutableArray *originalStrings = [NSMutableArray arrayWithCapacity:urls.count];
-    NSMutableArray *unwantedStrings = [NSMutableArray arrayWithCapacity:unwantedUrls.count];
-    NSMutableArray *wantedStrings = [NSMutableArray array];
-    for (int i = 0; i < urls.count; i++) {
-        id obj = urls[i];
-        if ([obj isKindOfClass:[NSURL class]]) {
-            obj = [(NSURL *)obj absoluteString];
-        }
-        if (![obj isKindOfClass:[NSString class]]) {
-            LBPhotoBrowserLog(@"urls传入的URL 类型必须为NSURL or NSString");
-            return nil;
-        }
-        [originalStrings addObject:obj];
-    }
-    for (int i = 0; i < unwantedUrls.count; i++) {
-        id obj = unwantedUrls[i];
-        if ([obj isKindOfClass:[NSURL class]]) {
-            obj = [(NSURL *)obj absoluteString];
-        }
-        if (![obj isKindOfClass:[NSString class]]) {
-            LBPhotoBrowserLog(@"unwantedUrls传入的URL 类型必须为NSURL or NSString");
-            return nil;
-        }
-        [unwantedStrings addObject:obj];
-    }
-    for (int i = 0; i < originalStrings.count; i++) {
-        NSString *urlString = urls[i];
-        if (![unwantedStrings containsObject:urlString]) {
-            NSURL *url = isRemoteAddress(urlString) ?[NSURL URLWithString:urlString] : [NSURL fileURLWithPath:urlString];
-            [self.helper.showIndexPathDic setObject:[NSIndexPath indexPathForRow:i inSection:0] forKey:url.absoluteString];
-            [wantedStrings addObject:urlString];
-        }
-    }
-    NSString *selectedString = originalStrings[index];
-    index = (int)[wantedStrings indexOfObject:selectedString];
-    return [self showImageWithURLArray:wantedStrings fromCollectionView:collectionView selectedIndex:index];
-}
 
 #pragma mark - longPressAction
-
 - (instancetype)addLongPressShowTitles:(NSArray <NSString *> *)titles {
     _titles = titles;
     return self;
@@ -270,15 +284,26 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
-- (instancetype)addPlaceHoldImageCallBackBlock:(UIImage *(^)(NSIndexPath * indexPath))placeHoldImageCallBackBlock {
-    _placeHoldImageCallBackBlock = placeHoldImageCallBackBlock;
+- (instancetype)addPlaceholdImageCallBackBlock:(UIImage *(^)(NSIndexPath *))placeholdImageCallBackBlock {
+    _placeholdImageCallBackBlock = placeholdImageCallBackBlock;
     return self;
 }
 
 - (instancetype)addPhotoBrowserWillDismissBlock:(void (^)(void))dismissBlock {
-    _dismissBlock = dismissBlock;
+    _willDismissBlock = dismissBlock;
     return self;
 }
+
+- (instancetype)addPhotoBrowserDidDismissBlock:(void (^)(void))dismissBlock {
+    _didDismissBlock = dismissBlock;
+    return self;
+}
+
+- (instancetype)addPlaceholdImageSizeBlock:(CGSize (^)(UIImage *, NSIndexPath *))placeholdImageSizeBlock {
+    _placeholdImageSizeBlock = placeholdImageSizeBlock;
+    return self;
+}
+
 
 - (NSArray<NSString *> *)currentTitles {
     return _titles;
@@ -303,6 +328,19 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return _displayLink;
 }
 
+- (void)photoBrowserWillDismiss {
+    [self displayLinkInvalidate];
+    if(self.willDismissBlock) {
+        self.willDismissBlock();
+    }
+    self.willDismissBlock = nil;
+}
+- (void)photoBrowserDidDismiss {
+    if (self.didDismissBlock) {
+        self.didDismissBlock();
+    }
+    self.didDismissBlock = nil;
+}
 - (void)displayLinkInvalidate {
     
     if (_displayLink) {
@@ -314,15 +352,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     if (_requestQueue) {
         [_requestQueue cancelAllOperations];
     }
-    if(_dismissBlock) {
-        _dismissBlock();
-    }
-    _dismissBlock = nil;
     _longPressCustomViewBlock = nil;
     _titleClickBlock = nil;
-    _placeHoldImageCallBackBlock = nil;
-    _helper = nil;
+    _placeholdImageCallBackBlock = nil;
+    _placeholdImageCallBackBlock = nil;
 }
+
+
 - (void)changeKeyframe:(CADisplayLink *)displayLink
 {
     if (!self.currentGifImage.images) return;
@@ -377,16 +413,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     weak_self;
     UIView *superView = wself.currentShowImageView.superview;
     if (![superView isKindOfClass:[UIScrollView class]]) return;
-    NSURL *currentUrl = [superView valueForKeyPath:@"url"];
-    if (!isRemoteAddress(currentUrl.absoluteString)) {
-        NSData *imageData = [NSData dataWithContentsOfURL:currentUrl];
-        UIImage *image = [UIImage sd_imageWithData:imageData];
-        self.currentGifImage = image;
-        [image lb_animatedGIFData:imageData];
-        self.displayLink.paused = NO;
-        return;
-    }
-    
+    LBZoomScrollView * zoomScrollView = (LBZoomScrollView *)superView;
+    NSURL *currentUrl = zoomScrollView.model.url;
+    // 异步查询图片
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
             __block NSData *data_block = data;
@@ -419,22 +448,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _currentGifImage  = currentGifImage;
 }
 
-#pragma mark - 监听通知
-
-- (void)stopDisplayLink {
-    if (self.lowGifMemory && self.style == LBMaximalImageViewOnDragDismmissStyleOne) {
-        if (_displayLink && _displayLink.paused == NO) {
-            _displayLink.paused = YES;
-        }
-    }
-}
-- (void)resumeDipaplayLink {
-    if (self.lowGifMemory && self.style == LBMaximalImageViewOnDragDismmissStyleOne) {
-        if (_displayLink && _displayLink.paused == YES) {
-            _displayLink.paused = NO;
-        }
-    }
-}
 
 @end
 

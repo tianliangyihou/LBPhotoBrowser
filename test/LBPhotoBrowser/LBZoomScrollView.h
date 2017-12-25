@@ -7,9 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "LBTapDetectingImageView.h"
+@class LBScrollViewStatusModel;
 @interface LBZoomScrollView : UIScrollView
 
-- (void)showWithURL:(NSURL *)url andwithAnimation:(BOOL)animation andWithStatusModel:(id)model;
+@property (nonatomic , strong)LBScrollViewStatusModel *model;
+
+@property (nonatomic , weak)LBTapDetectingImageView *imageView;
+
+@property (nonatomic , assign)BOOL imageViewIsMoving;
+
+
+- (void)handlesingleTap:(CGPoint)touchPoint;
+- (void)handleDoubleTap:(CGPoint)touchPoint;
+- (void)startPopAnimationWithModel:(LBScrollViewStatusModel *)model completionBlock:(void(^)(void))completion;
 
 @end

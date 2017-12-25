@@ -11,55 +11,44 @@
 #import "LBZoomScrollView.h"
 #import "LBLoadingView.h"
 #import "LBTapDetectingImageView.h"
+#import "LBPhotoBrowserView.h"
+#import "UIImage+LBDecoder.h"
+
+#if __has_include(<SDWebImage/SDWebImageManager.h>)
+#import <SDWebImage/SDWebImageManager.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/SDImageCacheConfig.h>
+#import <SDWebImage/UIImage+MultiFormat.h>
+#else
+#import "SDWebImageManager.h"
+#import "UIImageView+WebCache.h"
+#import "SDImageCacheConfig.h"
+#import "UIImage+MultiFormat.h"
+#endif
+
+static inline CGRect moveSizeToCenter(CGSize size) {
+    return CGRectMake(SCREEN_WIDTH /2.0 - size.width / 2.0, SCREEN_HEIGHT /2.0 - size.height / 2.0, size.width, size.height);
+}
 
 static CGFloat scrollViewMinZoomScale = 1.0;
 static CGFloat scrollViewMaxZoomScale = 3.0;
 
-@interface LBZoomScrollView ()<UIScrollViewDelegate,LBTapDetectingImageViewDelegate,UIGestureRecognizerDelegate>
+@interface LBZoomScrollView ()<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 
-@property (nonatomic , weak)LBTapDetectingImageView *imageView;
 @property (nonatomic , weak)LBLoadingView *loadingView;
-
 @property (nonatomic , assign)CGSize imageSize;
-@property (nonatomic , assign)BOOL imageViewIsMoving;
-@property (nonatomic , strong)NSURL *url;
 @property (nonatomic , assign)CGRect oldFrame;
-@property (nonatomic , assign)BOOL shouldAnimation;
-@property (nonatomic , weak)id statusModel;
-
-// 自定义的放大后 拖拽消失的方法
-@property (nonatomic , assign)CGPoint startPoint;
-
-// style1
-@property (nonatomic , weak)UIImageView *appearanceImageView;
-@property (nonatomic , assign)CGFloat dragBeginScrollViewContentOffsetX;
-@property (nonatomic , assign)CGFloat dragBeginImageViewCenterX;
-
-//style2
-@property (nonatomic , weak)UIView *scollViewSuperView;
 
 @end
 
 @implementation LBZoomScrollView
 
-- (UIImageView *)appearanceImageView {
-    if (!_appearanceImageView) {
-        UIImageView *imageView  = [[UIImageView alloc]initWithImage:self.imageView.image];
-        CGFloat imageViewY = LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX + 30 : 30;
-        imageView.frame = CGRectMake(-self.contentOffset.x + self.imageView.left,imageViewY, self.imageView.width, self.imageView.height);
-        [[UIApplication sharedApplication].keyWindow addSubview:imageView];
-        _appearanceImageView = imageView;
-        _dragBeginScrollViewContentOffsetX = imageView.left;
-        _dragBeginImageViewCenterX = imageView.centerX;
 
-    }
-    return _appearanceImageView;
-}
+#pragma mark - getter
 
 - (LBTapDetectingImageView *)imageView {
     if (!_imageView) {
         LBTapDetectingImageView *imageView  = [[LBTapDetectingImageView alloc]init];
-        imageView.tapDelegate = self;
         [self addSubview:imageView];
         _imageView = imageView;
     }
@@ -69,7 +58,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 - (LBLoadingView *)loadingView {
     if (!_loadingView) {
         LBLoadingView *loadingView = [[LBLoadingView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-        loadingView.center = self.center;
+        loadingView.frame = moveSizeToCenter(loadingView.frame.size);
         [self addSubview:loadingView];
         _loadingView = loadingView;
     }
@@ -82,92 +71,172 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.delegate = self;
+        self.alwaysBounceVertical = YES;
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         self.decelerationRate = UIScrollViewDecelerationRateFast;
-        self.frame = [UIScreen mainScreen].bounds;
-        self.bounces = NO;
+        self.frame = CGRectMake(10, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
         self.panGestureRecognizer.delegate = self;
+        self.minimumZoomScale = scrollViewMinZoomScale;
         [self imageView];
     }
     return self;
 }
 
-
-
-- (void)showWithURL:(NSURL *)url andwithAnimation:(BOOL)animation andWithStatusModel:(id)model{
-    
-    _url = url;
-    _shouldAnimation = animation;
-    _statusModel = model;
-    
+- (UIImage *)getPlaceholdImageForModel:(LBScrollViewStatusModel *)model {
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    if (animation && mgr.showBrowserWithAnimation) {
-        UIView *animationView = mgr.helper.currentShowView;
-        animationView.hidden = YES;
-        CGRect rect = [mgr.imageViewSuperView convertRect: animationView.frame toView:[UIApplication sharedApplication].keyWindow];
-        self.oldFrame = rect;
-    }else if (animation && !mgr.showBrowserWithAnimation) {
-        UIView *animationView = mgr.helper.currentShowView;
-        animationView.hidden = YES;
+    UIImage *placeholdImage = nil;
+    if (mgr.placeholdImageCallBackBlock) {
+        placeholdImage =  mgr.placeholdImageCallBackBlock([NSIndexPath indexPathForItem:model.index inSection:0]);
+        if (!placeholdImage) {
+            placeholdImage =[UIImage imageNamed:@"LBLoading.png"];
+        }
+    }else {
+        placeholdImage =[UIImage imageNamed:@"LBLoading.png"];
     }
-    
-    UIImage *currentImage = [self.statusModel valueForKey:@"currentPageImage"];
-    if (currentImage) {
+    return placeholdImage;
+}
+
+- (void)setModel:(LBScrollViewStatusModel *)model {
+    _model = model;
+    weak_self;
+    [self removePreviousFadeAnimationForLayer:self.imageView.layer];
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    if (!model.currentPageImage) {
+        [self loadingView];
+        wself.maximumZoomScale = scrollViewMinZoomScale;
+        if (mgr.placeholdImageSizeBlock) {
+            CGSize size = mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model], [NSIndexPath indexPathForItem:model.index inSection:0]);
+            self.imageView.frame = moveSizeToCenter(size);
+        }else {
+            [self resetScrollViewStatusWithImage:[self getPlaceholdImageForModel:model]];
+        }
+        self.imageView.image = [self getPlaceholdImageForModel:model];
+        [model loadImageWithCompletedBlock:^(LBScrollViewStatusModel *loadModel, UIImage *image, NSData *data, NSError *error, BOOL finished, NSURL *imageURL) {
+            [wself.loadingView removeFromSuperview];
+            wself.maximumZoomScale = scrollViewMaxZoomScale;
+            if (error) {
+                image = mgr.errorImage;
+                LBPhotoBrowserLog(@"%@",error);
+            }
+            model.currentPageImage  = image;
+            if (image.images.count > 0) {
+                model.currentPageImage = mgr.lowGifMemory ? image : [UIImage sdOverdue_animatedGIFWithData:data];
+            }
+            // 下载完成之后 只有当前cell正在展示 --> 刷新
+            NSArray *cells = [mgr.currentCollectionView visibleCells];
+            for (id obj in cells) {
+                LBScrollViewStatusModel *visibleModel = [obj valueForKeyPath:@"model"];
+                if (model.index == visibleModel.index) {
+                    [wself reloadCellDataWithModel:model andImage:image andImageData:data];
+                }
+            }
+        }];
+    }else {
+
         if (_loadingView) {
             [_loadingView removeFromSuperview];
         }
-    }else {
-        [self loadingView];
-        if (mgr.placeHoldImageCallBackBlock) {
-            currentImage =  mgr.placeHoldImageCallBackBlock([NSIndexPath indexPathForItem:[mgr.urls indexOfObject:url] inSection:0]);
-            if (!currentImage) {
-                currentImage =[UIImage imageNamed:@"LBLoading.png"];
-            }
-        }else {
-            currentImage =[UIImage imageNamed:@"LBLoading.png"];
-        }
+        [self resetScrollViewStatusWithImage:model.currentPageImage];
+        self.imageView.image = model.currentPageImage;
+        self.maximumZoomScale = scrollViewMaxZoomScale;
     }
-    [self adjustImageViewStatusWithImage:currentImage];
-    
+    self.zoomScale = model.scale.floatValue;
+    self.contentOffset = model.contentOffset;
+
+}
+
+- (void)reloadCellDataWithModel:(LBScrollViewStatusModel *)model andImage:(UIImage *)image andImageData:(NSData *)data{
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    self.imageView.image = model.currentPageImage;
+    [self resetScrollViewStatusWithImage:model.currentPageImage];
+    if (mgr.placeholdImageSizeBlock) {
+        CGSize size = mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model], [NSIndexPath indexPathForItem:model.index inSection:0]);
+        CGRect imageViewFrame = self.imageView.frame;
+        self.imageView.frame = moveSizeToCenter(size);
+        [UIView animateWithDuration:0.25 animations:^{
+            self.imageView.frame = imageViewFrame;
+        }];
+    }else {
+        [self addFadeAnimationWithDuration:0.25 curve:UIViewAnimationCurveLinear ForLayer:self.imageView.layer];
+    }
+    /**
+     当gif下载完成 并且正在当前的展示状态的时候
+     由于SDWebImage异步下载图片 导致可能图片没有完全写入沙盒
+     */
+    if (image.images.count > 0 && model.index == mgr.currentPage && mgr.lowGifMemory) {
+        [mgr setValue:data forKey:@"spareData"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:LBGifImageDownloadFinishedNot object:nil];
+        });
+    }
 }
 
 
-- (void)adjustImageViewStatusWithImage:(UIImage *)image {
-    weak_self;
-    self.imageSize = [self newSizeForImageViewWithImage:image];
-    [self resetScrollViewStatus];
-    CGRect photoImageViewFrame;
-    photoImageViewFrame.origin = CGPointZero;
-    photoImageViewFrame.size = self.imageSize;
-    if (self.shouldAnimation && [LBPhotoBrowserManager defaultManager].showBrowserWithAnimation) {
-        self.imageViewIsMoving = YES;
-        self.imageView.frame = self.oldFrame;
-        [ UIView animateWithDuration:0.25 animations:^{
-            wself.imageView.frame = photoImageViewFrame;
-            wself.imageView.center = [UIApplication sharedApplication].keyWindow.center;
-        }completion:^(BOOL finished) {
-            wself.imageViewIsMoving = NO;
-            [wself layoutSubviews];// sometime need layout
-        }];
-        
-    }else {
-        self.imageView.frame = photoImageViewFrame;
-        self.imageView.center = [UIApplication sharedApplication].keyWindow.center;
+- (void)startPopAnimationWithModel:(LBScrollViewStatusModel *)model completionBlock:(void (^)(void))completion {
+    UIImage *currentImage = model.currentPageImage;
+    _model = model;
+    if (!currentImage) {
+        currentImage = [self getPlaceholdImageForModel:model];
     }
+    [self showPopAnimationWithImage:currentImage WithCompletionBlock:completion];
+}
+
+- (void)showPopAnimationWithImage:(UIImage *)image WithCompletionBlock:(void (^)(void))completion {
+    weak_self;
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+//    UIView *animationView = mgr.imageViews[mgr.currentPage];
+    CGRect animationViewFrame = [mgr.frames[mgr.currentPage]  CGRectValue];
+    CGRect rect = [mgr.imageViewSuperView convertRect: animationViewFrame toView:[UIApplication sharedApplication].keyWindow];
+    self.oldFrame = rect;
+    CGRect photoImageViewFrame;
+    if (mgr.placeholdImageSizeBlock && !self.model.currentPageImage) {
+       CGSize size = mgr.placeholdImageSizeBlock(image, [NSIndexPath indexPathForItem:self.model.index inSection:0]);
+        photoImageViewFrame = moveSizeToCenter(size);
+    }else {
+        [self resetScrollViewStatusWithImage:image];        
+        photoImageViewFrame = self.imageView.frame;
+    }
+    self.imageViewIsMoving = YES;
+    self.imageView.frame = self.oldFrame;
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+        wself.imageView.frame = photoImageViewFrame;
+    }completion:^(BOOL finished) {
+        wself.imageViewIsMoving = NO;
+        [wself layoutSubviews];// sometime need layout
+        if (completion) {
+            completion();
+        }
+    }];
     // if not clear this image ,gif image may have some thing wrong
     self.imageView.image = nil;
     self.imageView.image = image;
-    self.contentSize = photoImageViewFrame.size;
     [self setNeedsLayout];
-    [LBPhotoBrowserManager defaultManager].showBrowserWithAnimation = YES;
 }
 
-- (void)resetScrollViewStatus {
-    self.minimumZoomScale = scrollViewMinZoomScale;
-    self.maximumZoomScale = scrollViewMaxZoomScale;
+
+- (void)resetScrollViewStatusWithImage:(UIImage *)image {
     self.zoomScale = scrollViewMinZoomScale;
-    self.contentSize = CGSizeMake(0, 0);
+    self.imageView.frame = CGRectMake(0, 0, self.width, 0);
+    if (image.size.height / image.size.width > self.height / self.width) {
+        self.imageView.height = floor(image.size.height / (image.size.width / self.width));
+    }else {
+        CGFloat height = image.size.height / image.size.width * self.width;;
+        self.imageView.height = floor(height);
+        self.imageView.centerY = self.height / 2;
+    }
+    if (self.imageView.height > self.height && self.imageView.height - self.height <= 1) {
+        self.imageView.height = self.height;
+    }
+    self.contentSize = CGSizeMake(self.width, MAX(self.imageView.height, self.height));
+    [self setContentOffset:CGPointZero];
+    
+    if (self.imageView.height > self.height) {
+        self.alwaysBounceVertical = YES;
+    } else {
+        self.alwaysBounceVertical = NO;
+    }
+
 }
 
 - (void)layoutSubviews {
@@ -184,7 +253,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     } else {
         frameToCenter.origin.x = 0;
     }
-    
+
     // Vertically
     if (frameToCenter.size.height < boundsSize.height) {
         frameToCenter.origin.y = floorf((boundsSize.height - frameToCenter.size.height) / 2.0);
@@ -195,33 +264,40 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (!CGRectEqualToRect( self.imageView.frame, frameToCenter)){
         self.imageView.frame = frameToCenter;
     }
+  
+}
+#pragma mark - 动画
+- (void)addFadeAnimationWithDuration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve ForLayer:(CALayer *)layer{
+    if (duration <= 0) return;
+    
+    NSString *mediaFunction;
+    switch (curve) {
+        case UIViewAnimationCurveEaseInOut: {
+            mediaFunction = kCAMediaTimingFunctionEaseInEaseOut;
+        } break;
+        case UIViewAnimationCurveEaseIn: {
+            mediaFunction = kCAMediaTimingFunctionEaseIn;
+        } break;
+        case UIViewAnimationCurveEaseOut: {
+            mediaFunction = kCAMediaTimingFunctionEaseOut;
+        } break;
+        case UIViewAnimationCurveLinear: {
+            mediaFunction = kCAMediaTimingFunctionLinear;
+        } break;
+        default: {
+            mediaFunction = kCAMediaTimingFunctionLinear;
+        } break;
+    }
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = duration;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:mediaFunction];
+    transition.type = kCATransitionFade;
+    [layer addAnimation:transition forKey:@"llb.fade"];
 }
 
-#pragma mark - 比例尺寸处理
-- (CGSize)newSizeForImageViewWithImage:(UIImage *)image {
-    
-    float width = 0;
-    float height = 0;
-    float maxWidth = SCREEN_WIDTH;
-    float maxHeight = SCREEN_HEIGHT;
-    
-    if(LB_IS_IPHONEX){
-        maxHeight = SCREEN_HEIGHT - LB_STUATUS_BAR_HEIGHT_IPHONEX - LB_BOTTOM_MARGIN_IPHONEX;
-    }
-    
-    float scale=(float)image.size.width/image.size.height;
-    float newScale=(float)maxWidth/maxHeight;
-    if (scale >= newScale) {
-        width = (float)image.size.width/maxWidth;
-        height = (float)image.size.height/width;
-        width = maxWidth;
-    }else
-    {
-        height = (float)image.size.height/maxHeight;
-        width = (float)image.size.width/height;
-        height = maxHeight;
-    }
-    return CGSizeMake(width,height);
+- (void)removePreviousFadeAnimationForLayer:(CALayer *)layer {
+    [layer removeAnimationForKey:@"llb.fade"];
 }
 
 
@@ -232,48 +308,28 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    if ([[self.statusModel valueForKeyPath:@"isDisplaying"] boolValue] == NO) return;
-    [self.statusModel setValue:@(scrollView.zoomScale) forKeyPath:@"scale"];
+    if (self.model.isShowing == NO) return;
+    self.model.scale = @(scrollView.zoomScale);
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale{
     if (scrollView.minimumZoomScale != scale) return;
     [self setZoomScale:self.minimumZoomScale animated:YES];
-    self.imageView.frame = CGRectMake(0, 0, self.imageSize.width, self.imageSize.height);
-    self.frame = [UIScreen mainScreen].bounds;
-    self.contentSize = self.imageView.frame.size;
+    [self resetScrollViewStatusWithImage:self.model.currentPageImage];
     [self setNeedsLayout];
 }
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
-    if ([[self.statusModel valueForKeyPath:@"isDisplaying"] boolValue] == NO) return;
-    [self.statusModel setValue:@(scrollView.contentOffset.x) forKeyPath:@"contentOffsetX"];
-    [self.statusModel setValue:@(scrollView.contentOffset.y) forKeyPath:@"contentOffsetY"];
-
+    if (self.model.isShowing == NO) return;
+    self.model.contentOffset = scrollView.contentOffset;
 }
 
-#pragma mark - imageView的代理方法
-- (void)imageView:(UIImageView *)imageView doubleTapDetected:(UITouch *)touch {
-    [self handleDoubleTap:[touch locationInView:imageView]];
-}
-
-- (void)imageView:(UIImageView *)imageView singleTapDetected:(UITouch *)touch {
-    [self handlesingleTap:[touch locationInView:imageView]];
-}
-
-- (void)imageViewIsMovingWithImageView:(LBTapDetectingImageView *)imageView {
-    self.imageViewIsMoving = YES;
-}
-
-- (void)imageViewEndMoveImageView:(LBTapDetectingImageView *)imageView {
-    self.imageViewIsMoving = NO;
-}
-
-- (void)imageViewNeedRemoveFromSuperView {
-    [self handlesingleTap:CGPointZero];
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self.imageView.height > SCREEN_HEIGHT) {
+        [[LBPhotoBrowserManager defaultManager].currentCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.model.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+    }
 }
 
 #pragma mark - imageView点击事件的处理方法
@@ -282,205 +338,36 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (_loadingView) {
         [_loadingView removeFromSuperview];
     }
-    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
-    UIView *movedView = mgr.helper.lastShowView;
-    movedView.hidden = NO;
-    UIView *currentView  = mgr.helper.currentShowView;
-    currentView.hidden = YES;
-    self.oldFrame = [mgr.imageViewSuperView convertRect:currentView.frame toView:[UIApplication sharedApplication].keyWindow];
-    
-    UIView *dismissView = nil;
-    if (touchPoint.x == -1 && touchPoint.y == -1) {
-        if ([LBPhotoBrowserManager defaultManager].style == LBMaximalImageViewOnDragDismmissStyleOne) {
-            dismissView = self.appearanceImageView;
-        }else {
-            dismissView = self.imageView;
-            dismissView.frame = CGRectMake(self.left, self.top, self.width, self.height);
-        }
-    }else {
-        dismissView = self.imageView;
-    }
-    
-    //Views can have only one superview. If view already has a superview and that view is not the receiver, this method removes the previous superview before making the receiver its new superview.
-    if (dismissView.superview != [UIApplication sharedApplication].keyWindow) {
-        [[UIApplication sharedApplication].keyWindow addSubview:dismissView];
-    }
-    
-    self.imageViewIsMoving = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewWillDismissNot object:nil];
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+//    UIView *currentView  = mgr.imageViews[mgr.currentPage];
+    CGRect currentViewFrame =  [mgr.frames[mgr.currentPage] CGRectValue];
+    self.oldFrame = [mgr.imageViewSuperView convertRect:currentViewFrame toView:[UIApplication sharedApplication].keyWindow];
+    UIView *dismissView = self.imageView;
+    self.imageViewIsMoving = YES;
     weak_self;
     [UIView animateWithDuration:0.25 animations:^{
+        wself.zoomScale = scrollViewMinZoomScale;
+        dismissView.contentMode = UIViewContentModeScaleAspectFill;
+        dismissView.clipsToBounds = YES;
+        wself.contentOffset = CGPointZero;
         dismissView.frame = wself.oldFrame;
-        
+        [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor clearColor];
     }completion:^(BOOL finished) {
         [dismissView removeFromSuperview];
         [wself removeFromSuperview];
-        currentView.hidden = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewDidDismissNot object:nil];
     }];
 }
 
 - (void)handleDoubleTap:(CGPoint)touchPoint {
-    
     if (self.zoomScale != self.minimumZoomScale) {
         [self setZoomScale:self.minimumZoomScale animated:YES];
     } else {
-        CGFloat newZoomScale =self.maximumZoomScale ;
+        CGFloat newZoomScale = self.maximumZoomScale ;
         CGFloat xsize = self.bounds.size.width / newZoomScale;
         CGFloat ysize = self.bounds.size.height / newZoomScale;
         [self zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
     }
 }
-
-#pragma mark - 手势的代理 为放大高度超过屏幕的ImageView添加拖拽消失手势-
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    // Thanks for simpleIsGod finds this bug
-    if (gestureRecognizer.numberOfTouches == 2 && self.imageViewIsMoving == YES) {
-        return NO;
-    }
-    CGFloat actualHeight = LB_IS_IPHONEX ? (SCREEN_HEIGHT - LB_STUATUS_BAR_HEIGHT_IPHONEX -LB_BOTTOM_MARGIN_IPHONEX) : SCREEN_HEIGHT;
-    CGFloat actualContentOffsetY = LB_IS_IPHONEX ? -LB_STUATUS_BAR_HEIGHT_IPHONEX : 0;
-    if (self.contentOffset.y == actualContentOffsetY && self.imageView.height > actualHeight && gestureRecognizer.numberOfTouches == 1) {
-        if ([LBPhotoBrowserManager defaultManager].style == LBMaximalImageViewOnDragDismmissStyleOne) {
-            [gestureRecognizer addTarget:self action:@selector(lb_touchMoveStyleOne:)];
-        }else {
-            [gestureRecognizer addTarget:self action:@selector(lb_touchMoveStyleTwo:)];
-        }
-    }
-    return YES;
-}
-
-- (void)lb_touchMoveStyleOne:(UIPanGestureRecognizer *)pan  {
-    CGPoint point = [pan locationInView:[UIApplication sharedApplication].keyWindow];
-    if (pan.state == UIGestureRecognizerStateBegan) {
-        _startPoint = point;
-    }else if (pan.state == UIGestureRecognizerStateChanged) {
-        
-        CGFloat deviationY = point.y - _startPoint.y;
-        CGFloat deviationX = point.x - _startPoint.x;
-        // 只要deviationY 大于 30 父View = [UIApplication sharedApplication].keyWindow
-        if (deviationY > 30) {
-            if (!_appearanceImageView || _appearanceImageView.superview != [UIApplication sharedApplication].keyWindow) {
-                [[UIApplication sharedApplication].keyWindow addSubview:self.appearanceImageView];
-                [[NSNotificationCenter defaultCenter] postNotificationName:LBAddCoverImageViewNot object:nil];
-            }
-        }
-        // 只要deviationY 小于或者等于30 父View = [UIApplication sharedApplication].keyWindow
-        if (deviationY <=30 && _appearanceImageView) {
-            [_appearanceImageView removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
-        }
-        // 保证背景View的颜色变化 --> 150
-        CGFloat ratio = (LB_DISMISS_DISTENCE-deviationY)/LB_DISMISS_DISTENCE;
-        [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:ratio];
-        
-        if (deviationY <= 30) {
-            _startPoint = CGPointMake(point.x,_startPoint.y);
-        }
-        
-        if (deviationY > 30) {
-            self.imageView.hidden = YES;
-            self.appearanceImageView.top =LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX + deviationY: deviationY;
-            self.appearanceImageView.width = self.imageView.width * ratio;
-            self.appearanceImageView.height = self.imageView.height * ratio;
-            self.appearanceImageView.centerX = self.dragBeginImageViewCenterX + deviationX;
-            
-        }else {
-            self.imageView.hidden = NO;
-        }
-        
-    }else if (pan.state == UIGestureRecognizerStateEnded) {
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleOne:)];
-        if (self.appearanceImageView.top > 200) {
-            [self handlesingleTap:CGPointMake(-1, -1)];
-            return;
-        }
-        CGFloat deviationY = point.y - _startPoint.y;
-        if (deviationY <= 30) {
-            [self.appearanceImageView removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
-            self.imageView.hidden = NO;
-            return;
-        }
-        weak_self;
-        self.dragBeginScrollViewContentOffsetX = self.contentOffset.x;
-        [UIView animateWithDuration:0.35 animations:^{
-            CGFloat appearanceImageViewY = LB_IS_IPHONEX ? LB_STUATUS_BAR_HEIGHT_IPHONEX :0;
-            [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor blackColor];
-            wself.appearanceImageView.frame = CGRectMake(- wself.contentOffset.x + wself.imageView.left, appearanceImageViewY, wself.imageView.width, wself.imageView.height);
-        }completion:^(BOOL finished) {
-            wself.contentOffset = CGPointMake(wself.dragBeginScrollViewContentOffsetX,LB_IS_IPHONEX ? -LB_STUATUS_BAR_HEIGHT_IPHONEX : 0);
-            wself.imageView.hidden = NO;
-            [wself.appearanceImageView removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
-        }];
-        
-    }else if (pan.state == UIGestureRecognizerStateCancelled) {
-        self.imageView.hidden = NO;
-        [self.appearanceImageView removeFromSuperview];
-        [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleOne:)];
-    }else if (pan.state == UIGestureRecognizerStateFailed) {
-        self.imageView.hidden = NO;
-        [self.appearanceImageView removeFromSuperview];
-        [[NSNotificationCenter defaultCenter] postNotificationName:LBRemoveCoverImageViewNot object:nil];
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleOne:)];
-    }
-}
-
-- (void)lb_touchMoveStyleTwo:(UIPanGestureRecognizer *)pan  {
-    CGPoint point = [pan locationInView:[UIApplication sharedApplication].keyWindow];
-    if (pan.state == UIGestureRecognizerStateBegan) {
-        _startPoint = point;
-        self.scollViewSuperView = self.superview;
-    }else if (pan.state == UIGestureRecognizerStateChanged) {
-        CGFloat deviationY = point.y - _startPoint.y;
-        CGFloat deviationX = point.x - _startPoint.x;
-        self.top = deviationY;
-        // 只要deviationY 大于 30 父View = [UIApplication sharedApplication].keyWindow
-        if (deviationY > 30 && self.superview != [UIApplication sharedApplication].keyWindow) {
-            [[UIApplication sharedApplication].keyWindow addSubview:self];
-        }
-        // 只要deviationY 小于或者等于 30 父View = [UIApplication sharedApplication].keyWindow
-        if (deviationY <=30 && self.superview!= self.scollViewSuperView) {
-            [self.scollViewSuperView addSubview:self];
-        }
-        // 保证背景View的颜色变化 --> 150
-        if (deviationY > 150) {
-            [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:(LB_DISMISS_DISTENCE-deviationY)/(LB_DISMISS_DISTENCE - 30)];
-        }else {
-            [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor blackColor];
-        }
-        
-        if (deviationY <= 30) {
-            _startPoint = CGPointMake(point.x,_startPoint.y);
-        }
-        // 调整ScrollView的frame
-        if (deviationY > 30) {
-            self.left = deviationX;
-        }else {
-            self.left = 0;
-        }
-        
-    }else if (pan.state == UIGestureRecognizerStateEnded) {
-        if (self.top > 200) {
-            [self handlesingleTap:CGPointMake(-1, -1)];
-        }
-        [self.scollViewSuperView addSubview:self];
-        [UIView animateWithDuration:0.25 animations:^{
-            self.top = 0;
-            self.left = 0;
-            [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor blackColor];
-        }];
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleTwo:)];
-    }else if (pan.state == UIGestureRecognizerStateCancelled) {
-        [self.scollViewSuperView addSubview:self];
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleTwo:)];
-    }else if (pan.state == UIGestureRecognizerStateFailed) {
-        [self.scollViewSuperView addSubview:self];
-        [self.panGestureRecognizer removeTarget:self action:@selector(lb_touchMoveStyleTwo:)];
-    }
-}
-
 @end

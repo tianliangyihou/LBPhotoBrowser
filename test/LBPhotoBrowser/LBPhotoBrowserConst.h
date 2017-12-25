@@ -10,10 +10,11 @@
 #define __LBPhotoBrowserConst__H__
 
 #import <Foundation/Foundation.h>
-#import "UIView+Frame.h"
+#import "UIView+LBFrame.h"
 
 typedef NSMutableArray<NSURL *> LBUrlsMutableArray;
-typedef NSMutableArray <UIImageView *> LBImageViewsArray;
+typedef NSMutableArray <NSValue *> LBFramesMutableArray;
+typedef NSMutableArray<UIImage *> LBImagesMutableArray;
 
 #ifdef DEBUG
 
@@ -52,14 +53,8 @@ typedef NSMutableArray <UIImageView *> LBImageViewsArray;
 
 #define LB_BOTTOM_MARGIN (LB_IS_IPHONEX ? 34 : 0)
 
-UIKIT_EXTERN BOOL isRemoteAddress(NSString * address);
 
-UIKIT_EXTERN NSString * const LBImageViewBeiginDragNot;
-UIKIT_EXTERN NSString * const LBImageViewEndDragNot;
 UIKIT_EXTERN NSString * const LBImageViewWillDismissNot;
 UIKIT_EXTERN NSString * const LBImageViewDidDismissNot;
-
-UIKIT_EXTERN NSString * const LBAddCoverImageViewNot;
-UIKIT_EXTERN NSString * const LBRemoveCoverImageViewNot;
-
+UIKIT_EXTERN NSString * const LBGifImageDownloadFinishedNot;
 #endif

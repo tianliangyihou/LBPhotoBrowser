@@ -10,7 +10,6 @@
 		264430F51FB9689E00043E0C /* CollectionViewShowVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430F41FB9689E00043E0C /* CollectionViewShowVC.m */; };
 		264430F91FB969E900043E0C /* LBCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430F71FB969E900043E0C /* LBCollectionViewCell.m */; };
 		264430FA1FB969E900043E0C /* LBCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 264430F81FB969E900043E0C /* LBCollectionViewCell.xib */; };
-		264430FD1FB9897500043E0C /* LBPhotoBrowserShowHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */; };
 		2657DB661E77BCDD00F324C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB651E77BCDD00F324C3 /* main.m */; };
 		2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB681E77BCDD00F324C3 /* AppDelegate.m */; };
 		2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB6B1E77BCDD00F324C3 /* ViewController.m */; };
@@ -27,11 +26,8 @@
 		267AD8981F5E3B3A00DC6D9F /* LBTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88A1F5E3B3A00DC6D9F /* LBTapDetectingImageView.m */; };
 		267AD8991F5E3B3A00DC6D9F /* LBZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88C1F5E3B3A00DC6D9F /* LBZoomScrollView.m */; };
 		267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */; };
-		267AD89B1F5E3B3A00DC6D9F /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */; };
+		267AD89B1F5E3B3A00DC6D9F /* UIView+LBFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD8901F5E3B3A00DC6D9F /* UIView+LBFrame.m */; };
 		26B30FA61FBAD563001615CD /* LBTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B30FA51FBAD563001615CD /* LBTest.m */; };
-		26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */; };
-		26E7AC531F960B0600929530 /* loner.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 26E7AC521F960AD700929530 /* loner.jpg */; };
-		26E7AC541F960B0600929530 /* timg.gif in Resources */ = {isa = PBXBuildFile; fileRef = 26E7AC511F960AD600929530 /* timg.gif */; };
 		32BF97956CD6003C5D78629E /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1472DF34D1E9CA8AAD44F40D /* libPods-test.a */; };
 /* End PBXBuildFile section */
 
@@ -42,8 +38,6 @@
 		264430F61FB969E900043E0C /* LBCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBCollectionViewCell.h; sourceTree = "<group>"; };
 		264430F71FB969E900043E0C /* LBCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBCollectionViewCell.m; sourceTree = "<group>"; };
 		264430F81FB969E900043E0C /* LBCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LBCollectionViewCell.xib; sourceTree = "<group>"; };
-		264430FB1FB9897500043E0C /* LBPhotoBrowserShowHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBPhotoBrowserShowHelper.h; sourceTree = "<group>"; };
-		264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBPhotoBrowserShowHelper.m; sourceTree = "<group>"; };
 		2657DB611E77BCDD00F324C3 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2657DB651E77BCDD00F324C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2657DB671E77BCDD00F324C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,21 +59,17 @@
 		267AD8851F5E3B3A00DC6D9F /* LBPhotoBrowserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBPhotoBrowserManager.h; sourceTree = "<group>"; };
 		267AD8861F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBPhotoBrowserManager.m; sourceTree = "<group>"; };
 		267AD8871F5E3B3A00DC6D9F /* LBPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBPhotoBrowserView.h; sourceTree = "<group>"; };
-		267AD8881F5E3B3A00DC6D9F /* LBPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBPhotoBrowserView.m; sourceTree = "<group>"; };
+		267AD8881F5E3B3A00DC6D9F /* LBPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBPhotoBrowserView.m; sourceTree = "<group>"; wrapsLines = 0; };
 		267AD8891F5E3B3A00DC6D9F /* LBTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBTapDetectingImageView.h; sourceTree = "<group>"; };
 		267AD88A1F5E3B3A00DC6D9F /* LBTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBTapDetectingImageView.m; sourceTree = "<group>"; };
 		267AD88B1F5E3B3A00DC6D9F /* LBZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBZoomScrollView.h; sourceTree = "<group>"; };
 		267AD88C1F5E3B3A00DC6D9F /* LBZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBZoomScrollView.m; sourceTree = "<group>"; };
 		267AD88D1F5E3B3A00DC6D9F /* UIImage+LBDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+LBDecoder.h"; sourceTree = "<group>"; };
 		267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LBDecoder.m"; sourceTree = "<group>"; };
-		267AD88F1F5E3B3A00DC6D9F /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
-		267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		267AD88F1F5E3B3A00DC6D9F /* UIView+LBFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LBFrame.h"; sourceTree = "<group>"; };
+		267AD8901F5E3B3A00DC6D9F /* UIView+LBFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LBFrame.m"; sourceTree = "<group>"; };
 		26B30FA41FBAD563001615CD /* LBTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBTest.h; sourceTree = "<group>"; };
 		26B30FA51FBAD563001615CD /* LBTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBTest.m; sourceTree = "<group>"; };
-		26DAE5DD1F78CEEA003DB86B /* LB3DTouchVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LB3DTouchVC.h; sourceTree = "<group>"; };
-		26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LB3DTouchVC.m; sourceTree = "<group>"; };
-		26E7AC511F960AD600929530 /* timg.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = timg.gif; sourceTree = "<group>"; };
-		26E7AC521F960AD700929530 /* loner.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = loner.jpg; sourceTree = "<group>"; };
 		52839D449824474097575972 /* Pods-test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig"; sourceTree = "<group>"; };
 		7258DD35A57A1219D711F5E6 /* Pods-test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.release.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,8 +109,6 @@
 			children = (
 				267AD87C1F5E3B3A00DC6D9F /* LBPhotoBrowser */,
 				26DF008F1FDD0E79000150FA /* showCollectionView */,
-				26E7AC521F960AD700929530 /* loner.jpg */,
-				26E7AC511F960AD600929530 /* timg.gif */,
 				2657DB671E77BCDD00F324C3 /* AppDelegate.h */,
 				2657DB681E77BCDD00F324C3 /* AppDelegate.m */,
 				2657DB6A1E77BCDD00F324C3 /* ViewController.h */,
@@ -151,12 +139,8 @@
 				267AD8801F5E3B3A00DC6D9F /* LBLoadingView.m */,
 				267AD8811F5E3B3A00DC6D9F /* LBOptionView.h */,
 				267AD8821F5E3B3A00DC6D9F /* LBOptionView.m */,
-				26DAE5DD1F78CEEA003DB86B /* LB3DTouchVC.h */,
-				26DAE5DE1F78CEEA003DB86B /* LB3DTouchVC.m */,
 				267AD8831F5E3B3A00DC6D9F /* LBPhotoBrowserConst.h */,
 				267AD8841F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m */,
-				264430FB1FB9897500043E0C /* LBPhotoBrowserShowHelper.h */,
-				264430FC1FB9897500043E0C /* LBPhotoBrowserShowHelper.m */,
 				267AD8851F5E3B3A00DC6D9F /* LBPhotoBrowserManager.h */,
 				267AD8861F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m */,
 				267AD8871F5E3B3A00DC6D9F /* LBPhotoBrowserView.h */,
@@ -167,8 +151,8 @@
 				267AD88C1F5E3B3A00DC6D9F /* LBZoomScrollView.m */,
 				267AD88D1F5E3B3A00DC6D9F /* UIImage+LBDecoder.h */,
 				267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */,
-				267AD88F1F5E3B3A00DC6D9F /* UIView+Frame.h */,
-				267AD8901F5E3B3A00DC6D9F /* UIView+Frame.m */,
+				267AD88F1F5E3B3A00DC6D9F /* UIView+LBFrame.h */,
+				267AD8901F5E3B3A00DC6D9F /* UIView+LBFrame.m */,
 			);
 			path = LBPhotoBrowser;
 			sourceTree = "<group>";
@@ -265,8 +249,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26E7AC531F960B0600929530 /* loner.jpg in Resources */,
-				26E7AC541F960B0600929530 /* timg.gif in Resources */,
 				267AD8921F5E3B3A00DC6D9F /* LBLoading.png in Resources */,
 				2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */,
 				2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */,
@@ -332,8 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				264430F91FB969E900043E0C /* LBCollectionViewCell.m in Sources */,
-				267AD89B1F5E3B3A00DC6D9F /* UIView+Frame.m in Sources */,
-				264430FD1FB9897500043E0C /* LBPhotoBrowserShowHelper.m in Sources */,
+				267AD89B1F5E3B3A00DC6D9F /* UIView+LBFrame.m in Sources */,
 				2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */,
 				267AD8981F5E3B3A00DC6D9F /* LBTapDetectingImageView.m in Sources */,
 				267AD8961F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m in Sources */,
@@ -342,7 +323,6 @@
 				267AD8971F5E3B3A00DC6D9F /* LBPhotoBrowserView.m in Sources */,
 				267AD8941F5E3B3A00DC6D9F /* LBOptionView.m in Sources */,
 				264430F51FB9689E00043E0C /* CollectionViewShowVC.m in Sources */,
-				26DAE5DF1F78CEEA003DB86B /* LB3DTouchVC.m in Sources */,
 				26B30FA61FBAD563001615CD /* LBTest.m in Sources */,
 				2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */,
 				267AD8951F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m in Sources */,

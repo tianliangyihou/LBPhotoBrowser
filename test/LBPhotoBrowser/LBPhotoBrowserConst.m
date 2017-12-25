@@ -13,14 +13,8 @@
 #import "LBPhotoBrowserConst.h"
 #import "LBPhotoBrowserManager.h"
 
-inline BOOL isRemoteAddress(NSString * address) {
-    return [address hasPrefix:@"http"];
-}
-
-NSString * const LBImageViewBeiginDragNot = @"LBImageViewBeiginDragNot";
-NSString * const LBImageViewEndDragNot = @"LBImageViewEndDragNot";
 NSString * const LBImageViewWillDismissNot = @"LBImageViewWillDismissNot";
 NSString * const LBImageViewDidDismissNot = @"LBImageViewDidDismissNot";
-NSString * const LBAddCoverImageViewNot = @"LBAddCoverImageViewNot";
-NSString * const LBRemoveCoverImageViewNot = @"LBRemoveCoverImageViewNot";
+NSString * const LBGifImageDownloadFinishedNot = @"LBGifImageDownloadFinishedNot";
+
 #endif

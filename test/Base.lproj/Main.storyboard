@@ -57,7 +57,7 @@
                                     <constraint firstAttribute="width" constant="80" id="Q0s-GP-M36"/>
                                 </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t7O-8x-HuR">
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t7O-8x-HuR">
                                 <rect key="frame" x="228" y="363" width="80" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="bi1-hM-zM6"/>
@@ -264,7 +264,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="2We-Ay-L90"/>
                                 </constraints>
-                                <state key="normal" title="collectionView show"/>
+                                <state key="normal" title="本地图片"/>
                                 <connections>
                                     <segue destination="Xat-Cc-wZy" kind="push" id="akn-cn-viZ"/>
                                 </connections>
@@ -275,7 +275,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="5Xc-tp-0EB"/>
                                 </constraints>
-                                <state key="normal" title="views show"/>
+                                <state key="normal" title="网络图片"/>
                                 <connections>
                                     <segue destination="BYZ-38-t0r" kind="push" id="ktl-1Q-t69"/>
                                 </connections>

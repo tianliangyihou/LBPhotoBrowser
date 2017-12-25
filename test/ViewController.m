@@ -7,13 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "UIView+Frame.h"
+#import "UIView+LBFrame.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LBPhotoBrowserManager.h"
-#import "LB3DTouchVC.h"
-#import <ImageIO/ImageIO.h>
 
-@interface ViewController ()<LBTouchVCPreviewingDelegate>
+@interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView1;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView2;
@@ -26,14 +24,22 @@
 
 @property (nonatomic , strong)NSArray *largeUrlStrings;
 
-@property (nonatomic , strong)NSArray *imageViews;
+@property (nonatomic , strong)NSArray <UIImageView *> *imageViews;
+
 
 @property (nonatomic , strong)NSArray *titles;
+
+@property (nonatomic , assign)BOOL hide;
 
 @end
 
 
 @implementation ViewController
+
+
+- (void)dealloc {
+    LBPhotoBrowserLog(@"ViewController 销毁了");
+}
 
 - (NSArray *)thumbnailUrlStrings {
     if (!_thumbnailUrlStrings) {
@@ -49,7 +55,7 @@
                                  // 200 * 200
                                  @"http://p7.pstatp.com/list/s200/4d500005a686aa22dcb3",
                                  // 200 * 200
-                                 @"http://p3.pstatp.com/list/s200/4df30000df219619c35f",
+                                 @"http://ww2.sinaimg.cn/wap720/6204ece1gw1evvzegkumsj20k069f4hm.jpg",
                                  ];
     }
     return _thumbnailUrlStrings;
@@ -59,9 +65,9 @@
     if (!_largeUrlStrings) {
         _largeUrlStrings = @[
                              //1080 * 912
-                             @"http://p2.pstatp.com/large/w960/4d500005a68341de149a",
+                             @"http://n1.itc.cn/img8/wb/recom/2016/08/12/147100143815015802.gif",
                              //767 * 1080
-                             @"http://p3.pstatp.com/large/w960/4df40000dff9b11bae66",
+                             @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504425455943&di=26c76de065684dcca127e0970254518c&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0143d4578075450000012e7eb2106a.gif",
                              //1322 * 734
                              @"http://p7.pstatp.com/large/w960/4df20000df7ef91b0fa8",
                              //1984 * 1488
@@ -69,7 +75,7 @@
                              //1984 * 1488
                              @"http://p7.pstatp.com/large/w960/4d500005a686aa22dcb3",
                              //1984 * 1488
-                             @"http://p3.pstatp.com/large/w960/4df30000df219619c35f",
+                             @"http://ww2.sinaimg.cn/wap720/6204ece1gw1evvzegkumsj20k069f4hm.jpg",
                              ];
     }
     return _largeUrlStrings;
@@ -77,11 +83,10 @@
 
 
 - (void)viewDidLoad {
-    [super viewDidLoad];    
-    _imageViews = @[ _imageView1,_imageView2,_imageView3,_imageView4,_imageView5 ,_imageView6];
+    [super viewDidLoad];
     
+    _imageViews = @[_imageView1,_imageView2,_imageView3,_imageView4,_imageView5,_imageView6];
     _titles = @[ @"发送朋友",@"收藏",@"保存图片",@"识别二维码",@"编辑",@"取消" ];
-
     for (int i = 0; i < _imageViews.count; i++) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewClick:)];
         UIImageView *imageView = _imageViews[i];
@@ -92,43 +97,34 @@
         [imageView sd_setImageWithURL:url];
         [self addGifLabelForImageView:imageView withUrl:self.thumbnailUrlStrings[i]];
     }
-     //添加3d touch功能 --> LB3DTouchVC 已经把该做的都做了 只管用就好
-    [self lb_registerForPreviewingWithDelegate:self sourceViews:_imageViews previewActionTitles:@[@"保存图片",@"分享",@"识别二维码",@"取消"]];
 }
  
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
-
-    [[LBPhotoBrowserManager defaultManager] showImageWithURLArray:self.largeUrlStrings fromImageViews:_imageViews selectedIndex:(int)tap.view.tag imageViewSuperView:self.view]; // lowGifMemory 这个在真机上效果明显 模拟器用的是电脑的内存
-    
-    // 添加图片浏览器长按手势的效果
-    [[[LBPhotoBrowserManager defaultManager] addLongPressShowTitles:self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-        LBPhotoBrowserLog(@"%@ %@ %@",image,indexPath,title);
-    }].style = LBMaximalImageViewOnDragDismmissStyleOne; // 默认的就是LBMaximalImageViewOnDragDismmissStyleOne
-    
-    // 给每张图片添加占位图 默认LBLoading.png
-    [[[LBPhotoBrowserManager defaultManager] addPlaceHoldImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
-        LBPhotoBrowserLog(@"%@",indexPath);
-        return [UIImage imageNamed:@"LBLoading.png"];
-    }]addPhotoBrowserWillDismissBlock:^{
-        LBPhotoBrowserLog(@" LBPhotoBrowser --> 即将销毁 ");
-    }].lowGifMemory = YES;
-}
-
-#pragma mark - LBTouchVCPreviewingDelegate
-
-- (UIPreviewActionStyle)lb_previewActionStyleForActionTitle:(NSString *)title index:(NSInteger)index inTitles:(NSArray<NSString *> *)titles {
-    if (index == titles.count - 1) {
-        return UIPreviewActionStyleDestructive;
+    weak_self;
+    NSMutableArray *items = @[].mutableCopy;
+    for (int i = 0; i < self.largeUrlStrings.count; i++) {
+        LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:self.largeUrlStrings[i] frame:self.imageViews[i].frame];
+        item.placeholdSize = CGSizeMake(200, 200);
+        item.placeholdImage = self.imageViews[i].image;
+        [items addObject:item];
     }
-    return UIPreviewActionStyleDefault;
+    [[[[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles: self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+        LBPhotoBrowserLog(@"%@",title);
+    }].lowGifMemory = YES;
+    
+    [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
+        LBPhotoBrowserLog(@"即将销毁");
+        _hide = NO;
+        [wself setNeedsStatusBarAppearanceUpdate];
+    }];
+    
+    _hide = YES;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)lb_userDidSelectedPreviewTitle:(NSString *)title {
-    LBPhotoBrowserLog(@"%@",title);
-}
 
-- (void)lb_showPhotoBrowserFormImageView:(UIImageView *)imageView {
-    [self imageViewClick:imageView.gestureRecognizers.lastObject];
+- (BOOL)prefersStatusBarHidden {
+    return _hide;
 }
 
 #pragma mark - 给图片添加gif标识

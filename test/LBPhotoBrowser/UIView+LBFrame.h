@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (Frame)
+@interface UIView (LBFrame)
 
 @property (nonatomic, assign) CGFloat top;
 @property (nonatomic, assign) CGFloat bottom;
