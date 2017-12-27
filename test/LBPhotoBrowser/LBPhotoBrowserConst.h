@@ -53,7 +53,6 @@ typedef NSMutableArray<UIImage *> LBImagesMutableArray;
 
 #define LB_BOTTOM_MARGIN (LB_IS_IPHONEX ? 34 : 0)
 
-
 UIKIT_EXTERN NSString * const LBImageViewWillDismissNot;
 UIKIT_EXTERN NSString * const LBImageViewDidDismissNot;
 UIKIT_EXTERN NSString * const LBGifImageDownloadFinishedNot;

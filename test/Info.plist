@@ -41,5 +41,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>请求使用图库</string>
 </dict>
 </plist>

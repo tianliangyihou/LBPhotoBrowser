@@ -57,7 +57,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 
 - (LBLoadingView *)loadingView {
     if (!_loadingView) {
-        LBLoadingView *loadingView = [[LBLoadingView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+        LBLoadingView *loadingView = [[LBLoadingView alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
         loadingView.frame = moveSizeToCenter(loadingView.frame.size);
         [self addSubview:loadingView];
         _loadingView = loadingView;
@@ -105,8 +105,8 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (!model.currentPageImage) {
         [self loadingView];
         wself.maximumZoomScale = scrollViewMinZoomScale;
-        if (mgr.placeholdImageSizeBlock) {
-            CGSize size = mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model], [NSIndexPath indexPathForItem:model.index inSection:0]);
+        CGSize size = mgr.placeholdImageSizeBlock ? mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model],[NSIndexPath indexPathForItem:model.index inSection:0]) : CGSizeZero;
+        if (!CGSizeEqualToSize(size, CGSizeZero)) {
             self.imageView.frame = moveSizeToCenter(size);
         }else {
             [self resetScrollViewStatusWithImage:[self getPlaceholdImageForModel:model]];
@@ -133,7 +133,6 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
             }
         }];
     }else {
-
         if (_loadingView) {
             [_loadingView removeFromSuperview];
         }
@@ -143,15 +142,14 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     self.zoomScale = model.scale.floatValue;
     self.contentOffset = model.contentOffset;
-
 }
 
 - (void)reloadCellDataWithModel:(LBScrollViewStatusModel *)model andImage:(UIImage *)image andImageData:(NSData *)data{
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     self.imageView.image = model.currentPageImage;
     [self resetScrollViewStatusWithImage:model.currentPageImage];
-    if (mgr.placeholdImageSizeBlock) {
-        CGSize size = mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model], [NSIndexPath indexPathForItem:model.index inSection:0]);
+    CGSize size = mgr.placeholdImageSizeBlock ? mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model], [NSIndexPath indexPathForItem:model.index inSection:0]) : CGSizeZero;
+    if (!CGSizeEqualToSize(size, CGSizeZero)) {
         CGRect imageViewFrame = self.imageView.frame;
         self.imageView.frame = moveSizeToCenter(size);
         [UIView animateWithDuration:0.25 animations:^{
@@ -162,7 +160,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     /**
      当gif下载完成 并且正在当前的展示状态的时候
-     由于SDWebImage异步下载图片 导致可能图片没有完全写入沙盒
+     由于SDWebImage异步下载图片 导致可能图片没有完全写入沙盒 故:
      */
     if (image.images.count > 0 && model.index == mgr.currentPage && mgr.lowGifMemory) {
         [mgr setValue:data forKey:@"spareData"];
@@ -190,8 +188,8 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     CGRect rect = [mgr.imageViewSuperView convertRect: animationViewFrame toView:[UIApplication sharedApplication].keyWindow];
     self.oldFrame = rect;
     CGRect photoImageViewFrame;
-    if (mgr.placeholdImageSizeBlock && !self.model.currentPageImage) {
-       CGSize size = mgr.placeholdImageSizeBlock(image, [NSIndexPath indexPathForItem:self.model.index inSection:0]);
+    CGSize size = mgr.placeholdImageSizeBlock ? mgr.placeholdImageSizeBlock(image, [NSIndexPath indexPathForItem:self.model.index inSection:0]) : CGSizeZero;
+    if (!CGSizeEqualToSize(size, CGSizeZero) && !self.model.currentPageImage) {
         photoImageViewFrame = moveSizeToCenter(size);
     }else {
         [self resetScrollViewStatusWithImage:image];        
@@ -199,7 +197,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     self.imageViewIsMoving = YES;
     self.imageView.frame = self.oldFrame;
-    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:5 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         wself.imageView.frame = photoImageViewFrame;
     }completion:^(BOOL finished) {
         wself.imageViewIsMoving = NO;
@@ -237,6 +235,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         self.alwaysBounceVertical = NO;
     }
 
+    if (self.imageView.contentMode != UIViewContentModeScaleToFill) {
+        self.imageView.contentMode =  UIViewContentModeScaleToFill;
+        self.imageView.clipsToBounds = NO;
+    }
 }
 
 - (void)layoutSubviews {
@@ -343,20 +345,27 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 //    UIView *currentView  = mgr.imageViews[mgr.currentPage];
     CGRect currentViewFrame =  [mgr.frames[mgr.currentPage] CGRectValue];
     self.oldFrame = [mgr.imageViewSuperView convertRect:currentViewFrame toView:[UIApplication sharedApplication].keyWindow];
-    UIView *dismissView = self.imageView;
+    UIImageView *dismissView = self.imageView;
     self.imageViewIsMoving = YES;
     weak_self;
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
         wself.zoomScale = scrollViewMinZoomScale;
-        dismissView.contentMode = UIViewContentModeScaleAspectFill;
-        dismissView.clipsToBounds = YES;
         wself.contentOffset = CGPointZero;
         dismissView.frame = wself.oldFrame;
+        dismissView.contentMode = UIViewContentModeScaleAspectFill;
+        dismissView.clipsToBounds = YES;
+        if (wself.model.currentPageImage.images.count > 0) {
+            dismissView.image = wself.model.currentPageImage;
+        }
         [LBPhotoBrowserManager defaultManager].currentCollectionView.superview.backgroundColor = [UIColor clearColor];
     }completion:^(BOOL finished) {
-        [dismissView removeFromSuperview];
-        [wself removeFromSuperview];
-        [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewDidDismissNot object:nil];
+        [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            wself.imageView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [dismissView removeFromSuperview];
+            [wself removeFromSuperview];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewDidDismissNot object:nil];
+        }];
     }];
 }
 

@@ -78,7 +78,7 @@ static CGFloat const itemSpace = 20.0;
     }
     self.opreation = [[SDWebImageManager sharedManager] loadImageWithURL:self.url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
     
-        LBPhotoBrowserLog(@"LBScrollViewStatusModel:( %d ) line %d log: %d -- %d",self.index,__LINE__,(int)receivedSize ,(int)expectedSize);
+        //LBPhotoBrowserLog(@"LBScrollViewStatusModel:( %d ) line %d log: %d -- %d",self.index,__LINE__,(int)receivedSize ,(int)expectedSize);
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
        __block UIImage *downloadedImage = image;
@@ -248,6 +248,9 @@ static CGFloat const itemSpace = 20.0;
             CGAffineTransform scale = CGAffineTransformMakeScale(scalePercent, scalePercent);
             cell.zoomScrollView.imageView.transform =  CGAffineTransformConcat(translation, scale);
             self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent];
+            if ([LBPhotoBrowserManager defaultManager].moveBlock) {
+                [LBPhotoBrowserManager defaultManager].moveBlock(scalePercent);
+            }
             self.tag = 1;
         }
             break;
@@ -277,6 +280,9 @@ static CGFloat const itemSpace = 20.0;
         cell.zoomScrollView.imageView.transform =  CGAffineTransformConcat(translation, scale);
         self.backgroundColor = [UIColor blackColor];
     }completion:^(BOOL finished) {
+        if ([LBPhotoBrowserManager defaultManager].moveBlock) {
+            [LBPhotoBrowserManager defaultManager].moveBlock(1.0);
+        }
         cell.zoomScrollView.imageViewIsMoving = NO;
         [cell.zoomScrollView layoutSubviews];
     }];

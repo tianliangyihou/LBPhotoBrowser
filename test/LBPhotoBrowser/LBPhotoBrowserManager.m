@@ -127,6 +127,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @synthesize frames = _frames;
 
+@synthesize images = _images;
+
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -145,6 +148,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return _frames;
 }
 
+- (LBImagesMutableArray *)images {
+    if (!_images) {
+        _images = [[NSMutableArray alloc]init];
+    }
+    return _images;
+}
 
 + (instancetype)defaultManager {
     static dispatch_once_t onceToken;
@@ -304,6 +313,11 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
+
+- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void (^)(CGFloat))moveBlock {
+    _moveBlock = moveBlock;
+    return self;
+}
 
 - (NSArray<NSString *> *)currentTitles {
     return _titles;

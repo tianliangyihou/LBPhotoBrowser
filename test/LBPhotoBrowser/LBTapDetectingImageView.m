@@ -35,6 +35,8 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.userInteractionEnabled = YES;
+        self.contentMode = UIViewContentModeScaleAspectFill;
+        self.clipsToBounds = YES;
         UILongPressGestureRecognizer *ges = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressAction)];
         [self addGestureRecognizer:ges];
     }

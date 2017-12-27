@@ -13,7 +13,6 @@
 
 /**
                             控件的基本结构
- 
  |-------------------------LBTapDetectingImageView------------------------| (最上层)
  
  |-------------------------LBZoomScrollView------------------------|
@@ -23,11 +22,11 @@
  |-------------------------UICollectionView------------------------|
  
  |-------------------------LBPhotoBrowseView------------------------|       (最下层)
-
  */
 /**
-  iphone X 适配
-*/
+ 1 gif的image传值问题 介绍一下
+ 7 键盘图片的问题
+ */
 @interface LBPhotoWebItem : NSObject
 @property (nonatomic , strong)NSString *urlString;
 @property (nonatomic , assign)CGRect frame;
@@ -81,6 +80,8 @@
 
 @property (nonatomic , copy ,readonly)CGSize (^placeholdImageSizeBlock)(UIImage *Image,NSIndexPath *indexpath);
 
+@property (nonatomic , copy ,readonly)void(^moveBlock)(CGFloat);
+
 // 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
 @property (nonatomic , assign)BOOL lowGifMemory;
 
@@ -120,6 +121,8 @@
 - (instancetype)addPhotoBrowserWillDismissBlock:(void(^)(void))dismissBlock;
 
 - (instancetype)addPhotoBrowserDidDismissBlock:(void(^)(void))dismissBlock;
+
+- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void(^)(CGFloat bgViewAlpha))moveBlock;
 
 
 - (NSArray<NSString *> *)currentTitles;
