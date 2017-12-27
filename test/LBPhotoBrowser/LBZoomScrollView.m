@@ -197,7 +197,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     self.imageViewIsMoving = YES;
     self.imageView.frame = self.oldFrame;
-    [UIView animateWithDuration:5 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         wself.imageView.frame = photoImageViewFrame;
     }completion:^(BOOL finished) {
         wself.imageViewIsMoving = NO;
