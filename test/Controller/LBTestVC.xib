@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LBTestVC">
+            <connections>
+                <outlet property="testImageView1" destination="iTY-r4-kVj" id="EGf-ce-3eY"/>
+                <outlet property="testImageView2" destination="GUt-vm-yZO" id="bYj-At-Rc6"/>
+                <outlet property="testImageView3" destination="b1s-zl-L4v" id="scC-zp-VMH"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iTY-r4-kVj">
+                    <rect key="frame" x="78" y="88" width="219" height="127"/>
+                    <color key="backgroundColor" red="0.8626509309" green="0.86279940610000005" blue="0.86264163260000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="127" id="SAX-Un-DII"/>
+                        <constraint firstAttribute="width" constant="219" id="Zd1-UX-o8e"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GUt-vm-yZO">
+                    <rect key="frame" x="78" y="236" width="219" height="127"/>
+                    <color key="backgroundColor" red="0.8626509309" green="0.86279940610000005" blue="0.86264163260000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="219" id="luG-Tm-ToS"/>
+                        <constraint firstAttribute="height" constant="127" id="pOo-6p-QXf"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b1s-zl-L4v">
+                    <rect key="frame" x="78" y="383" width="219" height="127"/>
+                    <color key="backgroundColor" red="0.8626509309" green="0.86279940610000005" blue="0.86264163260000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="219" id="9NM-sb-rKf"/>
+                        <constraint firstAttribute="height" constant="127" id="WMM-x2-Zql"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="iTY-r4-kVj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="88" id="Z0k-b2-5Y5"/>
+                <constraint firstItem="GUt-vm-yZO" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="fXN-Hu-Ypw"/>
+                <constraint firstItem="b1s-zl-L4v" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="s9P-3u-viF"/>
+                <constraint firstItem="GUt-vm-yZO" firstAttribute="top" secondItem="iTY-r4-kVj" secondAttribute="bottom" constant="21" id="vLE-o0-Xus"/>
+                <constraint firstItem="b1s-zl-L4v" firstAttribute="top" secondItem="GUt-vm-yZO" secondAttribute="bottom" constant="20" id="yjj-nT-8dU"/>
+                <constraint firstItem="iTY-r4-kVj" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="zXr-9R-NP4"/>
+            </constraints>
+            <point key="canvasLocation" x="50.5" y="54.5"/>
+        </view>
+    </objects>
+</document>

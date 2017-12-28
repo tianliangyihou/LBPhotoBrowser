@@ -370,6 +370,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 }
 
 - (void)handleDoubleTap:(CGPoint)touchPoint {
+    if (self.maximumZoomScale == self.minimumZoomScale) {
+        return;
+    }
+    
     if (self.zoomScale != self.minimumZoomScale) {
         [self setZoomScale:self.minimumZoomScale animated:YES];
     } else {

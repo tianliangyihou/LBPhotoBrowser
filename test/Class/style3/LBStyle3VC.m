@@ -8,7 +8,7 @@
 //
 
 #import "LBStyle3VC.h"
-
+#import "LBTestVC.h"
 @interface LBStyle3VC ()
 
 @end
@@ -35,6 +35,12 @@
                              ];
     self.thumbnailURLStrings = self.lagerURLStrings;
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"gif test" style:UIBarButtonItemStyleDone target:self action:@selector(rightBtnClick)];
+}
+
+- (void)rightBtnClick {
+    LBTestVC *tvc = [[LBTestVC alloc]init];
+    [self.navigationController pushViewController:tvc animated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -62,6 +68,9 @@
             [wself setNeedsStatusBarAppearanceUpdate];
         }].cancelLoadImageWhenRemove = NO;// 这里关掉预加载功能
         
+        [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
+            return [UIImage imageNamed:@"placehold.jpeg"];
+        }];
     }];
     return cell;
 }
