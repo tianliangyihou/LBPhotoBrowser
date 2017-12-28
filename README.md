@@ -115,6 +115,9 @@ LBPhotoBrowser 将网络图片的加载分为两种:
          [items addObject:item];
      }
   [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+  [[LBPhotoBrowserManager defaultManager]addPhotoBrowserWillDismissBlock:^{
+    // do something       
+   }].cancelLoadImageWhenRemove = NO;
       
 ```
 
@@ -132,7 +135,7 @@ demo 中提供了控制status bar的方式 可以参考demo进行进一步的需
 1 当lowGifMemory = NO 的情况下,可以直接过
 // 默认长按控件的回调
 - (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title))titleClickCallBackBlock;
-add 这个block 返回的image 进项保存
+add 这个block 返回的image 进行保存
 
 2 当lowGifMemory = YES的情况下,通过下面这个block返回的data进行保存, 这个也适合方式1
  [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
