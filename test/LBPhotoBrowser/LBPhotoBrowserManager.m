@@ -167,7 +167,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 {
     self = [super init];
     if (self) {
-        self.showBrowserWithAnimation = YES;
         self.errorImage = [UIImage imageNamed:@"LBLoadError.jpg"];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserWillDismiss) name:LBImageViewWillDismissNot object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserDidDismiss) name:LBImageViewDidDismissNot object:nil];
