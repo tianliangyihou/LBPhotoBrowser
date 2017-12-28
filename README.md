@@ -38,7 +38,7 @@ LBPhotoBrowser对gif的播放提供了两种方式:
 ```
 LBPhotoBrowser 将网络图片的加载分为两种:
   
- (1)缩略图和大图使用同一个url 不提共预加载
+ (1)缩略图和大图使用同一个url 不提供预加载
  
  (2)缩略图和大图使用不同的url 提供预加载  
  
@@ -48,7 +48,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
     
     * 当用户退出LBPhotoBrowser,停止所有图片的加载
    
-   当你使用(1)展示图片的时候,请设置`LBPhotoBrowserManager`的`cancelLoadImageWhenRemove` = `NO`. 
+   当你使用(1)展示图片的时候,请设置`LBPhotoBrowserManager`的`needPreloading` = `NO`. 
    
    注:
       缩略图: 当前展示给用户的图片
@@ -117,7 +117,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
   [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
   [[LBPhotoBrowserManager defaultManager]addPhotoBrowserWillDismissBlock:^{
     // do something       
-   }].cancelLoadImageWhenRemove = NO;
+   }].needPreloading = NO;
       
 ```
 
