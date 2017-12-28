@@ -1,21 +1,16 @@
 # LBPhotoBrowser
 
-一个使用简单的图片浏览器, 实现类似微信和今日头条的图片浏览效果,支持本地图片和gif图片的播放
+一个使用简单的图片浏览器, 实现类似微信和今日头条的图片浏览效果
 
 简书地址:[http://www.jianshu.com/p/00f4b7b20dc4](http://www.jianshu.com/p/00f4b7b20dc4)(详细说明)
 
 An easy way to make photo browse
 
-# 问题收集
+# 概览(Overview)
 
-这是目前的第4个大的版本了,如果你用的时候遇到什么问题(及时保存崩溃日志)或者有什么建议的话,及时issues me,或者简书下面给我留言.
-
-同时也非常感谢一些提出好的建议的人: KevinCheinCoder,simpleIsGod ,Ryan0520,cowboyfzl等
-
-期望和你一同改进这个库.
-
+LBPhotoBrowser对gif图片的加载机制:
 ```
-LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
+LBPhotoBrowser对gif的播放提供了两种方式:
 
 (1)采用系统的 + (nullableUIImage*)animatedImageWithImages:(NSArray *)images duration:(NSTimeInterval)durationNS_AVAILABLE_IOS(5_0);
 
@@ -34,12 +29,111 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
      
    * LBPhotoBrowser为了保证较低的CPU消耗,即使在图片浏览器加载多张gif的时候,也会保证同一时间内,只会对一张gif进行处理,不会同时去解压多张gif图片.
    
-   建议使用第二中加载方式
+   建议使用第二种加载方式 即 `lowGifMemory` = `YES`, 通过`LBPhotoBrowserManager`的`lowGifMemory`属性控制
+   
 ```
-通过`LBPhotoBrowserManager`的`lowGifMemory`属性控制.
-```objc
+LBPhotoBrowser对网络图片的预加载机制:
 
 ```
+LBPhotoBrowser 将网络图片的加载分为两种:
+  
+ (1)缩略图和大图使用同一个url 不提共预加载
+ 
+ (2)缩略图和大图使用不同的url 提供预加载  
+ 
+    * 当点击图片,通过LBPhotoBrowser展示大图的过程中,LBPhotoBrowser会自动提前加载当前图片左右两张图片,以方便用户浏览
+    
+    * 当用户在滑动图片的过程中,LBPhotoBrowser会始终保持优先加载当前展示图片和当前展示图片左右两张的图片,并且停止离当前图片较远图片的加载
+    
+    * 当用户退出LBPhotoBrowser,停止所有图片的加载
+   
+   当你使用(1)展示图片的时候,请设置`LBPhotoBrowserManager`的`cancelLoadImageWhenRemove` = `NO`. 
+   
+   注:
+      缩略图: 当前展示给用户的图片
+        大图: 点击缩略图后,使用LBPhotoBrowser展示给用户的图片
+```
+
+# 使用(Usage)
+
+LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
+
+效果1:加载本地图片,支持相册中的gif的图片 
+
+效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
+
+效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
+
+效果4:加载网络图片 缩略图和大图使用同一个url
+
+
+效果1 加载本地图片
+![](https://github.com/tianliangyihou/zhuxian/blob/master/effect0.gif?raw=true)
+
+```obj-c
+  for (UIImageView *imageView in self.imageViews) {
+        LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
+        [items addObject:item];
+    }
+    __weak typeof(self)wself = self
+   // 这里只要你开心 可以无限addBlock
+    [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+        NSLog(@"%@",title);
+    }];
+    [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
+        wself.hideStatusBar = NO;
+        [wself setNeedsStatusBarAppearanceUpdate];
+    }].lowGifMemory = NO;
+ ```
+效果2 类似微信的图片浏览效果
+![](https://github.com/tianliangyihou/zhuxian/blob/master/effect1.gif?raw=true)
+
+```obj-c
+    NSMutableArray *items = [[NSMutableArray alloc]init];
+        for (int i = 0 ; i < cellModel.urls.count; i++) {
+            LBURLModel *urlModel = cellModel.urls[i];
+            UIImageView *imageView = cell.imageViews[i];
+            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
+            item.placeholdImage = imageView.image;
+            [items addObject:item];
+        }
+        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+ ```
+
+效果3 类似今日头条的图片浏览效果
+![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
+
+ ```obj-c
+ NSMutableArray *items = [[NSMutableArray alloc]init];
+        for (int i = 0 ; i < cellModel.urls.count; i++) {
+            LBURLModel *urlModel = cellModel.urls[i];
+            UIImageView *imageView = cell.imageViews[i];
+            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame placeholdImage:imageView.image placeholdSize:imageView.frame.size];
+            [items addObject:item];
+        }
+        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+ ```
+
+效果4  缩略图和大图使用同一个url
+![](https://github.com/tianliangyihou/zhuxian/blob/master/effect3.gif?raw=true)
+
+```objc
+ for (int i = 0 ; i < cellModel.urls.count; i++) {
+            LBURLModel *urlModel = cellModel.urls[i];
+            UIImageView *imageView = cell.imageViews[i];
+            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
+            [items addObject:item];
+        }
+        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+      
+```
+
+
+
+ 
+ 
+
+
 ```objc
 
 ```
@@ -57,30 +151,6 @@ LBPhotoBrowser对gif的播放提供了两种方式(详细见简书):
 这个是SDWebImage内部的一个方法导致的,你可以在demo(右上角有个测试按钮)中找到原因和解决办法
 
 ```
-
-效果图如下:
-
-
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect0.gif?raw=true)
-
-
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect1.gif?raw=true)
-
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
-
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect3.gif?raw=true)
-
-
-```obj-c
-
- ```
-
-```obj-c
-   
- ```
- ```obj-c
-
- ```
  
  有时候你也可以这么写:
  ```obj-c
