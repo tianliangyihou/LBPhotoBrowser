@@ -85,7 +85,7 @@
             }
         }]addPhotoBrowserDidDismissBlock:^{
             LBPhotoBrowserLog(@"PhotoBrowserDidDismiss");
-        }];
+        }].needPreloading = YES;
         
     }];
     return cell;

@@ -84,8 +84,8 @@
 // 当前图片浏览器正在展示的imageView
 @property (nonatomic , strong)UIImageView *currentShowImageView;
 
-// 当图片浏览器将要消失的时候 是否停止所有正在下载的图片 default is YES
-@property (nonatomic , assign)BOOL cancelLoadImageWhenRemove;
+// 是否需要预加载 default is YES
+@property (nonatomic , assign)BOOL needPreloading;
 
 /**
  返回当前的一个单例(不完全单利)

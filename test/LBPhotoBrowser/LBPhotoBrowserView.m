@@ -79,7 +79,6 @@ static CGFloat const itemSpace = 20.0;
     self.opreation = [[SDWebImageManager sharedManager] loadImageWithURL:self.url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
     
         //LBPhotoBrowserLog(@"LBScrollViewStatusModel:( %d ) line %d log: %d -- %d",self.index,__LINE__,(int)receivedSize ,(int)expectedSize);
-        
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
        __block UIImage *downloadedImage = image;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -300,7 +299,7 @@ static CGFloat const itemSpace = 20.0;
         [self.pageControl removeFromSuperview];
     }];
     
-    if (![LBPhotoBrowserManager defaultManager].cancelLoadImageWhenRemove) {
+    if (![LBPhotoBrowserManager defaultManager].needPreloading) {
         return;
     }
     [self.models enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -399,7 +398,7 @@ static CGFloat const itemSpace = 20.0;
     }
     if ([self.dataArr.firstObject isKindOfClass:[UIImage class]]) return;
     
-    if (![LBPhotoBrowserManager defaultManager].cancelLoadImageWhenRemove) return;
+    if (![LBPhotoBrowserManager defaultManager].needPreloading) return;
     
     if (self.stopPreloading) return;
     

@@ -173,7 +173,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _requestQueue = [[NSOperationQueue alloc] init];
         _requestQueue.maxConcurrentOperationCount = 1;
         _lock = dispatch_semaphore_create(1);
-        _cancelLoadImageWhenRemove = YES;
+        _needPreloading = YES;
     }
     return self;
 }

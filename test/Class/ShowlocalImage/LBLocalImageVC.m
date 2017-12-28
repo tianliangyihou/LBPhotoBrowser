@@ -104,6 +104,7 @@
     [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
         NSLog(@"%@",title);
     }];
+    
     [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
         wself.hideStatusBar = NO;
         [wself setNeedsStatusBarAppearanceUpdate];

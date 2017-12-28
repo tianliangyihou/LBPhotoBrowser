@@ -16,7 +16,6 @@
 		26341D4C1FF36C3B001DBE92 /* LBBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D4B1FF36C3B001DBE92 /* LBBaseController.m */; };
 		26341D581FF48C62001DBE92 /* LBTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D561FF48C62001DBE92 /* LBTestVC.m */; };
 		26341D591FF48C62001DBE92 /* LBTestVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26341D571FF48C62001DBE92 /* LBTestVC.xib */; };
-		26341D5B1FF48E0D001DBE92 /* tmp.gif in Resources */ = {isa = PBXBuildFile; fileRef = 26341D5A1FF48E0C001DBE92 /* tmp.gif */; };
 		26341D5D1FF4955A001DBE92 /* placehold.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 26341D5C1FF49559001DBE92 /* placehold.jpeg */; };
 		2657DB661E77BCDD00F324C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB651E77BCDD00F324C3 /* main.m */; };
 		2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB681E77BCDD00F324C3 /* AppDelegate.m */; };
@@ -57,7 +56,6 @@
 		26341D551FF48C62001DBE92 /* LBTestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBTestVC.h; sourceTree = "<group>"; };
 		26341D561FF48C62001DBE92 /* LBTestVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBTestVC.m; sourceTree = "<group>"; };
 		26341D571FF48C62001DBE92 /* LBTestVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LBTestVC.xib; sourceTree = "<group>"; };
-		26341D5A1FF48E0C001DBE92 /* tmp.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tmp.gif; sourceTree = "<group>"; };
 		26341D5C1FF49559001DBE92 /* placehold.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placehold.jpeg; sourceTree = "<group>"; };
 		2657DB611E77BCDD00F324C3 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2657DB651E77BCDD00F324C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -214,7 +212,6 @@
 				2657DB6A1E77BCDD00F324C3 /* ViewController.h */,
 				2657DB6B1E77BCDD00F324C3 /* ViewController.m */,
 				26341D5C1FF49559001DBE92 /* placehold.jpeg */,
-				26341D5A1FF48E0C001DBE92 /* tmp.gif */,
 				2657DB6D1E77BCDD00F324C3 /* Main.storyboard */,
 				2657DB701E77BCDD00F324C3 /* Assets.xcassets */,
 				2657DB721E77BCDD00F324C3 /* LaunchScreen.storyboard */,
@@ -345,7 +342,6 @@
 				26341D591FF48C62001DBE92 /* LBTestVC.xib in Resources */,
 				267AD8921F5E3B3A00DC6D9F /* LBLoading.png in Resources */,
 				2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */,
-				26341D5B1FF48E0D001DBE92 /* tmp.gif in Resources */,
 				2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */,
 				267AD8911F5E3B3A00DC6D9F /* LBLoadError.jpg in Resources */,
 				26341D5D1FF4955A001DBE92 /* placehold.jpeg in Resources */,

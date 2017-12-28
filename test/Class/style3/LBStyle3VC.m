@@ -66,7 +66,7 @@
             LBPhotoBrowserLog(@"即将销毁");
             wself.hideStatusBar = NO;
             [wself setNeedsStatusBarAppearanceUpdate];
-        }].cancelLoadImageWhenRemove = NO;// 这里关掉预加载功能
+        }].needPreloading = NO;// 这里关掉预加载功能
         
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
             return [UIImage imageNamed:@"placehold.jpeg"];
