@@ -60,14 +60,6 @@ LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
 
 效果1:加载本地图片,支持相册中的gif的图片 
 
-效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
-
-效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
-
-效果4:加载网络图片 缩略图和大图使用同一个url
-
-
-效果1 加载本地图片
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect0.gif?raw=true)
 
 ```obj-c
@@ -85,7 +77,8 @@ LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
         [wself setNeedsStatusBarAppearanceUpdate];
     }].lowGifMemory = NO;
  ```
-效果2 类似微信的图片浏览效果
+效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
+
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect1.gif?raw=true)
 
 ```obj-c
@@ -100,7 +93,8 @@ LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-效果3 类似今日头条的图片浏览效果
+效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
+
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
 
  ```obj-c
@@ -114,7 +108,8 @@ LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-效果4  缩略图和大图使用同一个url
+效果4:加载网络图片 缩略图和大图使用同一个url
+
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect3.gif?raw=true)
 
 ```objc
