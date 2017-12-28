@@ -8,7 +8,7 @@ An easy way to make photo browse
 
 # 概览(Overview)
 
-LBPhotoBrowser对gif图片的加载机制:
+`LBPhotoBrowser`对gif图片的加载机制:
 ```
 LBPhotoBrowser对gif的播放提供了两种方式:
 
@@ -29,10 +29,10 @@ LBPhotoBrowser对gif的播放提供了两种方式:
      
    * LBPhotoBrowser为了保证较低的CPU消耗,即使在图片浏览器加载多张gif的时候,也会保证同一时间内,只会对一张gif进行处理,不会同时去解压多张gif图片.
    
-   建议使用第二种加载方式 即 `lowGifMemory` = `YES`, 通过`LBPhotoBrowserManager`的`lowGifMemory`属性控制
+   建议使用第二种加载方式 即 lowGifMemory = YES, 通过 LBPhotoBrowserManager 的 lowGifMemory 属性控制
    
 ```
-LBPhotoBrowser对网络图片的预加载机制:
+`LBPhotoBrowser`对网络图片的预加载机制:
 
 ```
 LBPhotoBrowser 将网络图片的加载分为两种:
@@ -56,97 +56,100 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 
 # 使用(Usage)
 
-LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
+`LBPhotoBrowser` 支持本地图片和网络图片 以及gif的播放,下面四中效果详情可参考demo
 
-效果1:加载本地图片,支持相册中的gif的图片 
+### 效果1:加载本地图片,支持相册中的gif的图片 
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect0.gif?raw=true)
 
 ```obj-c
+  NSMutableArray *items = [[NSMutableArray alloc]init];
   for (UIImageView *imageView in self.imageViews) {
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
     __weak typeof(self)wself = self
    // 这里只要你开心 可以无限addBlock
-    [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+  [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
         NSLog(@"%@",title);
     }];
-    [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
+  [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
         wself.hideStatusBar = NO;
         [wself setNeedsStatusBarAppearanceUpdate];
     }].lowGifMemory = NO;
  ```
-效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
+### 效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect1.gif?raw=true)
 
 ```obj-c
-    NSMutableArray *items = [[NSMutableArray alloc]init];
-        for (int i = 0 ; i < cellModel.urls.count; i++) {
-            LBURLModel *urlModel = cellModel.urls[i];
-            UIImageView *imageView = cell.imageViews[i];
-            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
-            item.placeholdImage = imageView.image;
-            [items addObject:item];
-        }
-        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+ NSMutableArray *items = [[NSMutableArray alloc]init];
+ for (int i = 0 ; i < cellModel.urls.count; i++) {
+       LBURLModel *urlModel = cellModel.urls[i];
+        UIImageView *imageView = cell.imageViews[i];
+        LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
+        item.placeholdImage = imageView.image;
+        [items addObject:item];
+     }
+   [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
+### 效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
 
  ```obj-c
  NSMutableArray *items = [[NSMutableArray alloc]init];
-        for (int i = 0 ; i < cellModel.urls.count; i++) {
-            LBURLModel *urlModel = cellModel.urls[i];
-            UIImageView *imageView = cell.imageViews[i];
-            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame placeholdImage:imageView.image placeholdSize:imageView.frame.size];
-            [items addObject:item];
-        }
-        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+ for (int i = 0 ; i < cellModel.urls.count; i++) {
+       LBURLModel *urlModel = cellModel.urls[i];
+        UIImageView *imageView = cell.imageViews[i];
+        LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame placeholdImage:imageView.image placeholdSize:imageView.frame.size];
+         [items addObject:item];
+   }
+  [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-效果4:加载网络图片 缩略图和大图使用同一个url
+### 效果4:加载网络图片 缩略图和大图使用同一个url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect3.gif?raw=true)
 
 ```objc
+ NSMutableArray *items = [[NSMutableArray alloc]init];
  for (int i = 0 ; i < cellModel.urls.count; i++) {
-            LBURLModel *urlModel = cellModel.urls[i];
-            UIImageView *imageView = cell.imageViews[i];
-            LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
-            [items addObject:item];
-        }
-        [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
+        LBURLModel *urlModel = cellModel.urls[i];
+        UIImageView *imageView = cell.imageViews[i];
+         LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
+         [items addObject:item];
+     }
+  [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
       
 ```
 
 # 提示(Tip)
 
-关于图片展示过程中, ViewController的status bar控制
+##### 关于图片展示过程中, ViewController的status bar控制
 
 ```objc
 demo 中提供了控制status bar的方式 可以参考demo进行进一步的需改
 ```
-保存gif图片的问题
+##### 保存gif图片的问题
 ```objc
-1 当lowGifMemory = NO 的情况下,可以直接过
+由于 SDWebImage 返回的image只是这个gif图片的第一帧
 
+1 当lowGifMemory = NO 的情况下,可以直接过
 // 默认长按控件的回调
 - (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title))titleClickCallBackBlock;
-
 add 这个block 返回的image 进项保存
+
 2 当lowGifMemory = YES的情况下,通过下面这个block返回的data进行保存, 这个也适合方式1
  [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
     
  }];
 ```
  
-使用 `LBPhotoBrowser` 的时候 当你需要添功能的时候 就尝试add Block, `LBPhotoBrowser`可以无限add block,同一个block add多次,后添加的生效
+##### 使用 `LBPhotoBrowser` 的时候 当你需要添功能的时候 就尝试add Block, `LBPhotoBrowser`可以无限add block,同一个block add多次,后添加的生效
 
-所以你可以这样写,有点长 \(^o^)/~ ,当然也可以分离开
+所以你可以这样写,有点长 \(^o^)/~ ,当然也可以分开写
  ```obj-c
     
         [[[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView]addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
@@ -166,7 +169,7 @@ add 这个block 返回的image 进项保存
 ```
 
 
-关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
+##### 关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
 
 ```objc
 当你在真机上运行当前版本的时候,你会发现展示gif的一个问题 => 拖动pop当前界面的时候,imageView上的图片不见了
@@ -174,7 +177,8 @@ add 这个block 返回的image 进项保存
 这个是SDWebImage内部的一个方法导致的,你可以在demo的style3中(右上角有个测试按钮)中找到原因和解决办法
 
 ```
-
+ 
+##### `LBPhotoBrowser`的依赖
  ```obj-c
  LBPhotoBrowser 只依赖于SDWebImage,本身实现了gif的解压和播放
  ```
