@@ -175,8 +175,10 @@ add 这个block 返回的image 进行保存
 你可以在demo的style3中(右上角有个测试按钮)中找到原因和解决办法
 
 ```
- 
+
 ##### `LBPhotoBrowser`的依赖
  ```obj-c
  LBPhotoBrowser 只依赖于SDWebImage,本身实现了gif的解压和播放
  ```
+
+### 如果您使用过程中发现什么问题,请及时issue me 或者简书下面给我留言 期待和您一起改进`LBPhotoBrowser`
