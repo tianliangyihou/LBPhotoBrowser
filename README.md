@@ -31,7 +31,7 @@ LBPhotoBrowser对gif的播放提供了两种方式:
    
    建议使用第二种加载方式 即 lowGifMemory = YES, 通过 LBPhotoBrowserManager 的 lowGifMemory 属性控制 
    
-   当你加载的gif图片较多,并且gif的帧数也比较多,两种方式的差别会特别明显,方式2的优点也越明显.
+   当你加载的gif图片较多,并且gif的帧数也比较多,两种方式的差别会特别明显,方式2的优点也越明显.(不要使用模拟器测试)
 ```
 `LBPhotoBrowser`对网络图片的预加载机制:
 
