@@ -29,8 +29,9 @@ LBPhotoBrowser对gif的播放提供了两种方式:
      
    * LBPhotoBrowser为了保证较低的CPU消耗,即使在图片浏览器加载多张gif的时候,也会保证同一时间内,只会对一张gif进行处理,不会同时去解压多张gif图片.
    
-   建议使用第二种加载方式 即 lowGifMemory = YES, 通过 LBPhotoBrowserManager 的 lowGifMemory 属性控制
+   建议使用第二种加载方式 即 lowGifMemory = YES, 通过 LBPhotoBrowserManager 的 lowGifMemory 属性控制 
    
+   当你加载的gif图片较多,并且gif的帧数也比较多,两种方式的差别会特别明显,方式2的优点也越明显.
 ```
 `LBPhotoBrowser`对网络图片的预加载机制:
 
@@ -58,7 +59,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 
 `LBPhotoBrowser` 支持本地图片和网络图片 以及gif的播放,下面四中效果详情可参考demo
 
-### 效果1:加载本地图片,支持相册中的gif的图片 
+### 效果1: 加载本地图片,支持相册中的gif的图片 
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect0.gif?raw=true)
 
@@ -78,7 +79,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
         [wself setNeedsStatusBarAppearanceUpdate];
     }].lowGifMemory = NO;
  ```
-### 效果2:加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
+### 效果2: 加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect1.gif?raw=true)
 
@@ -94,7 +95,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
    [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-### 效果3:加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
+### 效果3: 加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
 
@@ -109,7 +110,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
   [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView].lowGifMemory = YES;
  ```
 
-### 效果4:加载网络图片 缩略图和大图使用同一个url
+### 效果4: 加载网络图片 缩略图和大图使用同一个url
 
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect3.gif?raw=true)
 
@@ -149,7 +150,7 @@ add 这个block 返回的image 进项保存
  
 ##### 使用 `LBPhotoBrowser` 的时候 当你需要添功能的时候 就尝试add Block, `LBPhotoBrowser`可以无限add block,同一个block add多次,后添加的生效
 
-所以你可以这样写,有点长 \(^o^)/~ ,当然也可以分开写
+所以你可以这样写,可以更长^_^ ,当然也可以分开写
  ```obj-c
     
         [[[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView]addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
