@@ -123,41 +123,58 @@ LBPhotoBrowser 支持本地图片和网络图片 以及gif的播放
       
 ```
 
+# 提示(Tip)
 
-
- 
- 
-
+关于图片展示过程中, ViewController的status bar控制
 
 ```objc
+demo 中提供了控制status bar的方式 可以参考demo进行进一步的需改
+```
+保存gif图片的问题
+```objc
+1 当lowGifMemory = NO 的情况下,可以直接过
+
+// 默认长按控件的回调
+- (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title))titleClickCallBackBlock;
+
+add 这个block 返回的image 进项保存
+2 当lowGifMemory = YES的情况下,通过下面这个block返回的data进行保存, 这个也适合方式1
+ [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
+    
+ }];
+```
+ 
+使用 `LBPhotoBrowser` 的时候 当你需要添功能的时候 就尝试add Block, `LBPhotoBrowser`可以无限add block,同一个block add多次,后添加的生效
+
+所以你可以这样写,有点长 \(^o^)/~ ,当然也可以分离开
+ ```obj-c
+    
+        [[[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView]addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+            // do something
+        }]addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
+            // do something
+            return nil;
+        }]addPlaceholdImageSizeBlock:^CGSize(UIImage *Image, NSIndexPath *indexpath) {
+            // do something
+            return CGSizeZero;
+        }]addPhotoBrowserWillDismissBlock:^{
+            // do something
+        }]addPhotoBrowserDidDismissBlock:^{
+            // do something
+        }].lowGifMemory = YES;
 
 ```
 
 
-```objc
-
-```
-
-```objc
 关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
 
+```objc
 当你在真机上运行当前版本的时候,你会发现展示gif的一个问题 => 拖动pop当前界面的时候,imageView上的图片不见了
 
-这个是SDWebImage内部的一个方法导致的,你可以在demo(右上角有个测试按钮)中找到原因和解决办法
+这个是SDWebImage内部的一个方法导致的,你可以在demo的style3中(右上角有个测试按钮)中找到原因和解决办法
 
-```
- 
- 有时候你也可以这么写:
- ```obj-c
-   
-  [[[[LBPhotoBrowserManager defaultManager] addLongPressShowTitles:self.titles] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-        LBPhotoBrowserLog(@"%@ %@ %@",image,indexPath,title);
-    }]addPlaceHoldImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
-        return [UIImage imageNamed:@"LBLoading.png"];
-    }].lowGifMemory = YES;
- 
 ```
 
  ```obj-c
- 
+ LBPhotoBrowser 只依赖于SDWebImage,本身实现了gif的解压和播放
  ```
