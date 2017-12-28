@@ -69,15 +69,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
-    __weak typeof(self)wself = self
-   // 这里只要你开心 可以无限addBlock
-  [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-        NSLog(@"%@",title);
-    }];
-  [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
-        wself.hideStatusBar = NO;
-        [wself setNeedsStatusBarAppearanceUpdate];
-    }].lowGifMemory = NO;
+  [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:self.view].lowGifMemory = NO;
  ```
 ### 效果2: 加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
 
