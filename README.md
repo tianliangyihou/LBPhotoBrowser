@@ -126,7 +126,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 ##### 关于图片展示过程中, ViewController的status bar控制
 
 ```objc
-demo 中提供了控制status bar的方式 可以参考demo进行进一步的需改
+demo 中提供了控制status bar的方式 可以参考demo进行进一步的修改
 ```
 ##### 保存gif图片的问题
 ```objc
