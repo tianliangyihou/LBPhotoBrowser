@@ -45,6 +45,7 @@
 
 
 @interface LBPhotoBrowserManager : NSObject
+
 // 传入的urls
 @property (nonatomic , strong, readonly)LBUrlsMutableArray *urls;
 
@@ -53,6 +54,9 @@
 
 //传入的本地图片
 @property (nonatomic , strong, readonly)LBImagesMutableArray *images;
+
+// 是否在info.plist中配置 View controller-based status bar appearance－NO
+@property (nonatomic , assign)BOOL configureStatusBarInfo;
 
 // 用来展示图片的UI控件
 @property (nonatomic , weak, readonly)LBPhotoBrowserView *photoBrowserView;

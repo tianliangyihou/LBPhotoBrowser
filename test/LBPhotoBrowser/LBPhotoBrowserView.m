@@ -251,6 +251,14 @@ static CGFloat const itemSpace = 20.0;
             self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent];
             if ([LBPhotoBrowserManager defaultManager].moveBlock) {
                 [LBPhotoBrowserManager defaultManager].moveBlock(scalePercent);
+            }else if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
+                UIApplication *app = [UIApplication sharedApplication];
+                if (scalePercent < 0.9 && app.statusBarHidden == YES) {
+                    app.statusBarHidden = NO;
+                }
+                if (scalePercent > 0.9 && app.statusBarHidden == NO) {
+                    app.statusBarHidden = YES;
+                }
             }
             self.tag = 1;
         }
@@ -283,9 +291,12 @@ static CGFloat const itemSpace = 20.0;
     }completion:^(BOOL finished) {
         if ([LBPhotoBrowserManager defaultManager].moveBlock) {
             [LBPhotoBrowserManager defaultManager].moveBlock(1.0);
+        }else if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
+            [UIApplication sharedApplication].statusBarHidden = YES;
         }
         cell.zoomScrollView.imageViewIsMoving = NO;
         [cell.zoomScrollView layoutSubviews];
+
     }];
   
 }
@@ -300,7 +311,9 @@ static CGFloat const itemSpace = 20.0;
     }completion:^(BOOL finished) {
         [self.pageControl removeFromSuperview];
     }];
-    
+    if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
+        [UIApplication sharedApplication].statusBarHidden = NO;
+    }
     if (![LBPhotoBrowserManager defaultManager].needPreloading) {
         return;
     }

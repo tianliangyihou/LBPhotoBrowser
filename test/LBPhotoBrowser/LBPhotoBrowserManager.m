@@ -174,6 +174,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _requestQueue.maxConcurrentOperationCount = 1;
         _lock = dispatch_semaphore_create(1);
         _needPreloading = YES;
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        NSNumber *value  = infoDictionary[@"UIViewControllerBasedStatusBarAppearance"];
+        if (value && [value boolValue] == NO) {
+            _configureStatusBarInfo = YES;
+        }else {
+            _configureStatusBarInfo = NO;
+        }
     }
     return self;
 }
@@ -197,7 +204,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     
     _currentPage = index;
     _imageViewSuperView = superView;
-    
+    if (self.configureStatusBarInfo) {
+        [UIApplication sharedApplication].statusBarHidden = YES;
+    }
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     [photoBrowserView showImageViewsWithImages:self.images andSeletedIndex:(int)index];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
@@ -267,7 +276,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     
     _currentPage = index;
     _imageViewSuperView = superView;
-    
+    if (self.configureStatusBarInfo) {
+        [UIApplication sharedApplication].statusBarHidden = YES;
+    }
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     [photoBrowserView showImageViewsWithURLs:self.urls andSelectedIndex:(int)index];
     [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
