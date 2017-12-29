@@ -147,15 +147,10 @@ add 这个block 返回的image 进行保存
 
 所以你可以这样写,可以更长^_^ ,当然也可以分开写
  ```obj-c
-    
-        [[[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView]addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+         [[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView] addLongPressShowTitles:@[@"识别二维码",@"保存",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
             // do something
-        }]addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
+        }]addPhotoBrowserImageDidDraggedToMoveBlock:^(CGFloat bgViewAlpha) {
             // do something
-            return nil;
-        }]addPlaceholdImageSizeBlock:^CGSize(UIImage *Image, NSIndexPath *indexpath) {
-            // do something
-            return CGSizeZero;
         }]addPhotoBrowserWillDismissBlock:^{
             // do something
         }]addPhotoBrowserDidDismissBlock:^{
@@ -183,8 +178,8 @@ add 这个block 返回的image 进行保存
  
  # 相关(Relevant)
  
- ### 这是本人写的一个高仿今日头条的项目,目前还在完善中 部分已有的功能如下:
- #### 点我传送 (#https://github.com/tianliangyihou/headlineNews)
+ #### 这是本人写的一个高仿今日头条的项目,目前还在完善中 部分已有的功能如下:
+ #### (#https://github.com/tianliangyihou/headlineNews)
  
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect4.gif?raw=true)
 
