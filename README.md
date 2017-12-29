@@ -127,10 +127,18 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 
 ```objc
 status bar 显示和隐藏的控制方式 有两只种
+
 1 在info.plist里面添加View controller-based status bar appearance－NO
+
 2 重写单个控制器的  - (BOOL)prefersStatusBarHidden 方法
 
-demo 中提供了控制status bar的2中方式
+如果你采用了方式 1  --> 就不需要自己再手动设置了
+
+如果再添加这个下面这个block,会覆盖系统之前的设置.需要自己控制图片(没有铺满整个屏幕时)被用户拖动时 status bar的隐藏和显示
+// 在图片浏览中 图片浏览器被拖动的回调
+- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void(^)(CGFloat bgViewAlpha))moveBlock;
+ 
+如果你采用了方式 2 可以参考demo中对status bar 的控制
 1 简单的控制  效果一 效果四
 2 精确的控制  效果二 效果三
 ```
