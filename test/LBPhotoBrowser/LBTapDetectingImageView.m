@@ -9,6 +9,7 @@
 #import "LBPhotoBrowserManager.h"
 #import "LBOptionView.h"
 #import "LBTapDetectingImageView.h"
+#import "LBZoomScrollView.h"
 
 @interface LBTapDetectingImageView ()
 
@@ -27,7 +28,8 @@
         [[UIApplication sharedApplication].keyWindow addSubview:optionView];
         _optionView = optionView;
     }else {
-        _optionView = [LBOptionView showOptionViewWithCurrentCellImage:self.image];
+        LBZoomScrollView *scrollView =  (LBZoomScrollView *)self.superview;
+        _optionView = [LBOptionView showOptionViewWithCurrentCellImage:scrollView.model.currentPageImage];
     }
     return _optionView;
 }
@@ -44,6 +46,10 @@
 }
 
 - (void)longPressAction {
+    LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+    if (!mgr.currentTitles || mgr.currentTitles.count == 0) {
+        return;
+    }
     [self optionView];
 }
 

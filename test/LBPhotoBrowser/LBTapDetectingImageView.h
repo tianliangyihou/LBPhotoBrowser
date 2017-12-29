@@ -10,6 +10,5 @@
 
 @interface LBTapDetectingImageView : UIImageView
 
-
 @end
 

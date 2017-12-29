@@ -102,13 +102,13 @@
     LB_WEAK_SELF;
     // 这里只要你开心 可以无限addBlock
     [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-        NSLog(@"%@",title);
+        LBPhotoBrowserLog(@"%@",title);
     }];
     
     [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
         wself.hideStatusBar = NO;
         [wself setNeedsStatusBarAppearanceUpdate];
-    }].lowGifMemory = NO;
+    }];
 }
 - (BOOL)prefersStatusBarHidden {
     return _hideStatusBar;

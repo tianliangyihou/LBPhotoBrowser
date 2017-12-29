@@ -348,11 +348,14 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     }
     self.willDismissBlock = nil;
 }
+
 - (void)photoBrowserDidDismiss {
     if (self.didDismissBlock) {
         self.didDismissBlock();
     }
     self.didDismissBlock = nil;
+    self.needPreloading = YES;
+    self.lowGifMemory = NO;
 }
 - (void)displayLinkInvalidate {
     
@@ -365,10 +368,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     if (_requestQueue) {
         [_requestQueue cancelAllOperations];
     }
+    
     _longPressCustomViewBlock = nil;
     _titleClickBlock = nil;
     _placeholdImageCallBackBlock = nil;
-    _placeholdImageCallBackBlock = nil;
+    _placeholdImageSizeBlock = nil;
+    _moveBlock = nil;
+    _titles = @[];
 }
 
 

@@ -23,7 +23,8 @@
     
     _models = @[].mutableCopy;
     [self.tableView registerClass:[LBCell class] forCellReuseIdentifier:ID];
-    
+    self.tableView.delegate = nil;
+    self.tableView.dataSource = nil;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSMutableArray *items = [[NSMutableArray alloc]init];
         for (int i = 0; i < self.lagerURLStrings.count; i++) {
@@ -62,6 +63,8 @@
         }
         [model loadFrames];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.tableView.delegate = self;
+            self.tableView.dataSource = self;
             [self.tableView reloadData];
         });
     });

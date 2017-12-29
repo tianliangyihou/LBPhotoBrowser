@@ -68,7 +68,6 @@
         }
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
         
-        
         [[[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
             LBPhotoBrowserLog(@"%@",title);
         }]addPhotoBrowserWillDismissBlock:^{
@@ -85,7 +84,7 @@
             }
         }]addPhotoBrowserDidDismissBlock:^{
             LBPhotoBrowserLog(@"PhotoBrowserDidDismiss");
-        }].needPreloading = YES;
+        }];
         
     }];
     return cell;

@@ -186,6 +186,8 @@ static CGFloat const itemSpace = 20.0;
         collectionView.dataSource = self;
         collectionView.pagingEnabled = YES;
         collectionView.alwaysBounceVertical = NO;
+        collectionView.showsHorizontalScrollIndicator = NO;
+        collectionView.showsVerticalScrollIndicator = NO;
         collectionView.backgroundColor = [UIColor clearColor];
         [self collectionViewRegisterCellWithCollectionView:collectionView];
         _collectionView = collectionView;

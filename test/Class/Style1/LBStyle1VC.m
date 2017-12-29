@@ -79,7 +79,7 @@
                 wself.hideStatusBar = YES;
                 [wself setNeedsStatusBarAppearanceUpdate];
             }
-        }].needPreloading = YES;
+        }];
         
     }];
     return cell;
