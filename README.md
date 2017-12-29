@@ -179,7 +179,7 @@ add 这个block 返回的image 进行保存
  # 相关(Relevant)
  
  #### 这是本人写的一个高仿今日头条的项目,目前还在完善中 部分已有的功能如下:
- #### (#https://github.com/tianliangyihou/headlineNews)
+ #### https://github.com/tianliangyihou/headlineNews
  
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect4.gif?raw=true)
 
