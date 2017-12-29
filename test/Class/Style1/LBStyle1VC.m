@@ -62,6 +62,7 @@
             item.placeholdImage = imageView.image;
             [items addObject:item];
         }
+        
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
         
         [[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
@@ -79,6 +80,7 @@
                 [wself setNeedsStatusBarAppearanceUpdate];
             }
         }].needPreloading = YES;
+        
     }];
     return cell;
 }

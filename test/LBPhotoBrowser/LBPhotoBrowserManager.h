@@ -132,10 +132,10 @@
 // 添加自定义的长按控件
 - (instancetype)addLongPressCustomViewBlock:(UIView *(^)(UIImage *image, NSIndexPath *indexPath))longPressBlock;
 
-// 为每张图片添加占位图 defaut ->LBLoading.png
+// 为每张图片添加占位图 defaut ->LBLoading.png 如果通过LBPhotoWebItem设置placeholdImage后,不需要实现
 - (instancetype)addPlaceholdImageCallBackBlock:(UIImage *(^)(NSIndexPath *indexPath))placeholdImageCallBackBlock;
 
-// 为每张占位图 设置大小
+// 为每张占位图 设置大小 如果配置过LBPhotoWebItem后,如果通过LBPhotoWebItem设置placeholdSize后,不需要实现
 - (instancetype)addPlaceholdImageSizeBlock:(CGSize (^)(UIImage *Image,NSIndexPath *indexpath))placeholdImageSizeBlock;
 
 // 图片浏览器将要消失的回调
