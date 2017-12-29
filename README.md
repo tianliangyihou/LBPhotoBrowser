@@ -126,7 +126,13 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 ##### 关于图片展示过程中, ViewController的status bar控制
 
 ```objc
-demo 中提供了控制status bar的方式 可以参考demo进行进一步的修改
+status bar 显示和隐藏的控制方式 有两只种
+1 在info.plist里面添加View controller-based status bar appearance－NO
+2 重写单个控制器的  - (BOOL)prefersStatusBarHidden 方法
+
+demo 中提供了控制status bar的2中方式
+1 简单的控制  效果一 效果四
+2 精确的控制  效果二 效果三
 ```
 ##### 保存gif图片的问题
 ```objc
