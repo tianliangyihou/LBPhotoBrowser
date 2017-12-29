@@ -69,7 +69,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
-  [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:self.view].lowGifMemory = NO;
+  [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:self.view];
  ```
 ### 效果2: 加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
 
