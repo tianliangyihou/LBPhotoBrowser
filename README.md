@@ -2,7 +2,7 @@
 
 一个使用简单的图片浏览器, 实现类似微信和今日头条的图片浏览效果
 
-简书地址:[http://www.jianshu.com/p/00f4b7b20dc4](http://www.jianshu.com/p/00f4b7b20dc4)(详细说明)
+简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)(详细说明)
 
 An easy way to make photo browse
 
@@ -158,7 +158,21 @@ add 这个block 返回的image 进行保存
         }].lowGifMemory = YES;
 
 ```
+```obj-c
+/**
+ 展示本地图片
+ */
+- (instancetype)showImageWithLocalItems:(NSArray <LBPhotoLocalItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView;
+/**
+ 展示网络图片
+ */
+- (instancetype)showImageWithWebItems:(NSArray <LBPhotoWebItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView;
 
+这两个方法 本质上是对下面这个方法的进一步封装,并且add了一些block: 
+
+- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViewFrames:(NSArray *)frames selectedIndex:(NSInteger)index imageViewSuperView:(UIView *)superView;
+
+```
 
 ##### 关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
 
