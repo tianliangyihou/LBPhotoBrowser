@@ -69,7 +69,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
-  [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:self.view].lowGifMemory = NO;
+  [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:self.view];
  ```
 ### 效果2: 加载网络图片,实现类似微信的图片浏览效果,缩略图和大图使用不同的url
 
@@ -127,10 +127,18 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 
 ```objc
 status bar 显示和隐藏的控制方式 有两只种
+
 1 在info.plist里面添加View controller-based status bar appearance－NO
+
 2 重写单个控制器的  - (BOOL)prefersStatusBarHidden 方法
 
-demo 中提供了控制status bar的2中方式
+如果你采用了方式 1  --> 就不需要自己再手动设置了
+
+如果再添加这个下面这个block,会覆盖系统之前的设置.需要自己控制图片(没有铺满整个屏幕时)被用户拖动时 status bar的隐藏和显示
+// 在图片浏览中 图片浏览器被拖动的回调
+- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void(^)(CGFloat bgViewAlpha))moveBlock;
+ 
+如果你采用了方式 2 可以参考demo中对status bar 的控制
 1 简单的控制  效果一 效果四
 2 精确的控制  效果二 效果三
 ```
@@ -164,21 +172,6 @@ add 这个block 返回的image 进行保存
         }].lowGifMemory = YES;
 
 ```
-```obj-c
-/**
- 展示本地图片
- */
-- (instancetype)showImageWithLocalItems:(NSArray <LBPhotoLocalItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView;
-/**
- 展示网络图片
- */
-- (instancetype)showImageWithWebItems:(NSArray <LBPhotoWebItem *> *)items selectedIndex:(NSInteger)index fromImageViewSuperView:(UIView *)superView;
-
-这两个方法 本质上是对下面这个方法的进一步封装,并且add了一些block: 
-
-- (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViewFrames:(NSArray *)frames selectedIndex:(NSInteger)index imageViewSuperView:(UIView *)superView;
-
-```
 
 ##### 关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
 
@@ -199,7 +192,7 @@ add 这个block 返回的image 进行保存
  # 相关(Relevant)
  
  #### 这是本人写的一个高仿今日头条的项目,目前还在完善中 部分已有的功能如下:
- 采用了RAC + MVVM 的方式
+ 采用了RAC + MVVM 的方式  使用了`LBPhotoBrowser`
  #### https://github.com/tianliangyihou/headlineNews
  
 ![](https://github.com/tianliangyihou/zhuxian/blob/master/effect4.gif?raw=true)
