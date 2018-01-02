@@ -51,6 +51,9 @@ static CGFloat const itemSpace = 20.0;
 
 @property (nonatomic , assign)BOOL stopPreloading;
 
+@property (nonatomic , assign)CGPoint startCenter;
+
+
 @end
 
 @implementation LBScrollViewStatusModel
@@ -229,6 +232,7 @@ static CGFloat const itemSpace = 20.0;
             _startPoint = location;
             self.tag = 0;
             _zoomScale = cell.zoomScrollView.zoomScale;
+            _startCenter = cell.zoomScrollView.imageView.center;
         }
             break;
         case UIGestureRecognizerStateChanged:
@@ -238,25 +242,24 @@ static CGFloat const itemSpace = 20.0;
             }
             cell.zoomScrollView.imageViewIsMoving = YES;
             double percent = 1 - fabs(point.y) / self.frame.size.height;// 移动距离 / 整个屏幕
-            percent = MAX(percent, 0.00001);
             double scalePercent = MAX(percent, 0.3);
             if (location.y - _startPoint.y < 0) {
-                scalePercent = 1.0;
+                scalePercent = 1.0 * _zoomScale;
             }else {
                 scalePercent = _zoomScale * scalePercent;
             }
-            CGAffineTransform translation = CGAffineTransformMakeTranslation(point.x/scalePercent, point.y/scalePercent);
             CGAffineTransform scale = CGAffineTransformMakeScale(scalePercent, scalePercent);
-            cell.zoomScrollView.imageView.transform =  CGAffineTransformConcat(translation, scale);
-            self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent];
+            cell.zoomScrollView.imageView.transform = scale;
+            cell.zoomScrollView.imageView.center = CGPointMake(self.startCenter.x + point.x, self.startCenter.y + point.y);
+            self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent / _zoomScale];
             if ([LBPhotoBrowserManager defaultManager].moveBlock) {
-                [LBPhotoBrowserManager defaultManager].moveBlock(scalePercent);
+                [LBPhotoBrowserManager defaultManager].moveBlock(scalePercent / _zoomScale);
             }else if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
                 UIApplication *app = [UIApplication sharedApplication];
-                if (scalePercent < 0.9 && app.statusBarHidden == YES) {
+                if (scalePercent / _zoomScale < 0.9 && app.statusBarHidden == YES) {
                     app.statusBarHidden = NO;
                 }
-                if (scalePercent > 0.9 && app.statusBarHidden == NO) {
+                if (scalePercent / _zoomScale > 0.9 && app.statusBarHidden == NO) {
                     app.statusBarHidden = YES;
                 }
             }
@@ -283,11 +286,12 @@ static CGFloat const itemSpace = 20.0;
 }
 
 - (void)cancelFromCell:(LBPhotoCollectionViewCell *)cell {
-    CGAffineTransform translation = CGAffineTransformMakeTranslation(0,0);
+    weak_self;
     CGAffineTransform scale = CGAffineTransformMakeScale(_zoomScale , _zoomScale);
     [UIView animateWithDuration:0.25 animations:^{
-        cell.zoomScrollView.imageView.transform =  CGAffineTransformConcat(translation, scale);
-        self.backgroundColor = [UIColor blackColor];
+        cell.zoomScrollView.imageView.transform = scale;
+        wself.backgroundColor = [UIColor blackColor];
+        cell.zoomScrollView.imageView.center = wself.startCenter;
     }completion:^(BOOL finished) {
         if ([LBPhotoBrowserManager defaultManager].moveBlock) {
             [LBPhotoBrowserManager defaultManager].moveBlock(1.0);
@@ -298,7 +302,6 @@ static CGFloat const itemSpace = 20.0;
         [cell.zoomScrollView layoutSubviews];
 
     }];
-  
 }
 
 #pragma mark - 监听通知
