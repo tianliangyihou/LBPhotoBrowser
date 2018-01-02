@@ -33,7 +33,7 @@
     LB_WEAK_SELF;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         int column = 3;
-        CGFloat itemWidth = (self.view.width - 2 * 10) / 3;
+        CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - 2 * 10) / 3;
         CGFloat itemHeight = itemWidth;
         for (int i = 0; i < MAX_COUNT; i++) {
             CGFloat x = (i % column) * (10 + itemWidth) ;

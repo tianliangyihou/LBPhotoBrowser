@@ -82,13 +82,21 @@
 // 图片拖动移动的过程中的回调
 @property (nonatomic , copy ,readonly)void(^moveBlock)(CGFloat);
 
-// 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
+/**
+ 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
+ 每次LBPhotoBrowser -> did dismiss(消失)的时候,LBPhotoBrowserManager 会将 lowGifMemory 置为NO,
+ 故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将lowGifMemory 置为 YES;
+ */
 @property (nonatomic , assign)BOOL lowGifMemory;
 
 // 当前图片浏览器正在展示的imageView
 @property (nonatomic , strong)UIImageView *currentShowImageView;
 
-// 是否需要预加载 default is YES
+/**
+ 是否需要预加载 default is YES
+ 每次LBPhotoBrowser -> did dismiss(消失)的时候,LBPhotoBrowserManager 会将 needPreloading 置为YES,
+ 故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将needPreloading 置为 NO;
+ */
 @property (nonatomic , assign)BOOL needPreloading;
 
 /**
