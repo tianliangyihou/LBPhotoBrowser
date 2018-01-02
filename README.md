@@ -1,6 +1,6 @@
 # LBPhotoBrowser
 
-一个使用简单的图片浏览器, 实现类似微信和今日头条的图片浏览效果
+一个使用简单的图片浏览器, 实现类似微信和今日头条的图片浏览效果 (如果下面的gif图加载不出来或者加载太慢,请移步简书)
 
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)(详细说明)
 
