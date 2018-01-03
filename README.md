@@ -89,7 +89,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 
 ### 效果3: 加载网络图片,实现类似今日头条的图片浏览效果,缩略图和大图使用不同的url
 
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2.gif?raw=true)
+![](https://github.com/tianliangyihou/zhuxian/blob/master/effect2_new.gif?raw=true)
 
  ```obj-c
  NSMutableArray *items = [[NSMutableArray alloc]init];
