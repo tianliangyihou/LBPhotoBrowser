@@ -318,8 +318,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale{
     if (scrollView.minimumZoomScale != scale) return;
     [self setZoomScale:self.minimumZoomScale animated:YES];
-    [self resetScrollViewStatusWithImage:self.model.currentPageImage];
+//    [self resetScrollViewStatusWithImage:self.model.currentPageImage];
     [self setNeedsLayout];
+    [self layoutIfNeeded];
+
 }
 
 
