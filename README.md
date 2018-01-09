@@ -128,7 +128,7 @@ LBPhotoBrowser 将网络图片的加载分为两种:
 ```objc
 对于status bar的处理,相比之前做了较大的优化
 采用创建一个新的level 高于status bar 的window 覆盖在之前的window上
-效果更佳流畅和自然
+效果更佳流畅和自然 (上面的gif采用了之前版本的处理方式,如果感觉不流畅,请忽略)
 ```
 ##### 保存gif图片的问题
 ```objc
@@ -149,16 +149,13 @@ add 这个block 返回的image 进行保存
 
 所以你可以这样写,可以更长^_^ ,当然也可以分开写
  ```obj-c
-         [[[[[[LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:cell.contentView] addLongPressShowTitles:@[@"识别二维码",@"保存",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
-            // do something
-        }]addPhotoBrowserImageDidDraggedToMoveBlock:^(CGFloat bgViewAlpha) {
-            // do something
+    [[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+            // do somehting
         }]addPhotoBrowserWillDismissBlock:^{
-            // do something
+            // do somehting
         }]addPhotoBrowserDidDismissBlock:^{
-            // do something
-        }].lowGifMemory = YES;
-
+            // do somehting
+        }];
 ```
 
 ##### 关于SDWebImage加载gif图片的问题(sd_setImageWithURL):
