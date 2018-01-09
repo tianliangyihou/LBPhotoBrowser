@@ -16,13 +16,12 @@
 @property (nonatomic , strong)NSMutableArray *frames;
 @property (nonatomic , weak)UIButton *addBtn;
 @property (nonatomic , strong)NSMutableArray *imageViews;
-@property (nonatomic , assign)BOOL hideStatusBar;
 @end
 
 @implementation LBLocalImageVC
 
 - (void)dealloc {
-    NSLog(@"%@ 销毁了",NSStringFromClass([self class]));
+    LBPhotoBrowserLog(@"%@ 销毁了",NSStringFromClass([self class]));
 }
 
 - (void)viewDidLoad {
@@ -92,27 +91,14 @@
 }
 
 - (void)imageClick:(UITapGestureRecognizer *)tap {
-    _hideStatusBar = YES;
-    [self setNeedsStatusBarAppearanceUpdate];
     NSMutableArray *items = @[].mutableCopy;
     for (UIImageView *imageView in self.imageViews) {
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
-    LB_WEAK_SELF;
     // 这里只要你开心 可以无限addBlock
     [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
         LBPhotoBrowserLog(@"%@",title);
     }];
-    
-    [[LBPhotoBrowserManager defaultManager] addPhotoBrowserWillDismissBlock:^{
-        wself.hideStatusBar = NO;
-        [wself setNeedsStatusBarAppearanceUpdate];
-    }];
 }
-- (BOOL)prefersStatusBarHidden {
-    return _hideStatusBar;
-}
-
-
 @end

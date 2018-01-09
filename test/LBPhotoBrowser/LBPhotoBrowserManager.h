@@ -55,11 +55,8 @@
 //传入的本地图片
 @property (nonatomic , strong, readonly)LBImagesMutableArray *images;
 
-// 是否在info.plist中配置 View controller-based status bar appearance－NO
-@property (nonatomic , assign, readonly)BOOL configureStatusBarInfo;
-
 // 用来展示图片的UI控件
-@property (nonatomic , weak, readonly)LBPhotoBrowserView *photoBrowserView;
+@property (nonatomic , strong, readonly)LBPhotoBrowserView *photoBrowserView;
 
 // 传入的imageView的共同父View
 @property (nonatomic , weak, readonly)UIView *imageViewSuperView;
@@ -79,8 +76,6 @@
 // 每张正在加载的图片的站位图的大小
 @property (nonatomic , copy ,readonly)CGSize (^placeholdImageSizeBlock)(UIImage *Image,NSIndexPath *indexpath);
 
-// 图片拖动移动的过程中的回调
-@property (nonatomic , copy ,readonly)void(^moveBlock)(CGFloat);
 
 /**
  开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
@@ -156,8 +151,6 @@
 // 图片浏览器彻底消失的回调
 - (instancetype)addPhotoBrowserDidDismissBlock:(void(^)(void))dismissBlock;
 
-// 在图片浏览中 图片浏览器被拖动的回调
-- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void(^)(CGFloat bgViewAlpha))moveBlock;
 
 #pragma mark - get方法
 

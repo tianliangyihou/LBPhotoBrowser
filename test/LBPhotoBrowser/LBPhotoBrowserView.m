@@ -207,12 +207,11 @@ static CGFloat const itemSpace = 20.0;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.windowLevel = UIWindowLevelAlert;
+        self.hidden = NO;
         self.backgroundColor = [UIColor blackColor];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(remove) name:LBImageViewDidDismissNot object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(scrollViewDidScroll:) name:LBGifImageDownloadFinishedNot object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(removePageControl) name:LBImageViewWillDismissNot object:nil];
-
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
         [self addGestureRecognizer:pan];
         [LBPhotoBrowserManager defaultManager].currentCollectionView = self.collectionView;
@@ -252,17 +251,6 @@ static CGFloat const itemSpace = 20.0;
             cell.zoomScrollView.imageView.transform = scale;
             cell.zoomScrollView.imageView.center = CGPointMake(self.startCenter.x + point.x, self.startCenter.y + point.y);
             self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent / _zoomScale];
-            if ([LBPhotoBrowserManager defaultManager].moveBlock) {
-                [LBPhotoBrowserManager defaultManager].moveBlock(scalePercent / _zoomScale);
-            }else if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
-                UIApplication *app = [UIApplication sharedApplication];
-                if (scalePercent / _zoomScale < 0.9 && app.statusBarHidden == YES) {
-                    app.statusBarHidden = NO;
-                }
-                if (scalePercent / _zoomScale > 0.9 && app.statusBarHidden == NO) {
-                    app.statusBarHidden = YES;
-                }
-            }
             self.tag = 1;
         }
             break;
@@ -293,11 +281,6 @@ static CGFloat const itemSpace = 20.0;
         wself.backgroundColor = [UIColor blackColor];
         cell.zoomScrollView.imageView.center = wself.startCenter;
     }completion:^(BOOL finished) {
-        if ([LBPhotoBrowserManager defaultManager].moveBlock) {
-            [LBPhotoBrowserManager defaultManager].moveBlock(1.0);
-        }else if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
-            [UIApplication sharedApplication].statusBarHidden = YES;
-        }
         cell.zoomScrollView.imageViewIsMoving = NO;
         [cell.zoomScrollView layoutSubviews];
 
@@ -305,18 +288,12 @@ static CGFloat const itemSpace = 20.0;
 }
 
 #pragma mark - 监听通知
-- (void)remove{
-    [self removeFromSuperview];
-}
 - (void)removePageControl {
     [UIView animateWithDuration:0.25 animations:^{
         self.pageControl.alpha = 0;
     }completion:^(BOOL finished) {
         [self.pageControl removeFromSuperview];
     }];
-    if ([LBPhotoBrowserManager defaultManager].configureStatusBarInfo) {
-        [UIApplication sharedApplication].statusBarHidden = NO;
-    }
     if (![LBPhotoBrowserManager defaultManager].needPreloading) {
         return;
     }
@@ -427,7 +404,6 @@ static CGFloat const itemSpace = 20.0;
             obj.shouldCancel = YES;
         }
      
-        
         int leftCellIndex = model.index - 1 >= 0 ?model.index - 1:0;
         int rightCellIndex = model.index + 1 < wself.models.count? model.index + 1 : (int)wself.models.count -1;
         

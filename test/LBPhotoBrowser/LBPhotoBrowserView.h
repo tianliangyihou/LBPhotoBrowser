@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LBPhotoBrowserView : UIView
+@interface LBPhotoBrowserView : UIWindow
 
 @property (nonatomic , weak)UIPageControl *pageControl;
 

@@ -54,11 +54,7 @@
     LBCell *cell = [tableView dequeueReusableCellWithIdentifier:ID forIndexPath:indexPath];
     cell.model = self.models[indexPath.row];
     __weak typeof(cell) wcell = cell;
-    __weak typeof(self) wself = self;
-
     [cell setCallBack:^(LBModel *cellModel, int tag) {
-        wself.hideStatusBar = YES;
-        [wself setNeedsStatusBarAppearanceUpdate];
         NSMutableArray *items = [[NSMutableArray alloc]init];
         for (int i = 0 ; i < cellModel.urls.count; i++) {
             LBURLModel *urlModel = cellModel.urls[i];
@@ -68,30 +64,16 @@
         }
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
         
-        [[[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+        [[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
             LBPhotoBrowserLog(@"%@",title);
         }]addPhotoBrowserWillDismissBlock:^{
-            wself.hideStatusBar = NO;
-            [wself setNeedsStatusBarAppearanceUpdate];
-        }]addPhotoBrowserImageDidDraggedToMoveBlock:^(CGFloat bgViewAlpha) {
-            if (bgViewAlpha < 0.9 && wself.hideStatusBar) {
-                wself.hideStatusBar = NO;
-                [wself setNeedsStatusBarAppearanceUpdate];
-            }
-            if (bgViewAlpha > 0.9 && !wself.hideStatusBar) {
-                wself.hideStatusBar = YES;
-                [wself setNeedsStatusBarAppearanceUpdate];
-            }
+            LBPhotoBrowserLog(@"PhotoBrowserWillDismiss");
         }]addPhotoBrowserDidDismissBlock:^{
             LBPhotoBrowserLog(@"PhotoBrowserDidDismiss");
         }];
         
     }];
     return cell;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return self.hideStatusBar;
 }
 
 @end

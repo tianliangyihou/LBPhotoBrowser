@@ -19,6 +19,4 @@
 
 @property (nonatomic , strong)NSArray *thumbnailURLStrings;
 
-@property (nonatomic , assign)BOOL hideStatusBar;
-
 @end

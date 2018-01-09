@@ -174,13 +174,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _requestQueue.maxConcurrentOperationCount = 1;
         _lock = dispatch_semaphore_create(1);
         _needPreloading = YES;
-        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-        NSNumber *value  = infoDictionary[@"UIViewControllerBasedStatusBarAppearance"];
-        if (value && [value boolValue] == NO) {
-            _configureStatusBarInfo = YES;
-        }else {
-            _configureStatusBarInfo = NO;
-        }
     }
     return self;
 }
@@ -204,12 +197,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     
     _currentPage = index;
     _imageViewSuperView = superView;
-    if (self.configureStatusBarInfo) {
-        [UIApplication sharedApplication].statusBarHidden = YES;
-    }
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     [photoBrowserView showImageViewsWithImages:self.images andSeletedIndex:(int)index];
-    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
+    [photoBrowserView makeKeyAndVisible];
     _photoBrowserView = photoBrowserView;
     return self;
 }
@@ -276,12 +266,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     
     _currentPage = index;
     _imageViewSuperView = superView;
-    if (self.configureStatusBarInfo) {
-        [UIApplication sharedApplication].statusBarHidden = YES;
-    }
     LBPhotoBrowserView *photoBrowserView = [[LBPhotoBrowserView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     [photoBrowserView showImageViewsWithURLs:self.urls andSelectedIndex:(int)index];
-    [[UIApplication sharedApplication].keyWindow addSubview:photoBrowserView];
+    [photoBrowserView makeKeyAndVisible];
     _photoBrowserView = photoBrowserView;
     return self;
     
@@ -324,11 +311,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 }
 
 
-- (instancetype)addPhotoBrowserImageDidDraggedToMoveBlock:(void (^)(CGFloat))moveBlock {
-    _moveBlock = moveBlock;
-    return self;
-}
-
 - (NSArray<NSString *> *)currentTitles {
     return _titles;
 }
@@ -367,6 +349,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.didDismissBlock = nil;
     self.needPreloading = YES;
     self.lowGifMemory = NO;
+    _photoBrowserView.hidden = YES;
+    _photoBrowserView = nil;
 }
 - (void)displayLinkInvalidate {
     
@@ -384,7 +368,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _titleClickBlock = nil;
     _placeholdImageCallBackBlock = nil;
     _placeholdImageSizeBlock = nil;
-    _moveBlock = nil;
     _titles = @[];
 }
 

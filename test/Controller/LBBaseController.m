@@ -15,7 +15,7 @@
 @implementation LBBaseController
 
 - (void)dealloc {
-    NSLog(@"%@ 销毁了",NSStringFromClass([self class]));
+    LBPhotoBrowserLog(@"%@ 销毁了",NSStringFromClass([self class]));
 }
 
 - (void)viewDidLoad {

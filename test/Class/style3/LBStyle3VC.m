@@ -47,10 +47,7 @@
     LBCell *cell = [tableView dequeueReusableCellWithIdentifier:ID forIndexPath:indexPath];
     cell.model = self.models[indexPath.row];
     __weak typeof(cell) wcell = cell;
-    __weak typeof(self) wself = self;
     [cell setCallBack:^(LBModel *cellModel, int tag) {
-        wself.hideStatusBar = YES;
-        [wself setNeedsStatusBarAppearanceUpdate];
         NSMutableArray *items = [[NSMutableArray alloc]init];
         for (int i = 0 ; i < cellModel.urls.count; i++) {
             LBURLModel *urlModel = cellModel.urls[i];
@@ -64,8 +61,6 @@
             LBPhotoBrowserLog(@"%@",title);
         }]addPhotoBrowserWillDismissBlock:^{
             LBPhotoBrowserLog(@"即将销毁");
-            wself.hideStatusBar = NO;
-            [wself setNeedsStatusBarAppearanceUpdate];
         }].needPreloading = NO;// 这里关掉预加载功能
         
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
@@ -74,7 +69,5 @@
     }];
     return cell;
 }
-- (BOOL)prefersStatusBarHidden {
-    return self.hideStatusBar;
-}
+
 @end
