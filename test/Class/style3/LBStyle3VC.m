@@ -66,6 +66,7 @@
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
             return [UIImage imageNamed:@"placehold.jpeg"];
         }];
+        
     }];
     return cell;
 }

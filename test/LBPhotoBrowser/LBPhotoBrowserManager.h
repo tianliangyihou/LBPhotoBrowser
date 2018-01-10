@@ -76,7 +76,6 @@
 // 每张正在加载的图片的站位图的大小
 @property (nonatomic , copy ,readonly)CGSize (^placeholdImageSizeBlock)(UIImage *Image,NSIndexPath *indexpath);
 
-
 /**
  开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
  每次LBPhotoBrowser -> did dismiss(消失)的时候,LBPhotoBrowserManager 会将 lowGifMemory 置为NO,
