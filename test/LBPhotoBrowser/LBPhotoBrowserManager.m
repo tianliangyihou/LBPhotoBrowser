@@ -214,7 +214,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         if (!item.urlString || CGRectEqualToRect(item.frame, CGRectZero)) {
             return nil;
         }
-        [urls addObject:[NSURL URLWithString:item.urlString]];
+        [urls addObject:item.urlString];
         [frames addObject:[NSValue valueWithCGRect:item.frame]];
         NSString *index = [NSString stringWithFormat:@"%d",i];
         placeHoldImageDic[index] = item.placeholdImage;

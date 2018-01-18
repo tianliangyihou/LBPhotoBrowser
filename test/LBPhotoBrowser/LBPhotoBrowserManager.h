@@ -24,7 +24,7 @@
 
 @interface LBPhotoWebItem : NSObject
 // 加载图片的url
-@property (nonatomic , strong)NSString *urlString;
+@property (nonatomic , copy)NSString *urlString;
 //imageView的frame
 @property (nonatomic , assign)CGRect frame;
 //站位图的大小
