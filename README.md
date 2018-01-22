@@ -4,7 +4,7 @@
 
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
-An easy way to make photo browse
+
 
 目前已更新至V2.2,新增以下内容:
 
