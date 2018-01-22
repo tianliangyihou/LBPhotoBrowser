@@ -137,6 +137,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
             [_loadingView removeFromSuperview];
         }
         [self resetScrollViewStatusWithImage:model.currentPageImage];
+        /**
+          when lowGifMemory = NO,if not clear this image ,gif image may have some thing wrong
+         */
+        self.imageView.image = nil;
         self.imageView.image = model.currentPageImage;
         self.maximumZoomScale = scrollViewMaxZoomScale;
     }

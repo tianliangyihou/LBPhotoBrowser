@@ -364,6 +364,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.lowGifMemory = NO;
     _photoBrowserView.hidden = YES;
     _photoBrowserView = nil;
+    [self.linkageInfo removeAllObjects];
 }
 - (void)displayLinkInvalidate {
     
