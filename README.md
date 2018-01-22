@@ -7,7 +7,9 @@
 An easy way to make photo browse
 
 目前已更新至V2.2,新增以下内容:
+
 1.支持通过collectionView展示本地和网络图片(详情可查看demo)
+
 2.修复 lowGifMemory = NO情况下,展示gif图片的一个bug
 
 # 概览(Overview)
