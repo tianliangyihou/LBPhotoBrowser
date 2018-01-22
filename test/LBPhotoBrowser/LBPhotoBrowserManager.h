@@ -55,6 +55,9 @@
 //传入的本地图片
 @property (nonatomic , strong, readonly)LBImagesMutableArray *images;
 
+// 关于联动的信息
+@property (nonatomic , strong, readonly)NSMutableDictionary *linkageInfo;
+
 // 用来展示图片的UI控件
 @property (nonatomic , strong, readonly)LBPhotoBrowserView *photoBrowserView;
 
@@ -98,7 +101,6 @@
  */
 + (instancetype)defaultManager;
 
-
 /**
  展示本地图片
  @param items 传入本地的图片模型数组
@@ -128,6 +130,7 @@
  */
 - (instancetype)showImageWithURLArray:(NSArray *)urls fromImageViewFrames:(NSArray *)frames selectedIndex:(NSInteger)index imageViewSuperView:(UIView *)superView;
 
+
 #pragma mark - 回调
 // 添加默认的长按控件
 - (instancetype)addLongPressShowTitles:(NSArray <NSString *>*)titles;
@@ -150,7 +153,7 @@
 // 图片浏览器彻底消失的回调
 - (instancetype)addPhotoBrowserDidDismissBlock:(void(^)(void))dismissBlock;
 
-
+- (instancetype)addCollectionViewLinkageStyle:(UICollectionViewScrollPosition)style cellReuseIdentifier:(NSString *)reuseIdentifier;
 #pragma mark - get方法
 
 - (NSArray<NSString *> *)currentTitles;

@@ -342,6 +342,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (_loadingView) {
         [_loadingView removeFromSuperview];
     }
+    if ([[LBPhotoBrowserManager defaultManager].imageViewSuperView isKindOfClass:[UICollectionView class]]) {
+        [self configCollectionViewAnimationStyle];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:LBImageViewWillDismissNot object:nil];
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
 //    UIView *currentView  = mgr.imageViews[mgr.currentPage];
@@ -384,5 +388,23 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         CGFloat ysize = self.bounds.size.height / newZoomScale;
         [self zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
     }
+}
+
+- (void)configCollectionViewAnimationStyle {
+    NSDictionary *info = [LBPhotoBrowserManager defaultManager].linkageInfo;
+    NSString *reuseIdentifier = info[LBLinkageInfoReuseIdentifierKey];
+    if (!reuseIdentifier) {
+        LBPhotoBrowserLog(@"请设置传入collectionViewCell的reuseIdentifier");
+    }
+    NSUInteger style = UICollectionViewScrollPositionCenteredHorizontally;
+    if (info[LBLinkageInfoStyleKey]) {
+        style = [info[LBLinkageInfoStyleKey] unsignedIntValue];
+    }
+    UICollectionView *collectionView = (UICollectionView *)[LBPhotoBrowserManager defaultManager].imageViewSuperView;
+    NSIndexPath *index = [NSIndexPath indexPathForItem:[LBPhotoBrowserManager defaultManager].currentPage inSection:0];
+    [collectionView scrollToItemAtIndexPath:index atScrollPosition:style animated:NO];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:index];
+    NSValue* value  = [NSValue valueWithCGRect:cell.frame];
+    [[LBPhotoBrowserManager defaultManager].frames replaceObjectAtIndex:index.row withObject:value];
 }
 @end

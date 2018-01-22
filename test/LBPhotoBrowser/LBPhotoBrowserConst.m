@@ -17,4 +17,6 @@ NSString * const LBImageViewWillDismissNot = @"LBImageViewWillDismissNot";
 NSString * const LBImageViewDidDismissNot = @"LBImageViewDidDismissNot";
 NSString * const LBGifImageDownloadFinishedNot = @"LBGifImageDownloadFinishedNot";
 
+NSString * const LBLinkageInfoStyleKey = @"lb_style";
+NSString * const LBLinkageInfoReuseIdentifierKey = @"lb_reuseIdentifier";
 #endif

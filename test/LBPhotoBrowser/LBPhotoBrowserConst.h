@@ -56,4 +56,8 @@ typedef NSMutableArray<UIImage *> LBImagesMutableArray;
 UIKIT_EXTERN NSString * const LBImageViewWillDismissNot;
 UIKIT_EXTERN NSString * const LBImageViewDidDismissNot;
 UIKIT_EXTERN NSString * const LBGifImageDownloadFinishedNot;
+
+UIKIT_EXTERN NSString * const LBLinkageInfoStyleKey;
+UIKIT_EXTERN NSString * const LBLinkageInfoReuseIdentifierKey;
+
 #endif

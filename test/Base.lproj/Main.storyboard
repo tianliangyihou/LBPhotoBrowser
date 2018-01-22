@@ -46,7 +46,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="2We-Ay-L90"/>
                                 </constraints>
-                                <state key="normal" title="本地图片"/>
+                                <state key="normal" title="本地图片(不复用cell)"/>
                                 <connections>
                                     <action selector="localBtnClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="s0U-Z2-ox8"/>
                                 </connections>
@@ -84,11 +84,23 @@
                                     <action selector="style3BtnClicl:" destination="4e6-C5-Euz" eventType="touchUpInside" id="BX2-r2-c6h"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24r-Km-eRA">
+                                <rect key="frame" x="16" y="89" width="343" height="50"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="2e1-zn-eu9"/>
+                                </constraints>
+                                <state key="normal" title="collectionView展示图片(复用cell)"/>
+                                <connections>
+                                    <action selector="collectionViewClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="gC7-Ap-WRV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="g7b-iJ-DgV" secondAttribute="trailing" id="2CI-SD-CZ0"/>
                             <constraint firstItem="zfK-zO-7xb" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="9eU-LO-bOf"/>
+                            <constraint firstItem="24r-Km-eRA" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="CrY-Ds-kPD"/>
                             <constraint firstItem="pw4-qo-IeW" firstAttribute="top" secondItem="g7b-iJ-DgV" secondAttribute="bottom" constant="30" id="Ga5-X7-aQ6"/>
                             <constraint firstItem="jQA-z6-OOY" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="JpV-dB-cAI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="pw4-qo-IeW" secondAttribute="trailing" id="STy-Uk-wg6"/>
@@ -96,7 +108,9 @@
                             <constraint firstItem="jQA-z6-OOY" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="Y83-aQ-VQt"/>
                             <constraint firstItem="g7b-iJ-DgV" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="102" id="ZVw-yY-5vj"/>
                             <constraint firstItem="zfK-zO-7xb" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="Zpp-9m-vrg"/>
+                            <constraint firstItem="24r-Km-eRA" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="jpx-ib-Q3L"/>
                             <constraint firstItem="pw4-qo-IeW" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="sxb-wq-tvk"/>
+                            <constraint firstItem="24r-Km-eRA" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="25" id="vK2-Dv-X0O"/>
                             <constraint firstItem="zfK-zO-7xb" firstAttribute="top" secondItem="pw4-qo-IeW" secondAttribute="bottom" constant="30" id="zTh-U1-Pek"/>
                             <constraint firstItem="g7b-iJ-DgV" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="zgi-3Z-a73"/>
                         </constraints>
@@ -105,7 +119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KFQ-4b-3Sa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1498.4000000000001" y="-194.75262368815595"/>
+            <point key="canvasLocation" x="1279" y="-159"/>
         </scene>
     </scenes>
 </document>

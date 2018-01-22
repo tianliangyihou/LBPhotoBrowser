@@ -11,6 +11,7 @@
 #import "LBStyle1VC.h"
 #import "LBStyle2VC.h"
 #import "LBStyle3VC.h"
+#import "LBLocalImageCollectionViewVC.h"
 @interface ViewController ()
 
 @end
@@ -18,6 +19,10 @@
 
 @implementation ViewController
 
+- (IBAction)collectionViewClick:(id)sender {
+    LBLocalImageCollectionViewVC *lcv = [[LBLocalImageCollectionViewVC alloc]init];
+    [self.navigationController pushViewController:lcv animated:YES];
+}
 
 - (IBAction)localBtnClick:(id)sender {
     LBLocalImageVC *lvc = [[LBLocalImageVC alloc]init];
