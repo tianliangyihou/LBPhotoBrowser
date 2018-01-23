@@ -186,6 +186,6 @@ add 这个block 返回的image 进行保存
  采用了RAC + MVVM 的方式  使用了`LBPhotoBrowser`
  #### https://github.com/tianliangyihou/headlineNews
  
-![](https://github.com/tianliangyihou/zhuxian/blob/master/effect4.gif?raw=true)
+![effect_hn.gif](https://github.com/tianliangyihou/zhuxian/blob/master/effect_hn.gif?raw=true)
 
 #### 如果您使用过程中发现什么问题,请及时issue me 或者 简书 下面给我留言 期待和您一起改进`LBPhotoBrowser`
