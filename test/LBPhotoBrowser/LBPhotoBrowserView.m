@@ -157,7 +157,6 @@ static CGFloat const itemSpace = 20.0;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    SDDispatchQueueRelease(_preloadingQueue);
 }
 
 - (NSMutableArray *)models {
