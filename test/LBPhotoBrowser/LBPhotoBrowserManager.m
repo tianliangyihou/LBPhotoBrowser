@@ -131,6 +131,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @synthesize linkageInfo = _linkageInfo;
 
+@synthesize lb_resourceBundle = _lb_resourceBundle;
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -175,7 +177,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 {
     self = [super init];
     if (self) {
-        self.errorImage = [UIImage imageNamed:@"LBLoadError.jpg"];
+        _lb_resourceBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[LBPhotoBrowserView class]] pathForResource:@"LBPhotoBrowser" ofType:@"bundle"]];
+        _errorImage = [UIImage imageWithContentsOfFile:[_lb_resourceBundle pathForResource:@"LBLoadError.png" ofType:nil]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserWillDismiss) name:LBImageViewWillDismissNot object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoBrowserDidDismiss) name:LBImageViewDidDismissNot object:nil];
         _requestQueue = [[NSOperationQueue alloc] init];

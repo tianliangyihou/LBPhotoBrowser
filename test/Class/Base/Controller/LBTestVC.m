@@ -30,7 +30,9 @@
      */
     NSString *urlString = @"http://img.zcool.cn/community/0132f455a6d04432f8758bed5f25a9.gif";
     NSURL *url = [NSURL URLWithString:urlString];
-    [_testImageView1 sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"LBLoadError.jpg"]];
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[LBTestVC class]] pathForResource:@"LBPhotoBrowser" ofType:@"bundle"]];
+    [_testImageView1 sd_setImageWithURL:url placeholderImage:[UIImage imageWithContentsOfFile:[bundle pathForResource:@"LBLoadError.png" ofType:nil]]];
 
     __weak typeof(self) wself = self;
     [[SDWebImageManager sharedManager] loadImageWithURL:url options:SDWebImageRetryFailed progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {

@@ -89,10 +89,10 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (mgr.placeholdImageCallBackBlock) {
         placeholdImage =  mgr.placeholdImageCallBackBlock([NSIndexPath indexPathForItem:model.index inSection:0]);
         if (!placeholdImage) {
-            placeholdImage =[UIImage imageNamed:@"LBLoading.png"];
+            placeholdImage = [UIImage imageWithContentsOfFile:[mgr.lb_resourceBundle pathForResource:@"LBLoading.png" ofType:nil]];
         }
     }else {
-        placeholdImage =[UIImage imageNamed:@"LBLoading.png"];
+        placeholdImage = [UIImage imageWithContentsOfFile:[mgr.lb_resourceBundle pathForResource:@"LBLoading.png" ofType:nil]];
     }
     return placeholdImage;
 }

@@ -70,7 +70,8 @@
 // 展示图片使用collectionView来提高效率
 @property (nonatomic , weak)UICollectionView *currentCollectionView;
 
-//当图片加载出现错误时候显示的图片  default is [UIImage imageNamed:@"LBLoadError.jpg"]
+//当图片加载出现错误时候显示的图片  default is [UIImage imageNamed:@"LBLoadError.png"]
+//如果LBLoadError.png这张图片不满意 可以修改这个属性替换
 @property (nonatomic , strong)UIImage *errorImage;
 
 // 每张正在加载的图片的占位图
@@ -95,6 +96,11 @@
  故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将needPreloading 置为 NO;
  */
 @property (nonatomic , assign)BOOL needPreloading;
+
+/**
+ 含有图片的bundle
+ */
+@property (nonatomic , strong, readonly)NSBundle *lb_resourceBundle;
 
 /**
  返回当前的一个单例(不完全单利)

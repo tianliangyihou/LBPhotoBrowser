@@ -56,7 +56,6 @@
             [items addObject:item];
         }
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
-      
         [[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
             LBPhotoBrowserLog(@"%@",title);
         }]addPhotoBrowserWillDismissBlock:^{
@@ -66,7 +65,6 @@
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
             return [UIImage imageNamed:@"placehold.jpeg"];
         }];
-        
     }];
     return cell;
 }
