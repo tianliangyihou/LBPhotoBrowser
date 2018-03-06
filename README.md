@@ -5,8 +5,7 @@
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
 
-
-目前已更新至V2.2,新增以下内容:
+目前已更新至V2.2.2,新增以下内容:
 
 1.支持通过collectionView展示本地和网络图片(详情可查看demo)
 
