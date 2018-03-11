@@ -11,8 +11,8 @@
 
 2.修复 lowGifMemory = NO情况下,展示gif图片的一个bug
 
-##### LBPhotoBrowser依赖于SDWebImage,建议使用SDWebImage(v4.0.0)版本
-##### 由于最新版的SDWebImage(v4.3.2)更新了对了gif图片的处理方式,导致LBPhotoBrowser无法播放gif图片.目前正在是适配中...
+##### `LBPhotoBrowser`依赖于`SDWebImage`,建议使用`SDWebImage`(v4.0.0)版本
+##### 由于最新版的`SDWebImage`(v4.3.2)更新了对了gif图片的处理方式,导致`LBPhotoBrowser`无法播放gif图片(其他都正常).目前正在是适配中...
 
 # 概览(Overview)
 
