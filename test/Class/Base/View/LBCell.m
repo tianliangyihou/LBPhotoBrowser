@@ -59,7 +59,7 @@
 
 - (void)imageViewClick:(UITapGestureRecognizer *)tap {
     if (_callBack) {
-        _callBack(self.model,tap.view.tag);
+        _callBack(self.model,(int)tap.view.tag);
     }
 }
 

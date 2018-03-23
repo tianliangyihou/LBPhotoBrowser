@@ -15,6 +15,7 @@
 
 @implementation LBStyle3VC
 
+
 - (void)viewDidLoad {
     self.lagerURLStrings = @[
                              //大图
@@ -61,7 +62,6 @@
         }]addPhotoBrowserWillDismissBlock:^{
             LBPhotoBrowserLog(@"即将销毁");
         }].needPreloading = NO;// 这里关掉预加载功能
-        
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
             return [UIImage imageNamed:@"placehold.jpeg"];
         }];

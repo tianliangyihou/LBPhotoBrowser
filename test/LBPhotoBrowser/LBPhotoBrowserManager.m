@@ -368,6 +368,10 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _photoBrowserView.hidden = YES;
     _photoBrowserView = nil;
     [self.linkageInfo removeAllObjects];
+    // 这个必须要清除 包含有image对象
+    if(_images) [_images removeAllObjects];
+    if(_frames) [_frames removeAllObjects];
+    if(_urls)   [_urls removeAllObjects];
 }
 - (void)displayLinkInvalidate {
     

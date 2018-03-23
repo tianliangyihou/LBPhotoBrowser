@@ -397,10 +397,11 @@ static CGFloat const itemSpace = 20.0;
     model.currentPageImage = model.currentPageImage ?:[self getCacheImageForModel:model];
     // 需要展示动画的话 展示动画
     if (model.showPopAnimation) {
+        __weak typeof(cell)wcell = cell;
         [currentCell startPopAnimationWithModel:model completionBlock:^{
             wself.isShowing = YES;
             model.showPopAnimation = NO;
-            [wself collectionView:collectionView willDisplayCell:cell forItemAtIndexPath:indexPath];
+            [wself collectionView:collectionView willDisplayCell:wcell forItemAtIndexPath:indexPath];
         }];
     }
     if (_isShowing == NO) return;
@@ -476,7 +477,6 @@ static CGFloat const itemSpace = 20.0;
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     NSString *address = model.url.absoluteString;
     localImage =  [[SDImageCache sharedImageCache] imageFromCacheForKey:address];
-    
     if (localImage && localImage.images.count > 0) {//gif 图片
         if (mgr.lowGifMemory == YES) {
             return localImage;
@@ -503,5 +503,7 @@ static CGFloat const itemSpace = 20.0;
         model.isShowing = YES;
     }
 }
+
+
 @end
 
