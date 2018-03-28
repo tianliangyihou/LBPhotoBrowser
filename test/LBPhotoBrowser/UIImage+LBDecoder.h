@@ -40,4 +40,5 @@
 - (UIImage *)animatedImageFrameAtIndex:(int)index;
 
 - (void)imageViewShowFinsished;
+
 @end

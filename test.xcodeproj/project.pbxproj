@@ -31,8 +31,6 @@
 		267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD88E1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m */; };
 		267AD89B1F5E3B3A00DC6D9F /* UIView+LBFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 267AD8901F5E3B3A00DC6D9F /* UIView+LBFrame.m */; };
 		267D19F32015833700B87BE0 /* LBBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19EF2015833700B87BE0 /* LBBaseController.m */; };
-		267D19F42015833700B87BE0 /* LBTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19F12015833700B87BE0 /* LBTestVC.m */; };
-		267D19F52015833700B87BE0 /* LBTestVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 267D19F22015833700B87BE0 /* LBTestVC.xib */; };
 		267D19F92015839600B87BE0 /* LBLocalImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19F72015839600B87BE0 /* LBLocalImageCollectionViewVC.m */; };
 		267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19FB2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m */; };
 		32BF97956CD6003C5D78629E /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1472DF34D1E9CA8AAD44F40D /* libPods-test.a */; };
@@ -84,9 +82,6 @@
 		267AD8901F5E3B3A00DC6D9F /* UIView+LBFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LBFrame.m"; sourceTree = "<group>"; };
 		267D19EE2015833700B87BE0 /* LBBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBBaseController.h; sourceTree = "<group>"; };
 		267D19EF2015833700B87BE0 /* LBBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBBaseController.m; sourceTree = "<group>"; };
-		267D19F02015833700B87BE0 /* LBTestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBTestVC.h; sourceTree = "<group>"; };
-		267D19F12015833700B87BE0 /* LBTestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBTestVC.m; sourceTree = "<group>"; };
-		267D19F22015833700B87BE0 /* LBTestVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LBTestVC.xib; sourceTree = "<group>"; };
 		267D19F72015839600B87BE0 /* LBLocalImageCollectionViewVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBLocalImageCollectionViewVC.m; sourceTree = "<group>"; };
 		267D19F82015839600B87BE0 /* LBLocalImageCollectionViewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLocalImageCollectionViewVC.h; sourceTree = "<group>"; };
 		267D19FA2015B1C500B87BE0 /* LBWebImageCollectionViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBWebImageCollectionViewVC.h; sourceTree = "<group>"; };
@@ -261,9 +256,6 @@
 			children = (
 				267D19EE2015833700B87BE0 /* LBBaseController.h */,
 				267D19EF2015833700B87BE0 /* LBBaseController.m */,
-				267D19F02015833700B87BE0 /* LBTestVC.h */,
-				267D19F12015833700B87BE0 /* LBTestVC.m */,
-				267D19F22015833700B87BE0 /* LBTestVC.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -362,7 +354,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2639F3B02047A3310099186E /* LBPhotoBrowser.bundle in Resources */,
-				267D19F52015833700B87BE0 /* LBTestVC.xib in Resources */,
 				2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */,
 				2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */,
 				26341D5D1FF4955A001DBE92 /* placehold.jpeg in Resources */,
@@ -437,7 +428,6 @@
 				26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */,
 				26341D431FF2402B001DBE92 /* LBCell.m in Sources */,
 				26341D471FF244D4001DBE92 /* LBModel.m in Sources */,
-				267D19F42015833700B87BE0 /* LBTestVC.m in Sources */,
 				267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */,
 				267AD8961F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m in Sources */,
 				267AD8931F5E3B3A00DC6D9F /* LBLoadingView.m in Sources */,

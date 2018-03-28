@@ -96,6 +96,16 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     return placeholdImage;
 }
+- (UIImage *)checkUpCurrentSDWebImageVersionForData:(NSData *)gifData image:(UIImage *)localImage{
+    id gifCoder = [[NSClassFromString(@"SDWebImageGIFCoder") alloc]init];
+    UIImage *image = nil;
+    if (gifCoder) {
+        image = localImage;
+    }else {
+        image = [UIImage sdOverdue_animatedGIFWithData:gifData];
+    }
+    return image;
+}
 
 - (void)setModel:(LBScrollViewStatusModel *)model {
     _model = model;
@@ -112,6 +122,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
             [self resetScrollViewStatusWithImage:[self getPlaceholdImageForModel:model]];
         }
         self.imageView.image = [self getPlaceholdImageForModel:model];
+        __weak typeof(model)wmodel = model;
         [model loadImageWithCompletedBlock:^(LBScrollViewStatusModel *loadModel, UIImage *image, NSData *data, NSError *error, BOOL finished, NSURL *imageURL) {
             [wself.loadingView removeFromSuperview];
             wself.maximumZoomScale = scrollViewMaxZoomScale;
@@ -119,16 +130,16 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
                 image = mgr.errorImage;
                 LBPhotoBrowserLog(@"%@",error);
             }
-            model.currentPageImage  = image;
+            wmodel.currentPageImage  = image;
             if (image.images.count > 0) {
-                model.currentPageImage = mgr.lowGifMemory ? image : [UIImage sdOverdue_animatedGIFWithData:data];
+                wmodel.currentPageImage = mgr.lowGifMemory ? image : [wself checkUpCurrentSDWebImageVersionForData:data image:image];
             }
             // 下载完成之后 只有当前cell正在展示 --> 刷新
             NSArray *cells = [mgr.currentCollectionView visibleCells];
             for (id obj in cells) {
                 LBScrollViewStatusModel *visibleModel = [obj valueForKeyPath:@"model"];
-                if (model.index == visibleModel.index) {
-                    [wself reloadCellDataWithModel:model andImage:image andImageData:data];
+                if (wmodel.index == visibleModel.index) {
+                    [wself reloadCellDataWithModel:wmodel andImage:image andImageData:data];
                 }
             }
         }];

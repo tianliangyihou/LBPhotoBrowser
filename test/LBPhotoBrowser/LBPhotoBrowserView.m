@@ -98,13 +98,22 @@ static CGFloat const itemSpace = 20.0;
                 }
                 wself.currentPageImage  = downloadedImage;
                 if (downloadedImage.images.count > 0) {
-                    wself.currentPageImage = [LBPhotoBrowserManager defaultManager].lowGifMemory ? downloadedImage : [UIImage sdOverdue_animatedGIFWithData:data];
+                    wself.currentPageImage = [LBPhotoBrowserManager defaultManager].lowGifMemory ? downloadedImage : [self checkUpCurrentSDWebImageVersionForData:data image:downloadedImage];
                 }
             }
         });
     }];
 }
-
+- (UIImage *)checkUpCurrentSDWebImageVersionForData:(NSData *)gifData image:(UIImage *)localImage{
+    id gifCoder = [[NSClassFromString(@"SDWebImageGIFCoder") alloc]init];
+    UIImage *image = nil;
+    if (gifCoder) {
+        image = localImage;
+    }else {
+        image = [UIImage sdOverdue_animatedGIFWithData:gifData];
+    }
+    return image;
+}
 @end
 
 @implementation LBPhotoCollectionViewCell
@@ -218,7 +227,6 @@ static CGFloat const itemSpace = 20.0;
     [collentionView registerClass:[LBPhotoCollectionViewCell class] forCellWithReuseIdentifier:ID];
 }
 
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -299,7 +307,6 @@ static CGFloat const itemSpace = 20.0;
     }completion:^(BOOL finished) {
         cell.zoomScrollView.imageViewIsMoving = NO;
         [cell.zoomScrollView layoutSubviews];
-
     }];
 }
 
@@ -413,34 +420,37 @@ static CGFloat const itemSpace = 20.0;
     
     if (![LBPhotoBrowserManager defaultManager].needPreloading) return;
     
+    
     dispatch_async(wself.preloadingQueue, ^{
         int leftCellIndex = model.index - 1 >= 0 ?model.index - 1:0;
         int rightCellIndex = model.index + 1 < wself.models.count? model.index + 1 : (int)wself.models.count -1;
         //wself.loadingImageModels 新计算出的需要加载的 -- > 如果个原来的没有重合的 --> 取消
         [wself.preloadingModelDic removeAllObjects];
-        NSMutableDictionary *indexDic = wself.preloadingModelDic; // 采用全局的字典 减少快速切换时 重复创建消耗性能的问题
-        indexDic[[NSString stringWithFormat:@"%d",leftCellIndex]] = @1;
-        indexDic[[NSString stringWithFormat:@"%d",model.index]] = @1;
-        indexDic[[NSString stringWithFormat:@"%d",rightCellIndex]] = @1;
-
-        for (NSString *indexStr in wself.loadingImageModelDic.allKeys) {
-            if (indexDic[indexStr]) continue;
-            LBScrollViewStatusModel *loadingModel = wself.loadingImageModelDic[indexStr];
-            if (loadingModel.opreation) {
-                [loadingModel.opreation cancel];
-                loadingModel.opreation = nil;
+        @autoreleasepool {
+            NSMutableDictionary *indexDic = wself.preloadingModelDic; // 采用全局的字典 减少快速切换时 重复创建消耗性能的问题
+            indexDic[[NSString stringWithFormat:@"%d",leftCellIndex]] = @1;
+            indexDic[[NSString stringWithFormat:@"%d",model.index]] = @1;
+            indexDic[[NSString stringWithFormat:@"%d",rightCellIndex]] = @1;
+            
+            for (NSString *indexStr in wself.loadingImageModelDic.allKeys) {
+                if (indexDic[indexStr]) continue;
+                LBScrollViewStatusModel *loadingModel = wself.loadingImageModelDic[indexStr];
+                if (loadingModel.opreation) {
+                    [loadingModel.opreation cancel];
+                    loadingModel.opreation = nil;
+                }
             }
-        }
-        [wself.loadingImageModelDic removeAllObjects];
-        for (int i = leftCellIndex; i <= rightCellIndex; i++) {
-            LBScrollViewStatusModel *loadingModel = wself.models[i];
-            NSString *indexStr = [NSString stringWithFormat:@"%d",i];
-            wself.loadingImageModelDic[indexStr] = loadingModel;
-            if (model.index == i) continue;
-            LBScrollViewStatusModel *preloadingModel = wself.models[i];
-            preloadingModel.currentPageImage = preloadingModel.currentPageImage ?:[wself getCacheImageForModel:preloadingModel];
-            if (preloadingModel.currentPageImage) continue;
-            [preloadingModel loadImage];
+            [wself.loadingImageModelDic removeAllObjects];
+            for (int i = leftCellIndex; i <= rightCellIndex; i++) {
+                LBScrollViewStatusModel *loadingModel = wself.models[i];
+                NSString *indexStr = [NSString stringWithFormat:@"%d",i];
+                wself.loadingImageModelDic[indexStr] = loadingModel;
+                if (model.index == i) continue;
+                LBScrollViewStatusModel *preloadingModel = wself.models[i];
+                preloadingModel.currentPageImage = preloadingModel.currentPageImage ?:[wself getCacheImageForModel:preloadingModel];
+                if (preloadingModel.currentPageImage) continue;
+                [preloadingModel loadImage];
+            }
         }
     });
 
@@ -473,7 +483,7 @@ static CGFloat const itemSpace = 20.0;
 #pragma mark - 获取URL的缓存图片
 
 - (UIImage *)getCacheImageForModel:(LBScrollViewStatusModel *)model {
-    __block UIImage *localImage = nil;
+    UIImage *localImage = nil;
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     NSString *address = model.url.absoluteString;
     localImage =  [[SDImageCache sharedImageCache] imageFromCacheForKey:address];
@@ -481,15 +491,33 @@ static CGFloat const itemSpace = 20.0;
         if (mgr.lowGifMemory == YES) {
             return localImage;
         }else{
-            [[SDImageCache sharedImageCache] queryCacheOperationForKey: model.url.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
-                localImage = [UIImage sdOverdue_animatedGIFWithData:data];
-            }];
-            return localImage;
+            return [self checkUpCurrentSDWebImageVersionForURL:address image:localImage];
         }
     }else if (localImage) { // 图片存在
         return localImage;
     }
     return nil;
+}
+
+- (UIImage *)checkUpCurrentSDWebImageVersionForURL:(NSString *)urlString image:(UIImage *)localImage{
+    id gifCoder = [[NSClassFromString(@"SDWebImageGIFCoder") alloc]init];
+    UIImage *image = nil;
+    if (gifCoder) {
+        image = localImage;
+    }else {
+        NSData *gifImageData = [self diskImageDataBySearchingAllPathsForKey:urlString];
+        image = [UIImage sdOverdue_animatedGIFWithData:gifImageData];
+    }
+    return image;
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector
+{
+    NSString *seletorString = NSStringFromSelector(@selector(diskImageDataBySearchingAllPathsForKey:));
+    if ([@"diskImageDataBySearchingAllPathsForKey:" isEqualToString:seletorString]) {
+        return [SDImageCache sharedImageCache];
+    }
+    return [super forwardingTargetForSelector:aSelector];
 }
 
 #pragma mark - 修改cell子控件的状态 的状态
@@ -503,6 +531,8 @@ static CGFloat const itemSpace = 20.0;
         model.isShowing = YES;
     }
 }
+
+
 
 
 @end

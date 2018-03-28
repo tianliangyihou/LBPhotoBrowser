@@ -8,7 +8,6 @@
 //
 
 #import "LBStyle3VC.h"
-#import "LBTestVC.h"
 @interface LBStyle3VC ()
 
 @end
@@ -36,13 +35,8 @@
                              ];
     self.thumbnailURLStrings = self.lagerURLStrings;
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"gif test" style:UIBarButtonItemStyleDone target:self action:@selector(rightBtnClick)];
 }
 
-- (void)rightBtnClick {
-    LBTestVC *tvc = [[LBTestVC alloc]init];
-    [self.navigationController pushViewController:tvc animated:YES];
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LBCell *cell = [tableView dequeueReusableCellWithIdentifier:ID forIndexPath:indexPath];

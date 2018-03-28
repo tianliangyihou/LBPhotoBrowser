@@ -472,8 +472,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
             });
         }];
     });
-    
 }
+
 - (void)setCurrentGifImage:(UIImage *)currentGifImage {
     if (_currentGifImage == currentGifImage) {
         return;

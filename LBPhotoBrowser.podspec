@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LBPhotoBrowser"
-  s.version      = "2.2.1"
+  s.version      = "2.2.2"
   s.summary      = "a photo browser for iOS."
 
   # This description is used to generate tags and improve search results.
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/tianliangyihou/LBPhotoBrowser.git", :tag => "2.2.1" }
+  s.source       = { :git => "https://github.com/tianliangyihou/LBPhotoBrowser.git", :tag => "2.2.2" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,8 +91,8 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes", "test/LBPhotoBrowser/*.{h,m}"
-  s.exclude_files = "Classes/Exclude"
+  s.source_files  = "LBPhotoBrowser", "test/LBPhotoBrowser/*.{h,m}"
+  #s.exclude_files = "test/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
 
@@ -105,8 +105,7 @@ Pod::Spec.new do |s|
   #  non-essential files like tests, examples and documentation.
   #
 
-  s.resource  = "test/LBPhotoBrowser/LBLoadError.jpg"
-  s.resource  = "test/LBPhotoBrowser/LBLoading.png"
+  s.resource  = "test/LBPhotoBrowser/LBPhotoBrowser.bundle"
   # s.resources = "Resources/*.png"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"

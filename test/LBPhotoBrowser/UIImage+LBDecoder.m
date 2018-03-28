@@ -10,6 +10,7 @@
 #import <ImageIO/ImageIO.h>
 #import <objc/runtime.h>
 #import <mach/mach.h>
+
 //这里参考了YYImage的源码
 #define BUFFER_SIZE (10 * 1024 * 1024) // 10MB (minimum memory buffer size)
 
@@ -231,5 +232,4 @@ static int64_t _YYDeviceMemoryFree() {
         objc_removeAssociatedObjects(self);
     }
 }
-
 @end
