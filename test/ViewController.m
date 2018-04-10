@@ -13,7 +13,6 @@
 #import "LBStyle3VC.h"
 #import "LBLocalImageCollectionViewVC.h"
 #import <SDWebImage/SDWebImageManager.h>
-#import <KMCGeigerCounter/KMCGeigerCounter.h>
 
 @interface ViewController ()
 
@@ -24,7 +23,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [KMCGeigerCounter sharedGeigerCounter].enabled = YES;
 }
 
 - (IBAction)cleanCacheClick:(UIButton *)sender {

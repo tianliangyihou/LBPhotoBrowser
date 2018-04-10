@@ -538,13 +538,6 @@ static CGFloat const itemSpace = 20.0;
     loadingModel.gifData = nil;
     loadingModel.currentPageImage = nil;
     loadingModel.loadFinsihed = NO;
-    if (![[NSThread currentThread] isMainThread]) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            loadingModel.currentPageImageView.image = nil;
-        });
-    }else {
-        loadingModel.currentPageImageView.image = nil;
-    }
 }
 
 #pragma mark - 处理cell中图片的显示
