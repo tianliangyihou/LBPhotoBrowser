@@ -5,14 +5,13 @@
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
 
-目前已更新至V2.2.2,新增以下内容:
+目前已更新至V2.3.0,新增以下内容:
 
-1.支持通过collectionView展示本地和网络图片(详情可查看demo)
+1.修复之前iPhone X展示的bug
 
-2.修复 lowGifMemory = NO情况下,展示gif图片的一个bug
+2.适配新版的SDWebImage(v4.3.2)同时兼容4.3.2之前的版本对gif的处理方式
 
-##### `LBPhotoBrowser`依赖于`SDWebImage`,建议使用`SDWebImage`(v4.0.0)版本
-##### 最新版的`SDWebImage`(v4.3.2) 更新了对了gif图片的处理方式,导致`LBPhotoBrowser`无法正常播放gif图片(其他都正常).目前正在是适配中...
+3.对图片的的展示做了进一步优化,增加`destroyImageNotNeedShow`属性,进一步优化内存.
 
 # 概览(Overview)
 
@@ -60,9 +59,29 @@ LBPhotoBrowser 将网络图片的加载分为两种:
    
    注:
       缩略图: 当前展示给用户的图片
-        大图: 点击缩略图后,使用LBPhotoBrowser展示给用户的图片
+        大图: 点击缩略图后,使用LBPhotoBrowser展示给用户的图片       
 ```
+```
+LBPhotoBrowser 对网络图片的预加载机制的进一步优化: 增加 destroyImageNotNeedShow 属性
 
+问   题:
+当用户在不停浏览图片的过程中,我们通过预加载机制默默的替用户加载着图片.
+比如:用户浏览了20张图片(一般没这么多哈),这时候LBPhotoBrowser会将这20张图片都保存在内存中(会有一个强请引用).(没具体看过其他的图片浏览器怎么做的,不过我猜多数应该也是这样)
+这样其实是有些不合理,用户可能只关心当前浏览的图片,至于之前浏览过图片的这时候不应该存在内存当中.一旦用户又要重新浏览这些图片.我们也可以通过预加载机制读取SDWebImage的缓存,这样来减少内存的消耗.
+
+解决办法:
+原有的预加载机制,只会加载当前展示的图片和当前展示图片左右两张的图片.不在当前展示范围的图片不会去加载. 已经加载过了的图片会保存在内存中.
+故:将所有不在预加载的范围内的图片(已经加载过的),清除内存缓存(取消强引用).
+
+问题: 使用destroyImageNotNeedShow 发现内存没什么变化.有点尴尬😓
+
+原因: SDWebImage会做内存缓存,当我们不对图片强引用的时候,SDWebImage依然会图片有一个强引用. 所以图片不会销毁. 
+但是SDWebImage 虽然会对图片做一个引用,但是一旦收到内存警告,SDWebImage就会清除这个引用.
+
+解决办法:
+对于展示较少张数的图片,不建议开启destroyImageNotNeedShow(默认NO)这个属性
+对于展示图片的张数比较多情况,开启destroyImageNotNeedShow = YES,进行优化
+```
 # 使用(Usage)
 
 `LBPhotoBrowser` 支持本地图片和网络图片 以及gif的播放,下面四中效果详情可参考demo
