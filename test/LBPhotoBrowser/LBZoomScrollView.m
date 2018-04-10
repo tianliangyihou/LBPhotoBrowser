@@ -27,7 +27,7 @@
 #endif
 
 static inline CGRect moveSizeToCenter(CGSize size) {
-    return CGRectMake(SCREEN_WIDTH /2.0 - size.width / 2.0, SCREEN_HEIGHT /2.0 - size.height / 2.0, size.width, size.height);
+    return CGRectMake((SCREEN_WIDTH - size.width) / 2.0, (SCREEN_HEIGHT - size.height)/2.0, size.width, size.height);
 }
 
 static CGFloat scrollViewMinZoomScale = 1.0;
@@ -78,6 +78,9 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         self.frame = CGRectMake(10, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
         self.panGestureRecognizer.delegate = self;
         self.minimumZoomScale = scrollViewMinZoomScale;
+        if (@available(iOS 11.0, *)) {
+            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
         [self imageView];
     }
     return self;
@@ -96,23 +99,21 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     return placeholdImage;
 }
-- (UIImage *)checkUpCurrentSDWebImageVersionForData:(NSData *)gifData image:(UIImage *)localImage{
-    id gifCoder = [[NSClassFromString(@"SDWebImageGIFCoder") alloc]init];
-    UIImage *image = nil;
-    if (gifCoder) {
-        image = localImage;
-    }else {
-        image = [UIImage sdOverdue_animatedGIFWithData:gifData];
-    }
-    return image;
-}
 
 - (void)setModel:(LBScrollViewStatusModel *)model {
     _model = model;
     weak_self;
+    model.currentPageImageView = self.imageView;
     [self removePreviousFadeAnimationForLayer:self.imageView.layer];
     LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
     if (!model.currentPageImage) {
+        /** 设配iPhone X*/
+        if (@available(iOS 11.0, *)) {
+            if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentAutomatic) {
+                self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+            }
+        }
+        /** loading 框 */
         [self loadingView];
         wself.maximumZoomScale = scrollViewMinZoomScale;
         CGSize size = mgr.placeholdImageSizeBlock ? mgr.placeholdImageSizeBlock([self getPlaceholdImageForModel:model],[NSIndexPath indexPathForItem:model.index inSection:0]) : CGSizeZero;
@@ -122,18 +123,11 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
             [self resetScrollViewStatusWithImage:[self getPlaceholdImageForModel:model]];
         }
         self.imageView.image = [self getPlaceholdImageForModel:model];
+
         __weak typeof(model)wmodel = model;
         [model loadImageWithCompletedBlock:^(LBScrollViewStatusModel *loadModel, UIImage *image, NSData *data, NSError *error, BOOL finished, NSURL *imageURL) {
             [wself.loadingView removeFromSuperview];
             wself.maximumZoomScale = scrollViewMaxZoomScale;
-            if (error) {
-                image = mgr.errorImage;
-                LBPhotoBrowserLog(@"%@",error);
-            }
-            wmodel.currentPageImage  = image;
-            if (image.images.count > 0) {
-                wmodel.currentPageImage = mgr.lowGifMemory ? image : [wself checkUpCurrentSDWebImageVersionForData:data image:image];
-            }
             // 下载完成之后 只有当前cell正在展示 --> 刷新
             NSArray *cells = [mgr.currentCollectionView visibleCells];
             for (id obj in cells) {
@@ -147,6 +141,11 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         if (_loadingView) {
             [_loadingView removeFromSuperview];
         }
+        if (@available(iOS 11.0, *)) {
+            if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
+                self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+            }
+        }
         [self resetScrollViewStatusWithImage:model.currentPageImage];
         /**
           when lowGifMemory = NO,if not clear this image ,gif image may have some thing wrong
@@ -154,6 +153,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
         self.imageView.image = nil;
         self.imageView.image = model.currentPageImage;
         self.maximumZoomScale = scrollViewMaxZoomScale;
+      
     }
     self.zoomScale = model.scale.floatValue;
     self.contentOffset = model.contentOffset;
@@ -173,15 +173,17 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }else {
         [self addFadeAnimationWithDuration:0.25 curve:UIViewAnimationCurveLinear ForLayer:self.imageView.layer];
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (@available(iOS 11.0, *)) {
+            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+        }
+    });
     /**
      当gif下载完成 并且正在当前的展示状态的时候
      由于SDWebImage异步下载图片 导致可能图片没有完全写入沙盒 故:
      */
-    if (image.images.count > 0 && model.index == mgr.currentPage && mgr.lowGifMemory) {
-        [mgr setValue:data forKey:@"spareData"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:LBGifImageDownloadFinishedNot object:nil];
-        });
+    if (model.isGif && model.index == mgr.currentPage && mgr.lowGifMemory) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LBGifImageDownloadFinishedNot object:nil];
     }
 }
 
@@ -212,17 +214,17 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     self.imageViewIsMoving = YES;
     self.imageView.frame = self.oldFrame;
+
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         wself.imageView.frame = photoImageViewFrame;
-    }completion:^(BOOL finished) {
-        wself.imageViewIsMoving = NO;
-        [wself layoutSubviews];// sometime need layout
-        if (completion) {
-            completion();
-        }
+        }completion:^(BOOL finished) {
+            wself.imageViewIsMoving = NO;
+            [wself layoutSubviews];// sometime need layout
+            if (completion) {
+                completion();
+            }
     }];
     // if not clear this image ,gif image may have some thing wrong
-    self.imageView.image = nil;
     self.imageView.image = image;
     [self setNeedsLayout];
 }
@@ -333,7 +335,7 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale{
     if (scrollView.minimumZoomScale != scale) return;
     [self setZoomScale:self.minimumZoomScale animated:YES];
-//    [self resetScrollViewStatusWithImage:self.model.currentPageImage];
+//    [self resetScrollViewStatusWithImage:self.model.currentPageImage]
     [self setNeedsLayout];
     [self layoutIfNeeded];
 
@@ -394,7 +396,6 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     if (self.maximumZoomScale == self.minimumZoomScale) {
         return;
     }
-    
     if (self.zoomScale != self.minimumZoomScale) {
         [self setZoomScale:self.minimumZoomScale animated:YES];
     } else {

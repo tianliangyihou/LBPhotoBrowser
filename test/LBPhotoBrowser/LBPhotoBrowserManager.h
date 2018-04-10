@@ -80,15 +80,11 @@
 // 每张正在加载的图片的站位图的大小
 @property (nonatomic , copy ,readonly)CGSize (^placeholdImageSizeBlock)(UIImage *Image,NSIndexPath *indexpath);
 
-/**
- 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
- 每次LBPhotoBrowser -> did dismiss(消失)的时候,LBPhotoBrowserManager 会将 lowGifMemory 置为NO,
- 故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将lowGifMemory 置为 YES;
- */
-@property (nonatomic , assign)BOOL lowGifMemory;
-
 // 当前图片浏览器正在展示的imageView
-@property (nonatomic , strong)UIImageView *currentShowImageView;
+@property (nonatomic , strong)UIImageView *currentDisplayImageView;
+
+// 当前图片浏览器正在展示的imageView的model
+@property (nonatomic , strong)LBScrollViewStatusModel *currentDisplayModel;
 
 /**
  是否需要预加载 default is YES
@@ -96,6 +92,18 @@
  故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将needPreloading 置为 NO;
  */
 @property (nonatomic , assign)BOOL needPreloading;
+
+/**
+ 开启这个选项后 在加载gif的时候 会大大的降低内存.与YYImage对gif的内存优化思路一样 default is NO
+ 每次LBPhotoBrowser -> did dismiss(消失)的时候,LBPhotoBrowserManager 会将 lowGifMemory 置为NO,
+ 故:如果需要修改该选项 需要每次弹出LBPhotoBrowser的时候 将lowGifMemory 置为 YES;
+ */
+@property (nonatomic , assign)BOOL lowGifMemory;
+
+/**
+  开启这个选项后 展示过的图片就会被销毁 等到需要展示的时候再去加载 对本地图片无效
+ */
+@property (nonatomic , assign)BOOL destroyImageNotNeedShow;
 
 /**
  含有图片的bundle

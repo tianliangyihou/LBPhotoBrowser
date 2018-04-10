@@ -101,11 +101,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @property (nonatomic , copy)void(^didDismissBlock)(void);
 
-
-
 @property (nonatomic , strong)NSArray *titles;
-
-@property (nonatomic , strong)NSData *spareData;
 
 // timer
 // in ios 9 this property can be weak Replace strong
@@ -185,6 +181,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _requestQueue.maxConcurrentOperationCount = 1;
         _lock = dispatch_semaphore_create(1);
         _needPreloading = YES;
+        _destroyImageNotNeedShow = NO;
     }
     return self;
 }
@@ -379,7 +376,8 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         [_displayLink invalidate];
         _displayLink = nil;
     }
-    self.currentShowImageView = nil;
+    self.currentDisplayImageView = nil;
+    self.currentDisplayModel = nil;
     self.currentGifImage = nil;
     if (_requestQueue) {
         [_requestQueue cancelAllOperations];
@@ -395,7 +393,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 - (void)changeKeyframe:(CADisplayLink *)displayLink
 {
-    if (!self.currentGifImage.images) return;
     NSMutableDictionary *buffer = self.currentGifImage.lb_imageBuffer;
     NSUInteger nextIndex = (self.currentGifImage.lb_handleIndex.intValue + 1)% self.currentGifImage.lb_totalFrameCount.intValue;
     BOOL bufferIsFull = NO;
@@ -414,7 +411,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
             [buffer removeObjectForKey:@(nextIndex)];
         }
         [self.currentGifImage lb_setHandleIndex:@(nextIndex)];
-        self.currentShowImageView.image = bufferedImage;
+        self.currentDisplayImageView.image = bufferedImage;
         [self.currentGifImage lb_setBufferMiss:@(NO)];
         nextIndex = (self.currentGifImage.lb_handleIndex.intValue + 1)% self.currentGifImage.lb_totalFrameCount.intValue;
         if (buffer.count == self.currentGifImage.totalFrameCount.unsignedIntValue) {
@@ -432,46 +429,26 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     }
 }
 
-- (void)setCurrentShowImageView:(UIImageView *)currentShowImageView {
-    if (_currentShowImageView && _currentShowImageView == currentShowImageView) {
+
+- (void)setCurrentDisplayModel:(LBScrollViewStatusModel *)currentDisplayModel {
+    if (_currentDisplayModel && _currentDisplayModel == currentDisplayModel) {
         return;
     }
-    _currentShowImageView = currentShowImageView;
+    _currentDisplayModel = currentDisplayModel;
     if (self.lowGifMemory == NO) return;
-    if (!_currentShowImageView) return;
+    if (!_currentDisplayModel) return;
     [self startAnimation];
+    
 }
 
 - (void)startAnimation {
     self.displayLink.paused = YES;
-    weak_self;
-    UIView *superView = wself.currentShowImageView.superview;
-    if (![superView isKindOfClass:[UIScrollView class]]) return;
-    LBZoomScrollView * zoomScrollView = (LBZoomScrollView *)superView;
-    NSURL *currentUrl = zoomScrollView.model.url;
-    // 异步查询图片
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[SDImageCache sharedImageCache] queryCacheOperationForKey:currentUrl.absoluteString done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
-            __block NSData *data_block = data;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                wself.currentGifImage = image;
-                if (image.images.count == 0) {
-                    return ;
-                }
-                if (!data_block) {
-                    data_block = wself.spareData;
-                }
-                if (!data_block) {
-                    return;
-                }
-                wself.currentShowImageView.image = image.images.firstObject;
-                [image lb_animatedGIFData:data_block];
-                wself.accumulator = 0;
-                wself.displayLink.paused = NO;
-                wself.spareData = nil;
-            });
-        }];
-    });
+    self.currentGifImage = self.currentDisplayModel.currentPageImage;
+    if (self.currentDisplayModel.isGif == NO) return;
+    self.currentDisplayImageView = self.currentDisplayModel.currentPageImageView;
+    [self.currentDisplayModel.currentPageImage lb_animatedGIFData:self.currentDisplayModel.gifData];
+    self.accumulator = 0;
+    self.displayLink.paused = NO;
 }
 
 - (void)setCurrentGifImage:(UIImage *)currentGifImage {

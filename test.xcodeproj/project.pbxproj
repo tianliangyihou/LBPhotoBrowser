@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		262337C62074A82200FA6109 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 262337C42074A82200FA6109 /* ViewController.m */; };
 		26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D101FF1E6A1001DBE92 /* LBLocalImageVC.m */; };
 		26341D141FF1E6C5001DBE92 /* LBStyle1VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D131FF1E6C5001DBE92 /* LBStyle1VC.m */; };
 		26341D171FF1E6DD001DBE92 /* LBStyle2VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D161FF1E6DD001DBE92 /* LBStyle2VC.m */; };
@@ -17,7 +18,6 @@
 		2639F3B02047A3310099186E /* LBPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2639F3AF2047A3310099186E /* LBPhotoBrowser.bundle */; };
 		2657DB661E77BCDD00F324C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB651E77BCDD00F324C3 /* main.m */; };
 		2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB681E77BCDD00F324C3 /* AppDelegate.m */; };
-		2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB6B1E77BCDD00F324C3 /* ViewController.m */; };
 		2657DB6F1E77BCDD00F324C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2657DB6D1E77BCDD00F324C3 /* Main.storyboard */; };
 		2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2657DB701E77BCDD00F324C3 /* Assets.xcassets */; };
 		2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2657DB721E77BCDD00F324C3 /* LaunchScreen.storyboard */; };
@@ -38,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		1472DF34D1E9CA8AAD44F40D /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		262337C42074A82200FA6109 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		262337C52074A82200FA6109 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		26341D0F1FF1E6A1001DBE92 /* LBLocalImageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBLocalImageVC.h; sourceTree = "<group>"; };
 		26341D101FF1E6A1001DBE92 /* LBLocalImageVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBLocalImageVC.m; sourceTree = "<group>"; };
 		26341D121FF1E6C5001DBE92 /* LBStyle1VC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBStyle1VC.h; sourceTree = "<group>"; };
@@ -56,8 +58,6 @@
 		2657DB651E77BCDD00F324C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2657DB671E77BCDD00F324C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2657DB681E77BCDD00F324C3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		2657DB6A1E77BCDD00F324C3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		2657DB6B1E77BCDD00F324C3 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ViewController.m; sourceTree = "<group>"; usesTabs = 0; };
 		2657DB6E1E77BCDD00F324C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2657DB701E77BCDD00F324C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2657DB731E77BCDD00F324C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -194,8 +194,8 @@
 				26341D0B1FF1E5BD001DBE92 /* Class */,
 				2657DB671E77BCDD00F324C3 /* AppDelegate.h */,
 				2657DB681E77BCDD00F324C3 /* AppDelegate.m */,
-				2657DB6A1E77BCDD00F324C3 /* ViewController.h */,
-				2657DB6B1E77BCDD00F324C3 /* ViewController.m */,
+				262337C52074A82200FA6109 /* ViewController.h */,
+				262337C42074A82200FA6109 /* ViewController.m */,
 				26341D5C1FF49559001DBE92 /* placehold.jpeg */,
 				2657DB6D1E77BCDD00F324C3 /* Main.storyboard */,
 				2657DB701E77BCDD00F324C3 /* Assets.xcassets */,
@@ -321,6 +321,7 @@
 				TargetAttributes = {
 					2657DB601E77BCDD00F324C3 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = M974WD5VWM;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
@@ -385,9 +386,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-resources.sh",
+				"${PODS_ROOT}/KMCGeigerCounter/KMCGeigerCounter/KMCGeigerCounterTick.aiff",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -419,8 +423,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				262337C62074A82200FA6109 /* ViewController.m in Sources */,
 				267AD89B1F5E3B3A00DC6D9F /* UIView+LBFrame.m in Sources */,
-				2657DB6C1E77BCDD00F324C3 /* ViewController.m in Sources */,
 				26341D1B1FF1E7D1001DBE92 /* LBStyle3VC.m in Sources */,
 				26341D141FF1E6C5001DBE92 /* LBStyle1VC.m in Sources */,
 				267AD8981F5E3B3A00DC6D9F /* LBTapDetectingImageView.m in Sources */,
@@ -558,17 +562,17 @@
 			baseConfigurationReference = 52839D449824474097575972 /* Pods-test.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = M974WD5VWM;
 				INFOPLIST_FILE = test/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vcyber.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "44290f65-14f3-4c5a-bce8-f7896707fea4";
+				PROVISIONING_PROFILE_SPECIFIER = CYW_ALL_APP_Development;
 			};
 			name = Debug;
 		};
@@ -577,7 +581,7 @@
 			baseConfigurationReference = 7258DD35A57A1219D711F5E6 /* Pods-test.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="kdp-Fb-4Sp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="kdp-Fb-4Sp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -40,6 +40,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ylB-Bs-bWZ">
+                                <rect key="frame" x="16" y="603" width="343" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="otj-hW-xBx"/>
+                                </constraints>
+                                <state key="normal" title="清除SDWebImage的缓存"/>
+                                <connections>
+                                    <action selector="cleanCacheClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="3UY-Rr-gRR"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7b-iJ-DgV">
                                 <rect key="frame" x="16" y="166" width="343" height="50"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -100,14 +110,17 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="g7b-iJ-DgV" secondAttribute="trailing" id="2CI-SD-CZ0"/>
                             <constraint firstItem="zfK-zO-7xb" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="9eU-LO-bOf"/>
+                            <constraint firstItem="BBd-D7-uYD" firstAttribute="top" secondItem="ylB-Bs-bWZ" secondAttribute="bottom" constant="34" id="AgK-av-WQY"/>
                             <constraint firstItem="24r-Km-eRA" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="CrY-Ds-kPD"/>
                             <constraint firstItem="pw4-qo-IeW" firstAttribute="top" secondItem="g7b-iJ-DgV" secondAttribute="bottom" constant="30" id="Ga5-X7-aQ6"/>
                             <constraint firstItem="jQA-z6-OOY" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="JpV-dB-cAI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="pw4-qo-IeW" secondAttribute="trailing" id="STy-Uk-wg6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ylB-Bs-bWZ" secondAttribute="trailing" id="VYf-LF-uhI"/>
                             <constraint firstItem="jQA-z6-OOY" firstAttribute="top" secondItem="zfK-zO-7xb" secondAttribute="bottom" constant="30" id="W9X-gj-iYs"/>
                             <constraint firstItem="jQA-z6-OOY" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="Y83-aQ-VQt"/>
                             <constraint firstItem="g7b-iJ-DgV" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="102" id="ZVw-yY-5vj"/>
                             <constraint firstItem="zfK-zO-7xb" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="Zpp-9m-vrg"/>
+                            <constraint firstItem="ylB-Bs-bWZ" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="fJU-pf-hzd"/>
                             <constraint firstItem="24r-Km-eRA" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="jpx-ib-Q3L"/>
                             <constraint firstItem="pw4-qo-IeW" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="sxb-wq-tvk"/>
                             <constraint firstItem="24r-Km-eRA" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="25" id="vK2-Dv-X0O"/>
@@ -119,7 +132,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KFQ-4b-3Sa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1279" y="-159"/>
+            <point key="canvasLocation" x="1716" y="-179.46026986506749"/>
         </scene>
     </scenes>
 </document>
