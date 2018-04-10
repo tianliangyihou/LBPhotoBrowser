@@ -80,7 +80,7 @@ LBPhotoBrowser 对网络图片的预加载机制的进一步优化: 增加 destr
 
 解决办法:
 对于展示较少张数的图片,不建议开启destroyImageNotNeedShow(默认NO)这个属性
-对于展示图片的张数比较多情况,开启destroyImageNotNeedShow = YES,进行优化
+对于展示图片的张数比较多情况(9张以上),开启destroyImageNotNeedShow = YES,进行优化
 ```
 # 使用(Usage)
 
