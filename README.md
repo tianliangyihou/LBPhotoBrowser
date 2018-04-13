@@ -4,7 +4,7 @@
 
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
-
+```
 目前已更新至V2.3.0,新增以下内容:
 
 1.修复之前iPhone X展示的bug
@@ -13,12 +13,14 @@
 
 3.除了对图片的的展示做了进一步优化,此外增加`destroyImageNotNeedShow`属性,进一步优化内存.
 
+```
+```
 下一版目标:
 
 1. 参照微信(发朋友圈)的本地图片浏览功能 增加可控的导航条和删除功能
 2. 对LBPhotoBrowser 进行较多的测试(包括内存,cpu的占用等)
 3. 制作Cocoapods库
-
+```
 # 概览(Overview)
 
 `LBPhotoBrowser`对gif图片的加载机制:
