@@ -211,7 +211,6 @@ static int64_t _YYDeviceMemoryFree() {
     else if (maxBufferCount > 512) maxBufferCount = 512;
     [self lb_setMaxBufferCount:@(maxBufferCount)];
     CGImageRelease(image);
-
 }
 - (NSTimeInterval)animatedImageDurationAtIndex:(int)index {
     return [self.class sdOverdue_frameDurationAtIndex:index source:self.lb_source];

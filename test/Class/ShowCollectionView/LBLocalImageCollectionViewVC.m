@@ -8,7 +8,6 @@
 //
 
 #import "LBLocalImageCollectionViewVC.h"
-#import "LBWebImageCollectionViewVC.h"
 #import "LBPhotoBrowserManager.h"
 
 static inline CGSize lb_screenSize(){
@@ -92,14 +91,8 @@ static NSString * const reuseIdentifier = @"Cell";
     model.isAdd = YES;
     model.image = [UIImage imageNamed:@"add_channel_titlbar_thin_new_night_16x16_"];
     [self.datas addObject:model];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"网络" style:UIBarButtonItemStylePlain target:self action:@selector(rightBtnClick)];
-    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
-- (void)rightBtnClick {
-    LBWebImageCollectionViewVC *cvc = [[LBWebImageCollectionViewVC alloc]init];
-    [self.navigationController pushViewController:cvc animated:YES];
-}
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

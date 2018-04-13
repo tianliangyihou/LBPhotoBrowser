@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -39,94 +38,7 @@
                     <view key="view" contentMode="scaleToFill" id="Ldi-d5-Kyy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ylB-Bs-bWZ">
-                                <rect key="frame" x="16" y="603" width="343" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="otj-hW-xBx"/>
-                                </constraints>
-                                <state key="normal" title="清除SDWebImage的缓存"/>
-                                <connections>
-                                    <action selector="cleanCacheClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="3UY-Rr-gRR"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7b-iJ-DgV">
-                                <rect key="frame" x="16" y="166" width="343" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="2We-Ay-L90"/>
-                                </constraints>
-                                <state key="normal" title="本地图片(不复用cell)"/>
-                                <connections>
-                                    <action selector="localBtnClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="s0U-Z2-ox8"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pw4-qo-IeW">
-                                <rect key="frame" x="16" y="246" width="343" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="5Xc-tp-0EB"/>
-                                </constraints>
-                                <state key="normal" title="style1(网络图片)类似微信"/>
-                                <connections>
-                                    <action selector="style1BtnbClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="rwB-Zb-egW"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfK-zO-7xb">
-                                <rect key="frame" x="16" y="326" width="343" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="GKh-yx-phz"/>
-                                </constraints>
-                                <state key="normal" title="style2(网络图片)类似今日头条"/>
-                                <connections>
-                                    <action selector="style2BtnClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="Oaf-dv-V44"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jQA-z6-OOY">
-                                <rect key="frame" x="16" y="406" width="343" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="d5V-AG-prt"/>
-                                </constraints>
-                                <state key="normal" title="style3(网络图片)没有缩略图"/>
-                                <connections>
-                                    <action selector="style3BtnClicl:" destination="4e6-C5-Euz" eventType="touchUpInside" id="BX2-r2-c6h"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24r-Km-eRA">
-                                <rect key="frame" x="16" y="89" width="343" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="2e1-zn-eu9"/>
-                                </constraints>
-                                <state key="normal" title="collectionView展示图片(复用cell)"/>
-                                <connections>
-                                    <action selector="collectionViewClick:" destination="4e6-C5-Euz" eventType="touchUpInside" id="gC7-Ap-WRV"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="g7b-iJ-DgV" secondAttribute="trailing" id="2CI-SD-CZ0"/>
-                            <constraint firstItem="zfK-zO-7xb" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="9eU-LO-bOf"/>
-                            <constraint firstItem="BBd-D7-uYD" firstAttribute="top" secondItem="ylB-Bs-bWZ" secondAttribute="bottom" constant="34" id="AgK-av-WQY"/>
-                            <constraint firstItem="24r-Km-eRA" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="CrY-Ds-kPD"/>
-                            <constraint firstItem="pw4-qo-IeW" firstAttribute="top" secondItem="g7b-iJ-DgV" secondAttribute="bottom" constant="30" id="Ga5-X7-aQ6"/>
-                            <constraint firstItem="jQA-z6-OOY" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="JpV-dB-cAI"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="pw4-qo-IeW" secondAttribute="trailing" id="STy-Uk-wg6"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ylB-Bs-bWZ" secondAttribute="trailing" id="VYf-LF-uhI"/>
-                            <constraint firstItem="jQA-z6-OOY" firstAttribute="top" secondItem="zfK-zO-7xb" secondAttribute="bottom" constant="30" id="W9X-gj-iYs"/>
-                            <constraint firstItem="jQA-z6-OOY" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="Y83-aQ-VQt"/>
-                            <constraint firstItem="g7b-iJ-DgV" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="102" id="ZVw-yY-5vj"/>
-                            <constraint firstItem="zfK-zO-7xb" firstAttribute="trailing" secondItem="Ldi-d5-Kyy" secondAttribute="trailingMargin" id="Zpp-9m-vrg"/>
-                            <constraint firstItem="ylB-Bs-bWZ" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="fJU-pf-hzd"/>
-                            <constraint firstItem="24r-Km-eRA" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="jpx-ib-Q3L"/>
-                            <constraint firstItem="pw4-qo-IeW" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="sxb-wq-tvk"/>
-                            <constraint firstItem="24r-Km-eRA" firstAttribute="top" secondItem="5wU-nC-Vbm" secondAttribute="bottom" constant="25" id="vK2-Dv-X0O"/>
-                            <constraint firstItem="zfK-zO-7xb" firstAttribute="top" secondItem="pw4-qo-IeW" secondAttribute="bottom" constant="30" id="zTh-U1-Pek"/>
-                            <constraint firstItem="g7b-iJ-DgV" firstAttribute="leading" secondItem="Ldi-d5-Kyy" secondAttribute="leadingMargin" id="zgi-3Z-a73"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="LBPhotoBrowser" id="dfw-qS-pgL"/>
                 </viewController>
