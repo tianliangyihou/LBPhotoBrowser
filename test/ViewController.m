@@ -55,7 +55,6 @@ static NSString *cellID = @"llb.cellID";
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self tableView];
 }
-
 #pragma mark - dataSource && delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -67,6 +66,11 @@ static NSString *cellID = @"llb.cellID";
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     cell.textLabel.text = _titles[indexPath.row];
+    if (indexPath.row == self.titles.count - 1) {
+        cell.textLabel.textColor = [UIColor redColor];
+    }else {
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
     return cell;
 }
 
