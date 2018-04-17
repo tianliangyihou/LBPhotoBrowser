@@ -70,6 +70,9 @@
 // 展示图片使用collectionView来提高效率
 @property (nonatomic , weak)UICollectionView *currentCollectionView;
 
+// 导航条
+@property (nonatomic , weak)UIView *navigationBar;
+
 //当图片加载出现错误时候显示的图片  default is [UIImage imageNamed:@"LBLoadError.png"]
 //如果LBLoadError.png这张图片不满意 可以修改这个属性替换
 @property (nonatomic , strong)UIImage *errorImage;
@@ -150,7 +153,7 @@
 - (instancetype)addLongPressShowTitles:(NSArray <NSString *>*)titles;
 
 // 默认长按控件的回调
-- (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title))titleClickCallBackBlock;
+- (instancetype)addTitleClickCallbackBlock:(void(^)(UIImage *image,NSIndexPath *indexPath,NSString *title,BOOL isGif,NSData *gifImageData))titleClickCallBackBlock;
 
 // 添加自定义的长按控件
 - (instancetype)addLongPressCustomViewBlock:(UIView *(^)(UIImage *image, NSIndexPath *indexPath))longPressBlock;
@@ -167,13 +170,18 @@
 // 图片浏览器彻底消失的回调
 - (instancetype)addPhotoBrowserDidDismissBlock:(void(^)(void))dismissBlock;
 
+// 关联collectionView
 - (instancetype)addCollectionViewLinkageStyle:(UICollectionViewScrollPosition)style cellReuseIdentifier:(NSString *)reuseIdentifier;
+
+// 移除图片
+- (instancetype)addPhotoBrowserDeleteItemBlock:(void(^)(NSIndexPath *deleIndexPath,UIImage *image))deleteBlock;
 #pragma mark - get方法
 
 - (NSArray<NSString *> *)currentTitles;
 
-- (void (^)(UIImage *, NSIndexPath *, NSString *))titleClickBlock;
+- (void (^)(UIImage *,NSIndexPath *,NSString *,BOOL,NSData *))titleClickBlock;
 
 - (UIView *(^)(UIImage *,NSIndexPath *))longPressCustomViewBlock;
 
+- (void (^)(NSIndexPath *, UIImage *))deleteItemBlock;
 @end

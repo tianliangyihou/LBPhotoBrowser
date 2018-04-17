@@ -16,6 +16,7 @@
 @property (nonatomic , strong)NSMutableArray *frames;
 @property (nonatomic , weak)UIButton *addBtn;
 @property (nonatomic , strong)NSMutableArray *imageViews;
+
 @end
 
 @implementation LBLocalImageVC
@@ -67,23 +68,22 @@
     LB_WEAK_SELF;
     [picker dismissViewControllerAnimated:YES completion:^{
         UIImage *image = info[UIImagePickerControllerOriginalImage];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:[wself.frames.firstObject CGRectValue]];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:[wself.frames[wself.imageViews.count] CGRectValue]];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
         [imageView addGestureRecognizer:tap];
         imageView.clipsToBounds = YES;
-        imageView.tag = MAX_COUNT - wself.frames.count;
+        imageView.tag = wself.imageViews.count;
         imageView.userInteractionEnabled = YES;
         imageView.image = image;
         [wself.view addSubview:imageView];
         [wself.view bringSubviewToFront:wself.addBtn];
         [wself.imageViews addObject:imageView];
-        [wself.frames removeObjectAtIndex:0];
-        if (!wself.frames.firstObject) {
+        if (wself.frames.count == wself.imageViews.count) {
             [wself.addBtn removeFromSuperview];
         }else {
             [UIView  animateWithDuration:0.25 animations:^{
-                wself.addBtn.frame = [wself.frames.firstObject CGRectValue];
+                wself.addBtn.frame = [wself.frames[wself.imageViews.count] CGRectValue];
             }];
         }
     }];
@@ -96,9 +96,39 @@
         LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
         [items addObject:item];
     }
+    weak_self;
     // 这里只要你开心 可以无限addBlock
-    [[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+    [[[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:tap.view.tag fromImageViewSuperView:self.view] addLongPressShowTitles:@[@"保存图片",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *deleIndexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
         LBPhotoBrowserLog(@"%@",title);
-    }];
+    }]addPhotoBrowserDeleteItemBlock:^(NSIndexPath *indexPath, UIImage *image) {
+        // 刷新UI
+        [wself refreshUIWithIndex:indexPath.row];
+    }];;
 }
+
+- (void)refreshUIWithIndex:(NSInteger)index {
+    UIImageView *deleImageView = self.imageViews[index];
+    deleImageView.hidden = YES;
+    for (int i = 0; i < self.imageViews.count; i++) {
+        if (i <= index) continue;
+        UIImageView *imageView = self.imageViews[i];
+        CGRect frame = CGRectZero;
+        if (i - 1 >= 0) {
+            UIImageView *imageViewPrevious = self.imageViews[i - 1];
+            frame = imageViewPrevious.frame;
+        }
+        [UIView animateWithDuration:0.25 animations:^{
+            imageView.frame = frame;
+        }];
+    }
+ 
+    NSValue *value = self.frames[self.imageViews.count - 1];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.addBtn.frame = [value CGRectValue];
+    }];
+    [self.imageViews removeObjectAtIndex:index];
+    [deleImageView removeFromSuperview];
+}
+
+
 @end

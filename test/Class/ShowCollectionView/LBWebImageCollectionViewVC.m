@@ -111,7 +111,7 @@ static NSString * const reuseIdentifier = @"webCell";
         [items addObject:item];
     }
     // 这里只要你开心 可以无限addBlock
-    [[[[[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:indexPath.row fromImageViewSuperView:collectionView] addCollectionViewLinkageStyle:UICollectionViewScrollPositionCenteredHorizontally cellReuseIdentifier:reuseIdentifier]addLongPressShowTitles:@[@"保存图片",@"删除",@"识别二维码",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+    [[[[[LBPhotoBrowserManager defaultManager]showImageWithWebItems:items selectedIndex:indexPath.row fromImageViewSuperView:collectionView] addCollectionViewLinkageStyle:UICollectionViewScrollPositionCenteredHorizontally cellReuseIdentifier:reuseIdentifier]addLongPressShowTitles:@[@"保存图片",@"删除",@"识别二维码",@"取消"]]addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
         LBPhotoBrowserLog(@"%@",title);
     }].lowGifMemory = YES;
     [LBPhotoBrowserManager defaultManager].needPreloading = NO;

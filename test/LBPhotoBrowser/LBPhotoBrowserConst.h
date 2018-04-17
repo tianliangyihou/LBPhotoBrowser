@@ -51,6 +51,8 @@ typedef NSMutableArray<UIImage *> LBImagesMutableArray;
 
 #define LB_IS_IPHONEX (SCREEN_HEIGHT == 812 && IS_IPHONE)
 
+#define LB_NAVBAR_HEIGHT (SCREEN_HEIGHT == 812 ? 88 : 64)
+
 #define LB_BOTTOM_MARGIN (LB_IS_IPHONEX ? 34 : 0)
 
 UIKIT_EXTERN NSString * const LBImageViewWillDismissNot;

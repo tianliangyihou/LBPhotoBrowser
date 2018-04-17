@@ -93,13 +93,16 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     NSOperationQueue *_requestQueue;
     dispatch_semaphore_t _lock;
 }
-@property (nonatomic , copy)void (^titleClickBlock)(UIImage *, NSIndexPath *, NSString *);
+@property (nonatomic , copy)void (^titleClickBlock)(UIImage *,NSIndexPath *,NSString *,BOOL ,NSData *);
 
 @property (nonatomic , copy)UIView *(^longPressCustomViewBlock)(UIImage *, NSIndexPath *);
 
 @property (nonatomic , copy)void(^willDismissBlock)(void);
 
 @property (nonatomic , copy)void(^didDismissBlock)(void);
+
+@property (nonatomic , copy)void(^deleteItemBlock)(NSIndexPath *, UIImage *);
+
 
 @property (nonatomic , strong)NSArray *titles;
 
@@ -108,9 +111,11 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 @property (nonatomic , strong)CADisplayLink *displayLink;
 @property (nonatomic , assign) NSTimeInterval accumulator;
 @property (nonatomic , strong)UIImage *currentGifImage;
+
 @end
 
 @interface LBDecoderOperation : NSOperation
+
 @property (nonatomic, assign) NSUInteger nextIndex;
 @property (nonatomic, strong) UIImage *curImage;
 @property (nonatomic , weak)dispatch_semaphore_t lock;
@@ -289,7 +294,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
-- (instancetype)addTitleClickCallbackBlock:(void (^)(UIImage *, NSIndexPath *, NSString *))titleClickCallBackBlock {
+- (instancetype)addTitleClickCallbackBlock:(void (^)(UIImage *,NSIndexPath *,NSString *,BOOL ,NSData *))titleClickCallBackBlock {
     _titleClickBlock = titleClickCallBackBlock;
     return self;
 }
@@ -324,11 +329,16 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return self;
 }
 
+- (instancetype)addPhotoBrowserDeleteItemBlock:(void (^)(NSIndexPath *, UIImage *))deleteBlock {
+    _deleteItemBlock = deleteBlock;
+    return self;
+}
+
 - (NSArray<NSString *> *)currentTitles {
     return _titles;
 }
 
-- (void (^)(UIImage *, NSIndexPath *, NSString *))titleClickBlock {
+- (void (^)(UIImage *,NSIndexPath *,NSString *,BOOL,NSData *))titleClickBlock {
     return _titleClickBlock;
 }
 
@@ -336,7 +346,9 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return _longPressCustomViewBlock;
 }
 
-
+- (void (^)(NSIndexPath *, UIImage *))deleteItemBlock {
+    return _deleteItemBlock;
+}
 #pragma mark - gif&定时器
 
 - (CADisplayLink *)displayLink {
@@ -388,6 +400,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _placeholdImageCallBackBlock = nil;
     _placeholdImageSizeBlock = nil;
     _titles = @[];
+    _deleteItemBlock = nil;
 }
 
 

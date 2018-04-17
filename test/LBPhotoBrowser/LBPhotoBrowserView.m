@@ -27,6 +27,24 @@
 
 static CGFloat const itemSpace = 20.0;
 
+@interface LBScrollViewStatusModel ()
+
+@property (nonatomic , assign)BOOL loadFinsihed;
+
+@property (nonatomic , strong)id opreation;
+
+@property (nonatomic , assign)BOOL imageFromURLString;
+
+@end
+
+
+@interface LBNavigationBar: UIView
+@property (nonatomic , copy)void (^navbarBtnOption)(int tag);
+@property (nonatomic , weak)UILabel *titleLabel;
+
+@end
+
+
 @interface LBPhotoCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic , weak)LBZoomScrollView *zoomScrollView;
@@ -46,6 +64,9 @@ static CGFloat const itemSpace = 20.0;
 
 @property (nonatomic , assign)BOOL isShowing;
 
+@property (nonatomic , assign)BOOL navBarStatusHidden;
+
+
 @property (nonatomic , assign)CGPoint startPoint;
 
 @property (nonatomic , assign)CGFloat zoomScale;
@@ -56,16 +77,6 @@ static CGFloat const itemSpace = 20.0;
 @property (nonatomic , strong)NSMutableDictionary *preloadingModelDic;
 //GCD中的对象在6.0之前是不参与ARC的，而6.0之后 在ARC下使用GCD也不用关心释放问题
 @property (strong, nonatomic) dispatch_queue_t preloadingQueue;
-
-@end
-
-@interface LBScrollViewStatusModel ()
-
-@property (nonatomic , assign)BOOL loadFinsihed;
-
-@property (nonatomic , strong)id opreation;
-
-@property (nonatomic , assign)BOOL imageFromURL;
 
 @end
 
@@ -80,7 +91,7 @@ static CGFloat const itemSpace = 20.0;
         self.contentOffset = CGPointMake(0, 0);
         self.isGif = NO;
         self.loadFinsihed = NO;
-        self.imageFromURL = YES;
+        self.imageFromURLString = YES;
     }
     return self;
 }
@@ -93,19 +104,25 @@ static CGFloat const itemSpace = 20.0;
 
 
 - (void)loadImage {
-    
-    if (self.imageFromURL == NO) {
+    // 本地图片
+    if (self.imageFromURLString == NO) {
         return;
     }
     
+    // 加载完成
     if (self.loadFinsihed) {
         return;
     }
+    
+    // 正在加载
     if (self.opreation) {
         return;
     }
+    
+    // 开始加载
     UIImage *cacheImage = [[SDWebImageManager sharedManager].imageCache imageFromCacheForKey:self.url.absoluteString];
     self.currentPageImage = cacheImage.images.count == 1 ?cacheImage.images.firstObject:cacheImage;
+    // 如果4.2.3之后的版本添加gifDecoder之后
     if (self.currentPageImage.images.count > 1) {
         self.isGif = NO;
         self.loadFinsihed = YES;
@@ -185,6 +202,51 @@ static CGFloat const itemSpace = 20.0;
 }
 @end
 
+
+@implementation LBNavigationBar
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        leftBtn.frame = CGRectMake(10, 0, 40, 40);
+        [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+        leftBtn.tag = 0;
+        [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        leftBtn.bottom = self.bottom - 2;
+        [self addSubview:leftBtn];
+        
+        UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        rightBtn.frame = CGRectMake(SCREEN_WIDTH - 50, 0, 40, 40);
+        rightBtn.bottom = self.bottom - 2;
+        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
+        rightBtn.tag = 1;
+        [rightBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:rightBtn];
+        
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH - 100, 40)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont systemFontOfSize:16];
+        label.left = leftBtn.right;
+        label.bottom = self.bottom - 2;
+        label.text = [NSString stringWithFormat:@"0/0"];
+        label.textColor = [UIColor whiteColor];
+        [self addSubview:label];
+        _titleLabel = label;
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    }
+    return self;
+}
+
+
+- (void)btnClick:(UIButton *)btn{
+    if (self.navbarBtnOption) {
+        self.navbarBtnOption(btn.tag);
+    }
+}
+@end
+
 @implementation LBPhotoCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -218,8 +280,13 @@ static CGFloat const itemSpace = 20.0;
 }
 
 - (void)didTap:(UITapGestureRecognizer *)tap {
-    CGPoint point = [tap locationInView:(UIView *)_zoomScrollView.imageView];
-    [_zoomScrollView handlesingleTap:point];
+    if (self.model.imageFromURLString) {
+        CGPoint point = [tap locationInView:(UIView *)_zoomScrollView.imageView];
+        [_zoomScrollView handlesingleTap:point];
+    }else {
+        [LBPhotoBrowserManager defaultManager].navigationBar.hidden = ![LBPhotoBrowserManager defaultManager].navigationBar.hidden;
+    }
+
 }
 - (void)didDoubleTap:(UITapGestureRecognizer *)tap {
     CGPoint point = [tap locationInView:(UIView *)_zoomScrollView.imageView];
@@ -325,6 +392,7 @@ static CGFloat const itemSpace = 20.0;
             self.tag = 0;
             _zoomScale = cell.zoomScrollView.zoomScale;
             _startCenter = cell.zoomScrollView.imageView.center;
+            self.navBarStatusHidden = [LBPhotoBrowserManager defaultManager].navigationBar.hidden;
         }
             break;
         case UIGestureRecognizerStateChanged:
@@ -345,6 +413,7 @@ static CGFloat const itemSpace = 20.0;
             cell.zoomScrollView.imageView.center = CGPointMake(self.startCenter.x + point.x, self.startCenter.y + point.y);
             self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent / _zoomScale];
             self.tag = 1;
+            [LBPhotoBrowserManager defaultManager].navigationBar.hidden = YES;
         }
             break;
         case UIGestureRecognizerStateEnded:
@@ -364,6 +433,7 @@ static CGFloat const itemSpace = 20.0;
 
 - (void)dismissFromCell:(LBPhotoCollectionViewCell *)cell {
     [cell.zoomScrollView handlesingleTap:CGPointZero];
+    [LBPhotoBrowserManager defaultManager].navigationBar.hidden = YES;
 }
 
 - (void)cancelFromCell:(LBPhotoCollectionViewCell *)cell {
@@ -376,6 +446,7 @@ static CGFloat const itemSpace = 20.0;
     }completion:^(BOOL finished) {
         cell.zoomScrollView.imageViewIsMoving = NO;
         [cell.zoomScrollView layoutSubviews];
+        [LBPhotoBrowserManager defaultManager].navigationBar.hidden = self.navBarStatusHidden;
     }];
 }
 
@@ -425,7 +496,7 @@ static CGFloat const itemSpace = 20.0;
         [_pageControl removeFromSuperview];
     }
     self.pageControl.bottom = SCREEN_HEIGHT - 50;
-    self.pageControl.hidden = images.count == 1? YES:NO;
+    self.pageControl.hidden = YES;
     [self.models removeAllObjects];
     for (int i = 0 ; i < images.count; i++) {
         LBScrollViewStatusModel *model = [[LBScrollViewStatusModel alloc]init];
@@ -433,12 +504,47 @@ static CGFloat const itemSpace = 20.0;
         model.isShowing = i == index ? YES:NO;
         model.currentPageImage = images[i];
         model.index = i;
-        model.imageFromURL = NO;
+        model.imageFromURLString = NO;
         [self.models addObject:model];
     }
     self.collectionView.alwaysBounceHorizontal = images.count == 1? NO : YES;
     [self.collectionView reloadData];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    
+    LBNavigationBar *navbar = [[LBNavigationBar alloc]initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH, LB_NAVBAR_HEIGHT)];
+    navbar.centerX = self.centerX;
+    navbar.titleLabel.text = [NSString stringWithFormat:@"%d/%lu",index + 1,(unsigned long)self.models.count];
+    [self addSubview:navbar];
+    [LBPhotoBrowserManager defaultManager].navigationBar = navbar;
+    weak_self;
+    [navbar setNavbarBtnOption:^(int tag) {
+         NSArray *cells = [wself.collectionView visibleCells];
+        if (cells.count > 1) return;
+        LBPhotoCollectionViewCell *cell = cells.firstObject;
+        if (tag == 0) {
+            [LBPhotoBrowserManager defaultManager].navigationBar.hidden = YES;
+            [cell.zoomScrollView handlesingleTap:CGPointZero];
+        }else {
+            NSUInteger index =  [wself.models indexOfObject:cell.model];
+            [wself.models removeObject:cell.model];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            if ([LBPhotoBrowserManager defaultManager].deleteItemBlock) {
+                [LBPhotoBrowserManager defaultManager].deleteItemBlock(indexPath,cell.model.currentPageImage);
+            }
+            if (wself.models.count == 0) {
+                [LBPhotoBrowserManager defaultManager].navigationBar.hidden = YES;
+                [UIView animateWithDuration:0.25 animations:^{
+                    cell.zoomScrollView.alpha = 0.4;
+                }completion:^(BOOL finished) {
+                    cell.zoomScrollView.imageView.hidden = YES;
+                    [cell.zoomScrollView handlesingleTap:CGPointZero];
+                }];
+            }else {
+                [wself.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+                [wself scrollViewDidScroll:wself.collectionView];
+            }
+        }
+    }];
 }
 
 #pragma mark - collectionView的数据源&代理
@@ -447,10 +553,7 @@ static CGFloat const itemSpace = 20.0;
     return 1;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (_dataArr) {
-        return _dataArr.count;
-    }
-    return 0;
+    return self.models.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -549,6 +652,8 @@ static CGFloat const itemSpace = 20.0;
     self.pageControl.currentPage = page;
     [LBPhotoBrowserManager defaultManager].currentPage = page;
     LBPhotoCollectionViewCell *cell = (LBPhotoCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+    LBNavigationBar *bar = (LBNavigationBar *)[LBPhotoBrowserManager defaultManager].navigationBar;
+    bar.titleLabel.text = [NSString stringWithFormat:@"%d/%lu",page + 1,(unsigned long)self.models.count];
     // 下载完成会走这个回调
     if (![scrollView isKindOfClass:[UIScrollView class]]) {
         LBPhotoBrowserManager.defaultManager.currentDisplayModel = nil;

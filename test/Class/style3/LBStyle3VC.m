@@ -8,12 +8,21 @@
 //
 
 #import "LBStyle3VC.h"
+#import "MBProgressHUD+EX.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 @interface LBStyle3VC ()
+@property (nonatomic , strong)ALAssetsLibrary *assetsLibrary;
 
 @end
 
 @implementation LBStyle3VC
 
+- (ALAssetsLibrary *)assetsLibrary {
+    if (!_assetsLibrary) {
+        _assetsLibrary = [[ALAssetsLibrary alloc]init];
+    }
+    return _assetsLibrary;
+}
 
 - (void)viewDidLoad {
     self.lagerURLStrings = @[
@@ -42,6 +51,7 @@
     LBCell *cell = [tableView dequeueReusableCellWithIdentifier:ID forIndexPath:indexPath];
     cell.model = self.models[indexPath.row];
     __weak typeof(cell) wcell = cell;
+    __weak typeof(self) wself = self;
     [cell setCallBack:^(LBModel *cellModel, int tag) {
         NSMutableArray *items = [[NSMutableArray alloc]init];
         for (int i = 0 ; i < cellModel.urls.count; i++) {
@@ -51,8 +61,20 @@
             [items addObject:item];
         }
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
-        [[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+        [[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
             LBPhotoBrowserLog(@"%@",title);
+            if(![title isEqualToString:@"保存"]) return;
+            if (!isGif) {
+                UIImageWriteToSavedPhotosAlbum(image, wself, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+            }else {
+                [wself.assetsLibrary writeImageDataToSavedPhotosAlbum:gifImageData metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
+                    if (error) {
+                        LBPhotoBrowserLog(@"%@",error);
+                    }else {
+                        [MBProgressHUD showText:@"保存gif成功" toView:nil];
+                    }
+                }];
+            }
         }]addPhotoBrowserWillDismissBlock:^{
             LBPhotoBrowserLog(@"即将销毁");
         }].needPreloading = NO;// 这里关掉预加载功能
@@ -62,5 +84,16 @@
     }];
     return cell;
 }
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    if (error) {
+        LBPhotoBrowserLog(@"%@",error);
+    }else {
+        [MBProgressHUD showText:@"保存成功" toView:nil];
+    }
+}
+
+
 
 @end

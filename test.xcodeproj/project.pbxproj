@@ -33,6 +33,7 @@
 		267D19F32015833700B87BE0 /* LBBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19EF2015833700B87BE0 /* LBBaseController.m */; };
 		267D19F92015839600B87BE0 /* LBLocalImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19F72015839600B87BE0 /* LBLocalImageCollectionViewVC.m */; };
 		267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19FB2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m */; };
+		268C67472085C10500DEE8E6 /* MBProgressHUD+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = 268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */; };
 		32BF97956CD6003C5D78629E /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1472DF34D1E9CA8AAD44F40D /* libPods-test.a */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +87,8 @@
 		267D19F82015839600B87BE0 /* LBLocalImageCollectionViewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLocalImageCollectionViewVC.h; sourceTree = "<group>"; };
 		267D19FA2015B1C500B87BE0 /* LBWebImageCollectionViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBWebImageCollectionViewVC.h; sourceTree = "<group>"; };
 		267D19FB2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBWebImageCollectionViewVC.m; sourceTree = "<group>"; };
+		268C67452085C10500DEE8E6 /* MBProgressHUD+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+EX.h"; sourceTree = "<group>"; };
+		268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+EX.m"; sourceTree = "<group>"; };
 		52839D449824474097575972 /* Pods-test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig"; sourceTree = "<group>"; };
 		7258DD35A57A1219D711F5E6 /* Pods-test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.release.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +159,8 @@
 			children = (
 				26341D411FF2402B001DBE92 /* LBCell.h */,
 				26341D421FF2402B001DBE92 /* LBCell.m */,
+				268C67452085C10500DEE8E6 /* MBProgressHUD+EX.h */,
+				268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -298,8 +303,6 @@
 				2657DB5D1E77BCDD00F324C3 /* Sources */,
 				2657DB5E1E77BCDD00F324C3 /* Frameworks */,
 				2657DB5F1E77BCDD00F324C3 /* Resources */,
-				25BDED9CA67B4E0F98322E18 /* [CP] Embed Pods Frameworks */,
-				64EB1B07AA19F5C08C42F899 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -364,39 +367,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		25BDED9CA67B4E0F98322E18 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		64EB1B07AA19F5C08C42F899 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-resources.sh",
-				"${PODS_ROOT}/KMCGeigerCounter/KMCGeigerCounter/KMCGeigerCounterTick.aiff",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B818FD17B0FD0DBFB75D5A72 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,6 +400,7 @@
 				267D19F92015839600B87BE0 /* LBLocalImageCollectionViewVC.m in Sources */,
 				26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */,
 				26341D431FF2402B001DBE92 /* LBCell.m in Sources */,
+				268C67472085C10500DEE8E6 /* MBProgressHUD+EX.m in Sources */,
 				26341D471FF244D4001DBE92 /* LBModel.m in Sources */,
 				267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */,
 				267AD8961F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m in Sources */,

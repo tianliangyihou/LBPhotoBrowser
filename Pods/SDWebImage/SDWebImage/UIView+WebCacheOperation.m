@@ -46,11 +46,14 @@ typedef NSMapTable<NSString *, id<SDWebImageOperation>> SDOperationsDictionary;
 
 - (void)sd_cancelImageLoadOperationWithKey:(nullable NSString *)key {
     // Cancel in progress downloader from queue
+    // 这个是每个IMageView 都会绑定的一个类似字典的东西
     SDOperationsDictionary *operationDictionary = [self sd_operationDictionary];
     id<SDWebImageOperation> operation;
     @synchronized (self) {
+        // 获取当前IMageView 绑定的图片的操作
         operation = [operationDictionary objectForKey:key];
     }
+    // 操作是否还在继续
     if (operation) {
         if ([operation conformsToProtocol:@protocol(SDWebImageOperation)]){
             [operation cancel];

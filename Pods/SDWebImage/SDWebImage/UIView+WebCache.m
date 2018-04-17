@@ -63,10 +63,12 @@ static char TAG_ACTIVITY_SHOW;
                           progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
                          completed:(nullable SDExternalCompletionBlock)completedBlock
                            context:(nullable NSDictionary<NSString *, id> *)context {
+    // 获取到一个字符串
     NSString *validOperationKey = operationKey ?: NSStringFromClass([self class]);
+    // 
     [self sd_cancelImageLoadOperationWithKey:validOperationKey];
+    // 给当前的imageView 关联 --> url
     objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
     if (!(options & SDWebImageDelayPlaceholder)) {
         if ([context valueForKey:SDWebImageInternalSetImageGroupKey]) {
             dispatch_group_t group = [context valueForKey:SDWebImageInternalSetImageGroupKey];

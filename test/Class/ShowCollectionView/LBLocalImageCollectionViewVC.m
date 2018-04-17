@@ -124,11 +124,14 @@ static NSString * const reuseIdentifier = @"Cell";
             LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:showModel.image frame:cell.frame];
             [items addObject:item];
         }
+        weak_self;
         // 这里只要你开心 可以无限addBlock
-        [[[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:indexPath.row fromImageViewSuperView:collectionView] addLongPressShowTitles:@[@"保存图片",@"删除",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title) {
+        [[[[[[LBPhotoBrowserManager defaultManager] showImageWithLocalItems:items selectedIndex:indexPath.row fromImageViewSuperView:collectionView] addLongPressShowTitles:@[@"保存图片",@"删除",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
             LBPhotoBrowserLog(@"%@",title);
-            // 这里的indexPath 指的是 这个title 在 @[@"保存图片",@"删除",@"识别二维码",@"取消"] 中的位置,如果想取在当前展示图片在collectionView中的位置,使用[LBPhotoBrowserManager defaultManager].currentPage
-        }]addCollectionViewLinkageStyle:UICollectionViewScrollPositionCenteredHorizontally cellReuseIdentifier:reuseIdentifier];
+        }]addCollectionViewLinkageStyle:UICollectionViewScrollPositionCenteredHorizontally cellReuseIdentifier:reuseIdentifier]addPhotoBrowserDeleteItemBlock:^(NSIndexPath *deleIndexPath, UIImage *image) {
+            [wself.datas removeObjectAtIndex:deleIndexPath.row];
+            [collectionView deleteItemsAtIndexPaths:@[deleIndexPath]];
+        }];
     }
 }
 

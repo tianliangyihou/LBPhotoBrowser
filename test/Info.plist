@@ -43,5 +43,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>为了更好的问您服务,LBPhotoBrowser需要访问您的相册</string>
 </dict>
 </plist>
