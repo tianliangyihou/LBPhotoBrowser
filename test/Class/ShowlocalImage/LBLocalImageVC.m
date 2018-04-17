@@ -116,10 +116,15 @@
         if (i - 1 >= 0) {
             UIImageView *imageViewPrevious = self.imageViews[i - 1];
             frame = imageViewPrevious.frame;
+            imageView.tag = imageView.tag - 1;
         }
-        [UIView animateWithDuration:0.25 animations:^{
-            imageView.frame = frame;
-        }];
+        if (CGRectEqualToRect(frame, CGRectZero)) {
+            [imageView removeFromSuperview];
+        }else {
+            [UIView animateWithDuration:0.25 animations:^{
+                imageView.frame = frame;
+            }];
+        }
     }
  
     NSValue *value = self.frames[self.imageViews.count - 1];

@@ -234,7 +234,7 @@ static CGFloat const itemSpace = 20.0;
         label.textColor = [UIColor whiteColor];
         [self addSubview:label];
         _titleLabel = label;
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -540,8 +540,12 @@ static CGFloat const itemSpace = 20.0;
                     [cell.zoomScrollView handlesingleTap:CGPointZero];
                 }];
             }else {
-                [wself.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-                [wself scrollViewDidScroll:wself.collectionView];
+                // 取消collectionView 删除cell 的动画
+                [UIView animateWithDuration:0 animations:^{
+                    [wself.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+                }completion:^(BOOL finished) {
+                    [wself scrollViewDidScroll:wself.collectionView];
+                }];
             }
         }
     }];
