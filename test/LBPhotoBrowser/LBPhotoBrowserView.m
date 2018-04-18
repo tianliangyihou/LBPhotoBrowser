@@ -242,7 +242,7 @@ static CGFloat const itemSpace = 20.0;
 
 - (void)btnClick:(UIButton *)btn{
     if (self.navbarBtnOption) {
-        self.navbarBtnOption(btn.tag);
+        self.navbarBtnOption((int)btn.tag);
     }
 }
 @end
@@ -499,11 +499,17 @@ static CGFloat const itemSpace = 20.0;
     self.pageControl.hidden = YES;
     [self.models removeAllObjects];
     for (int i = 0 ; i < images.count; i++) {
+        UIImage *image = images[i];
         LBScrollViewStatusModel *model = [[LBScrollViewStatusModel alloc]init];
         model.showPopAnimation = i == index ? YES:NO;
         model.isShowing = i == index ? YES:NO;
-        model.currentPageImage = images[i];
+        model.currentPageImage = image;
         model.index = i;
+        NSData *gifData = [image valueForKeyPath:@"gifData"];
+        if (gifData) {
+            model.isGif = YES;
+            model.gifData = gifData;
+        }
         model.imageFromURLString = NO;
         [self.models addObject:model];
     }

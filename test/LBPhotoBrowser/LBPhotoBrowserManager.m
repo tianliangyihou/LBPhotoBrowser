@@ -39,6 +39,13 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         [photoBrowseView removeFromSuperview];
     }
 }
+@interface LBPhotoLocalImage : UIImage
+@property (nonatomic , strong)NSData *gifData;
+@end
+
+@implementation LBPhotoLocalImage
+
+@end
 
 @implementation LBPhotoWebItem
 - (instancetype)init
@@ -80,6 +87,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 @implementation LBPhotoLocalItem
 
+
+- (void)setLocalImage:(UIImage *)localImage {
+    LBPhotoLocalImage *lb_image = [[LBPhotoLocalImage alloc]initWithCGImage:localImage.CGImage];
+    _localImage = lb_image;
+}
+
 - (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame {
     LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]init];
     item.localImage = image;
@@ -87,6 +100,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     return item;
 }
 
+- (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame gifData:(NSData *)gifData {
+    LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:image frame:frame];
+    LBPhotoLocalImage *localImage = (LBPhotoLocalImage *)item.localImage;
+    localImage.gifData = gifData;
+    return item;
+}
 @end
 
 @interface LBPhotoBrowserManager () {

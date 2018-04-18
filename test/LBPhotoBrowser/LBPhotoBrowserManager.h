@@ -40,7 +40,9 @@
 @interface LBPhotoLocalItem : NSObject
 @property (nonatomic , strong)UIImage *localImage;
 @property (nonatomic , assign)CGRect frame;
+
 - (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame;
+- (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame gifData:(NSData *)gifData;
 @end
 
 

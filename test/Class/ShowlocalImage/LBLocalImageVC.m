@@ -9,9 +9,19 @@
 #import "LBLocalImageVC.h"
 #import "UIView+LBFrame.h"
 #import "LBPhotoBrowserManager.h"
-
+#import "UIImage+LBDecoder.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #define MAX_COUNT 10
 #define LB_WEAK_SELF __weak typeof(self)wself = self
+
+@interface LBLocalImageView : UIImageView
+@property (nonatomic , strong)NSData *gifData;
+@end
+
+@implementation LBLocalImageView
+@end;
+
 @interface LBLocalImageVC ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (nonatomic , strong)NSMutableArray *frames;
 @property (nonatomic , weak)UIButton *addBtn;
@@ -67,33 +77,60 @@
 {
     LB_WEAK_SELF;
     [picker dismissViewControllerAnimated:YES completion:^{
+        NSString *assetString = [[info objectForKey:UIImagePickerControllerReferenceURL] absoluteString];
         UIImage *image = info[UIImagePickerControllerOriginalImage];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:[wself.frames[wself.imageViews.count] CGRectValue]];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
-        [imageView addGestureRecognizer:tap];
-        imageView.clipsToBounds = YES;
-        imageView.tag = wself.imageViews.count;
-        imageView.userInteractionEnabled = YES;
-        imageView.image = image;
-        [wself.view addSubview:imageView];
-        [wself.view bringSubviewToFront:wself.addBtn];
-        [wself.imageViews addObject:imageView];
-        if (wself.frames.count == wself.imageViews.count) {
-            [wself.addBtn removeFromSuperview];
-        }else {
-            [UIView  animateWithDuration:0.25 animations:^{
-                wself.addBtn.frame = [wself.frames[wself.imageViews.count] CGRectValue];
+        if([assetString hasSuffix:@"GIF"]){
+            ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc]init];
+            [assetLibrary assetForURL:[info objectForKey:UIImagePickerControllerReferenceURL] resultBlock:^(ALAsset *asset) {
+                
+                ALAssetRepresentation *assetRepresentation = [asset representationForUTI:(__bridge NSString *)kUTTypeGIF];;
+                NSUInteger size = (NSUInteger)assetRepresentation.size;
+                uint8_t *buffer = malloc(size);
+                NSError *error;
+                NSUInteger bytes = [assetRepresentation getBytes:buffer fromOffset:0 length:size error:&error];
+                NSData *data = [NSData dataWithBytes:buffer length:bytes];
+                free(buffer);
+                [wself configUIWithImage:image andGifData:data];
+            } failureBlock:^(NSError *error) {
+
             }];
+        }else {
+            [self configUIWithImage:image andGifData:nil];
         }
     }];
    
 }
 
+
+- (void)configUIWithImage:(UIImage *)image andGifData:(NSData *)gifData{
+    LBLocalImageView *imageView = [[LBLocalImageView alloc]initWithFrame:[self.frames[self.imageViews.count] CGRectValue]];
+    imageView.gifData = gifData;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
+    [imageView addGestureRecognizer:tap];
+    imageView.clipsToBounds = YES;
+    imageView.tag = self.imageViews.count;
+    imageView.userInteractionEnabled = YES;
+    imageView.image = image;
+    [self.view addSubview:imageView];
+    [self.view bringSubviewToFront:self.addBtn];
+    [self.imageViews addObject:imageView];
+    if (self.frames.count == self.imageViews.count) {
+        [self.addBtn removeFromSuperview];
+    }else {
+        [UIView  animateWithDuration:0.25 animations:^{
+            self.addBtn.frame = [self.frames[self.imageViews.count] CGRectValue];
+        }];
+    }
+}
+
+/**
+ 这个借口 继续完善 ---> 同一本地和网络
+ */
 - (void)imageClick:(UITapGestureRecognizer *)tap {
     NSMutableArray *items = @[].mutableCopy;
-    for (UIImageView *imageView in self.imageViews) {
-        LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame];
+    for (LBLocalImageView *imageView in self.imageViews) {
+        LBPhotoLocalItem *item = [[LBPhotoLocalItem alloc]initWithImage:imageView.image frame:imageView.frame gifData:imageView.gifData];
         [items addObject:item];
     }
     weak_self;
@@ -103,7 +140,7 @@
     }]addPhotoBrowserDeleteItemBlock:^(NSIndexPath *indexPath, UIImage *image) {
         // 刷新UI
         [wself refreshUIWithIndex:indexPath.row];
-    }];;
+    }].lowGifMemory = YES;
 }
 
 - (void)refreshUIWithIndex:(NSInteger)index {
@@ -134,6 +171,4 @@
     [self.imageViews removeObjectAtIndex:index];
     [deleImageView removeFromSuperview];
 }
-
-
 @end

@@ -13,6 +13,8 @@
 #import "LBStyle3VC.h"
 #import "LBLocalImageCollectionViewVC.h"
 #import "LBWebImageCollectionViewVC.h"
+
+#import "MBProgressHUD+EX.h"
 #import <SDWebImage/SDWebImageManager.h>
 
 static NSString *cellID = @"llb.cellID";
@@ -44,9 +46,9 @@ static NSString *cellID = @"llb.cellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _titles = @[@"collectionView展示本地图片(复用cell)",
-                @"collectionView展示网络(复用cell)",
+    _titles = @[@"本地图片collectionView展示(复用cell)",
                 @"本地图片(不复用cell)",
+                @"collectionView展示网络(复用cell)",
                 @"style1(网络图片)类似微信图片浏览器",
                 @"style2(网络图片)类似今日头条图片浏览器",
                 @"style3(网络图片)没有缩略图",
@@ -84,14 +86,14 @@ static NSString *cellID = @"llb.cellID";
             break;
         case 1:
         {
-            LBWebImageCollectionViewVC *cvc = [[LBWebImageCollectionViewVC alloc]init];
-            [self.navigationController pushViewController:cvc animated:YES];
+            LBLocalImageVC *lvc = [[LBLocalImageVC alloc]init];
+            [self.navigationController pushViewController:lvc animated:YES];
         }
             break;
         case 2:
         {
-            LBLocalImageVC *lvc = [[LBLocalImageVC alloc]init];
-            [self.navigationController pushViewController:lvc animated:YES];
+            LBWebImageCollectionViewVC *cvc = [[LBWebImageCollectionViewVC alloc]init];
+            [self.navigationController pushViewController:cvc animated:YES];
         }
             break;
         case 3:
@@ -115,7 +117,9 @@ static NSString *cellID = @"llb.cellID";
         default:
         {
             [[SDWebImageManager sharedManager].imageCache clearMemory];
-            [SDWebImageManager.sharedManager.imageCache clearDiskOnCompletion:nil];
+            [SDWebImageManager.sharedManager.imageCache clearDiskOnCompletion:^{
+                [MBProgressHUD showText:@"清除成功" toView:nil];
+            }];
         }
             break;
     }
