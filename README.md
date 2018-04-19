@@ -5,21 +5,10 @@
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
 ```
-目前已更新至V2.3.0,新增以下内容:
+目前正在全力调试新的版本,做了较大的改动和优化
 
-1.修复之前iPhone X展示的bug
+如果使用的话请下载release版本
 
-2.适配新版的SDWebImage(v4.3.2)同时兼容4.3.2之前的版本对gif的处理方式
-
-3.除了对图片的的展示做了进一步优化,此外增加`destroyImageNotNeedShow`属性,进一步优化内存.
-
-```
-```
-下一版目标:
-
-1. 参照微信(发朋友圈)的本地图片浏览功能 增加可控的导航条和删除功能
-2. 对LBPhotoBrowser 进行较多的测试(包括内存,cpu的占用等)
-3. 制作Cocoapods库
 ```
 # 概览(Overview)
 
