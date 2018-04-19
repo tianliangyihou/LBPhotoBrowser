@@ -661,14 +661,13 @@ static CGFloat const itemSpace = 20.0;
     [self refreshStatusWithPage:page];
     self.pageControl.currentPage = page;
     [LBPhotoBrowserManager defaultManager].currentPage = page;
-    LBPhotoCollectionViewCell *cell = (LBPhotoCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
     LBNavigationBar *bar = (LBNavigationBar *)[LBPhotoBrowserManager defaultManager].navigationBar;
     bar.titleLabel.text = [NSString stringWithFormat:@"%d/%lu",page + 1,(unsigned long)self.models.count];
     // 下载完成会走这个回调
     if (![scrollView isKindOfClass:[UIScrollView class]]) {
         LBPhotoBrowserManager.defaultManager.currentDisplayModel = nil;
     }
-    LBPhotoBrowserManager.defaultManager.currentDisplayModel = cell.zoomScrollView.model;
+    LBPhotoBrowserManager.defaultManager.currentDisplayModel = self.models[page];
 }
 
 - (void)refreshStatusWithPage:(int)page {
