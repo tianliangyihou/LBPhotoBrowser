@@ -89,7 +89,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
 
 
 - (void)setLocalImage:(UIImage *)localImage {
-    LBPhotoLocalImage *lb_image = [[LBPhotoLocalImage alloc]initWithCGImage:localImage.CGImage];
+    LBPhotoLocalImage *lb_image = [[LBPhotoLocalImage alloc]initWithCGImage:localImage.CGImage scale: localImage.scale orientation:localImage.imageOrientation];
     _localImage = lb_image;
 }
 
@@ -393,6 +393,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.didDismissBlock = nil;
     self.needPreloading = YES;
     self.lowGifMemory = NO;
+    self.destroyImageNotNeedShow = NO;
     _photoBrowserView.hidden = YES;
     _photoBrowserView = nil;
     [self.linkageInfo removeAllObjects];
@@ -477,6 +478,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.displayLink.paused = YES;
     self.currentGifImage = self.currentDisplayModel.currentPageImage;
     if (self.currentDisplayModel.isGif == NO) return;
+    if (!self.currentDisplayModel.gifData || self.currentDisplayModel.gifData.length == 0) return;
     self.currentDisplayImageView = self.currentDisplayModel.currentPageImageView;
     [self.currentDisplayModel.currentPageImage lb_animatedGIFData:self.currentDisplayModel.gifData];
     self.accumulator = 0;

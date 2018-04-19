@@ -8,11 +8,12 @@
 
 #import "ViewController.h"
 #import "LBLocalImageVC.h"
+#import "LBLocalImageCollectionViewVC.h"
+#import "LBWebImageCollectionViewVC.h"
 #import "LBStyle1VC.h"
 #import "LBStyle2VC.h"
 #import "LBStyle3VC.h"
-#import "LBLocalImageCollectionViewVC.h"
-#import "LBWebImageCollectionViewVC.h"
+#import "LBTestVC.h"
 
 #import "MBProgressHUD+EX.h"
 #import <SDWebImage/SDWebImageManager.h>
@@ -52,6 +53,7 @@ static NSString *cellID = @"llb.cellID";
                 @"style1(网络图片)类似微信图片浏览器",
                 @"style2(网络图片)类似今日头条图片浏览器",
                 @"style3(网络图片)没有缩略图",
+                @"LBPhotoBrowser的测试",
                 @"清除SDWebImage的所有缓存"
                 ];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -112,6 +114,13 @@ static NSString *cellID = @"llb.cellID";
         {
             LBStyle3VC *svc3 = [[LBStyle3VC alloc]init];
             [self.navigationController pushViewController:svc3 animated:YES];
+        }
+            break;
+            
+        case 6:
+        {
+            LBTestVC *tvc = [[LBTestVC alloc]init];
+            [self.navigationController pushViewController:tvc animated:YES];
         }
             break;
         default:
