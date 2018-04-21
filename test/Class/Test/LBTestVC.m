@@ -8,6 +8,8 @@
 
 #import "LBTestVC.h"
 #import "LBPhotoBrowserManager.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface LBTestVC ()
 
 @property (nonatomic , strong)NSArray *gifArray;
@@ -17,6 +19,10 @@
 @end
 
 @implementation LBTestVC
+
+- (void)dealloc {
+    LBPhotoBrowserLog(@"LBTestVC 销毁了");
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -63,7 +69,7 @@
                      @"http://p2.pstatp.com/large/w960/664500028cd633015730",
                      @"http://p7.pstatp.com/large/w960/664700026a0be7b63c78"
                      ];
-    
+
 }
 - (IBAction)gifShow:(UIButton *)sender {
     NSMutableArray *gifItems = [[NSMutableArray alloc]init];
@@ -72,7 +78,7 @@
         LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlString frame:sender.frame];
         [gifItems addObject:item];
     }
-    [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:gifItems selectedIndex:0 fromImageViewSuperView:self.view];\
+    [[LBPhotoBrowserManager defaultManager]showImageWithWebItems:gifItems selectedIndex:0 fromImageViewSuperView:self.view];
     [LBPhotoBrowserManager defaultManager].lowGifMemory = YES;
     [LBPhotoBrowserManager defaultManager].destroyImageNotNeedShow = YES;
 }

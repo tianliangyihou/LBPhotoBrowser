@@ -1,22 +1,29 @@
 PODS:
+  - FBAllocationTracker (0.1.5)
+  - FBMemoryProfiler (0.1.3):
+    - FBAllocationTracker (~> 0.1)
+    - FBRetainCycleDetector (~> 0.1)
+  - FBRetainCycleDetector (0.1.4)
+  - KMCGeigerCounter (0.2.2)
   - MBProgressHUD (1.0.0)
-  - SDWebImage (4.3.2):
-    - SDWebImage/Core (= 4.3.2)
-  - SDWebImage/Core (4.3.2)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
 
 DEPENDENCIES:
+  - FBMemoryProfiler
+  - KMCGeigerCounter
   - MBProgressHUD
-  - SDWebImage (~> 4.3.2)
-
-SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - MBProgressHUD
-    - SDWebImage
+  - SDWebImage (~> 4.0.0)
 
 SPEC CHECKSUMS:
+  FBAllocationTracker: dfdca3f71aceca6a85e95e3c6ec76a9785eba0f1
+  FBMemoryProfiler: 623fc5f8a61f7d02ec75c87e3b97c90f621d8b02
+  FBRetainCycleDetector: 46f8179bbb1c587deee3ea838a1a3ee02acf5015
+  KMCGeigerCounter: f8cc3c4aa19fc6f8cec168fb03b364b84c118a7a
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
-  SDWebImage: 29bd3c0bc1f01e5eb59720847c64ad4c4ca1af5d
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
 
-PODFILE CHECKSUM: b80cc3f412d0af45ffdd2507a7f08b838606ab05
+PODFILE CHECKSUM: b44cadd6fe4b3382d4634bc482ad5ab563fc8542
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.2.0

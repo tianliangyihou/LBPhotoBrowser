@@ -15,6 +15,7 @@
 #import "LBStyle3VC.h"
 #import "LBTestVC.h"
 
+#import <KMCGeigerCounter/KMCGeigerCounter.h>
 #import "MBProgressHUD+EX.h"
 #import <SDWebImage/SDWebImageManager.h>
 
@@ -47,6 +48,10 @@ static NSString *cellID = @"llb.cellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([UIScreen mainScreen].bounds.size.height == 812) {
+        [KMCGeigerCounter sharedGeigerCounter].position = KMCGeigerCounterPositionLeft;
+    }
+    [KMCGeigerCounter sharedGeigerCounter].enabled = YES;
     _titles = @[@"本地图片collectionView展示(复用cell)",
                 @"本地图片(不复用cell)",
                 @"collectionView展示网络(复用cell)",

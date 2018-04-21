@@ -8,9 +8,16 @@
 
 #import "AppDelegate.h"
 #import <SDWebImage/SDWebImageManager.h>
+#if DEBUG
+#import <FBMemoryProfiler/FBMemoryProfiler.h>
+#import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#endif
 
-@interface AppDelegate ()
-
+@interface AppDelegate (){
+#if DEBUG
+    FBMemoryProfiler *_memoryProfiler;
+#endif
+}
 @end
 
 @implementation AppDelegate
@@ -19,6 +26,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     NSLog(@"%@",NSHomeDirectory());
+#if DEBUG
+    _memoryProfiler = [FBMemoryProfiler new];
+    [_memoryProfiler enable];
+#endif
     return YES;
 }
 

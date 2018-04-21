@@ -24,7 +24,7 @@
  if (![LBPhotoBrowserManager defaultManager].needPreloading) return;
  
  --->
-  GPU,CPU的性能测试
+  GPU,CPU的性能测试 ，gif的播放
  */
 
 /**

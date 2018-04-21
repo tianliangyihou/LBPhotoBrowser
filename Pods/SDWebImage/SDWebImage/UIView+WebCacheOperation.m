@@ -14,62 +14,52 @@
 
 static char loadOperationKey;
 
-// key is copy, value is weak because operation instance is retained by SDWebImageManager's runningOperations property
-// we should use lock to keep thread-safe because these method may not be acessed from main queue
-typedef NSMapTable<NSString *, id<SDWebImageOperation>> SDOperationsDictionary;
+typedef NSMutableDictionary<NSString *, id> SDOperationsDictionary;
 
 @implementation UIView (WebCacheOperation)
 
-- (SDOperationsDictionary *)sd_operationDictionary {
-    @synchronized(self) {
-        SDOperationsDictionary *operations = objc_getAssociatedObject(self, &loadOperationKey);
-        if (operations) {
-            return operations;
-        }
-        operations = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsWeakMemory capacity:0];
-        objc_setAssociatedObject(self, &loadOperationKey, operations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (SDOperationsDictionary *)operationDictionary {
+    SDOperationsDictionary *operations = objc_getAssociatedObject(self, &loadOperationKey);
+    if (operations) {
         return operations;
     }
+    operations = [NSMutableDictionary dictionary];
+    objc_setAssociatedObject(self, &loadOperationKey, operations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return operations;
 }
 
-- (void)sd_setImageLoadOperation:(nullable id<SDWebImageOperation>)operation forKey:(nullable NSString *)key {
+- (void)sd_setImageLoadOperation:(nullable id)operation forKey:(nullable NSString *)key {
     if (key) {
         [self sd_cancelImageLoadOperationWithKey:key];
         if (operation) {
-            SDOperationsDictionary *operationDictionary = [self sd_operationDictionary];
-            @synchronized (self) {
-                [operationDictionary setObject:operation forKey:key];
-            }
+            SDOperationsDictionary *operationDictionary = [self operationDictionary];
+            operationDictionary[key] = operation;
         }
     }
 }
 
 - (void)sd_cancelImageLoadOperationWithKey:(nullable NSString *)key {
     // Cancel in progress downloader from queue
-    // 这个是每个IMageView 都会绑定的一个类似字典的东西
-    SDOperationsDictionary *operationDictionary = [self sd_operationDictionary];
-    id<SDWebImageOperation> operation;
-    @synchronized (self) {
-        // 获取当前IMageView 绑定的图片的操作
-        operation = [operationDictionary objectForKey:key];
-    }
-    // 操作是否还在继续
-    if (operation) {
-        if ([operation conformsToProtocol:@protocol(SDWebImageOperation)]){
-            [operation cancel];
+    SDOperationsDictionary *operationDictionary = [self operationDictionary];
+    id operations = operationDictionary[key];
+    if (operations) {
+        if ([operations isKindOfClass:[NSArray class]]) {
+            for (id <SDWebImageOperation> operation in operations) {
+                if (operation) {
+                    [operation cancel];
+                }
+            }
+        } else if ([operations conformsToProtocol:@protocol(SDWebImageOperation)]){
+            [(id<SDWebImageOperation>) operations cancel];
         }
-        @synchronized (self) {
-            [operationDictionary removeObjectForKey:key];
-        }
+        [operationDictionary removeObjectForKey:key];
     }
 }
 
 - (void)sd_removeImageLoadOperationWithKey:(nullable NSString *)key {
     if (key) {
-        SDOperationsDictionary *operationDictionary = [self sd_operationDictionary];
-        @synchronized (self) {
-            [operationDictionary removeObjectForKey:key];
-        }
+        SDOperationsDictionary *operationDictionary = [self operationDictionary];
+        [operationDictionary removeObjectForKey:key];
     }
 }
 
