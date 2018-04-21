@@ -10,19 +10,21 @@
 #import "LBPhotoBrowserView.h"
 
 /**
- pageController  图片太多  ..... 显示不太好 不能根据下标跳转
- 网上连续九张gif浏览时,因为内存原因,浏览过的某一张图片会被释放,整个界面变黑,
- 另外有时在dismiss图片浏览器时这行代码会有问题
- self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:scalePercent / _zoomScale];
- _zoomScale这个变量作为分母有时会为0
+ 
+ ---> 是否增加 addViewBlock 自定义显示底部内容
+ --->  添加source view不同父View跳转
+--->
  LBPhotoLocalImage *lb_image = [[LBPhotoLocalImage alloc]initWithCGImage:localImage.CGImage];
+ --->
  iPhone 11.3 gif无法读取
- 是否要针对没有小图的优化一下
+ 
+ --->
+ 是否要针对没有小图的优化一下 大于10张图片
+ SD的cancel 是否可以取消之前的下载 --》 没有就好了
  if (![LBPhotoBrowserManager defaultManager].needPreloading) return;
- 本地图片的朝向问题
- 横着拍的图片的动画问题
- GPU,CPU的性能测试
- 添加source view
+ 
+ --->
+  GPU,CPU的性能测试
  */
 
 /**

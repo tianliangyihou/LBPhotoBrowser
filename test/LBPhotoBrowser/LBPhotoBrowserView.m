@@ -58,6 +58,8 @@ static CGFloat const itemSpace = 20.0;
 
 @property (nonatomic , weak)UICollectionView *collectionView;
 
+@property (nonatomic , weak)UILabel *pageLabel;
+
 @property (nonatomic , strong)NSMutableArray *dataArr;
 
 @property (nonatomic , strong)NSMutableArray *models;
@@ -324,6 +326,23 @@ static CGFloat const itemSpace = 20.0;
     return _loadingImageModelDic;
 }
 
+- (UILabel *)pageLabel {
+    if (!_pageLabel) {
+        UILabel *pageLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+        pageLabel.centerX = self.centerX;
+        pageLabel.bottom = SCREEN_HEIGHT - 50;
+        pageLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        pageLabel.layer.cornerRadius = 5;
+        pageLabel.layer.masksToBounds = YES;
+        pageLabel.textColor = [UIColor whiteColor];
+        pageLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:pageLabel];
+        _pageLabel = pageLabel;
+    }
+    return _pageLabel;
+}
+
+
 - (UIPageControl *)pageControl {
     if (!_pageControl) {
         UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 10)];
@@ -391,6 +410,9 @@ static CGFloat const itemSpace = 20.0;
             _startPoint = location;
             self.tag = 0;
             _zoomScale = cell.zoomScrollView.zoomScale;
+            if (_zoomScale == 0) {
+                _zoomScale = 1;
+            }
             _startCenter = cell.zoomScrollView.imageView.center;
             self.navBarStatusHidden = [LBPhotoBrowserManager defaultManager].navigationBar.hidden;
         }
@@ -453,6 +475,11 @@ static CGFloat const itemSpace = 20.0;
 #pragma mark - 监听通知
 
 - (void)removePageControl {
+    if (_pageLabel) {
+        _pageLabel.hidden = YES;
+        [_pageLabel removeFromSuperview];
+    }
+    
     [UIView animateWithDuration:0.25 animations:^{
         self.pageControl.alpha = 0;
     }completion:^(BOOL finished) {
@@ -484,6 +511,10 @@ static CGFloat const itemSpace = 20.0;
         model.url = _dataArr[i];
         model.index = i;
         [self.models addObject:model];
+    }
+    if (self.models.count > 9) {
+        self.pageControl.hidden = YES;
+        self.pageLabel.text = [NSString stringWithFormat:@"%d/%lu",index+1,(unsigned long)self.models.count];
     }
     self.collectionView.alwaysBounceHorizontal = urls.count == 1? NO : YES;
     [self.collectionView reloadData];
@@ -603,7 +634,6 @@ static CGFloat const itemSpace = 20.0;
     dispatch_async(wself.preloadingQueue, ^{
         int leftCellIndex = model.index - 1 >= 0 ?model.index - 1:0;
         int rightCellIndex = model.index + 1 < wself.models.count? model.index + 1 : (int)wself.models.count -1;
-        //wself.loadingImageModels 新计算出的需要加载的 -- > 如果个原来的没有重合的 --> 取消
         [wself.preloadingModelDic removeAllObjects];
         @autoreleasepool {
             
@@ -613,11 +643,12 @@ static CGFloat const itemSpace = 20.0;
             indexDic[[NSString stringWithFormat:@"%d",model.index]] = @1;
             indexDic[[NSString stringWithFormat:@"%d",rightCellIndex]] = @1;
             
-            //loadingImageModelDic 已经正在加载的
+            //loadingImageModelDic 已经正在加载的 是否需要取消
             for (NSString *indexStr in wself.loadingImageModelDic.allKeys) {
                 if (indexDic[indexStr]) continue;
                 LBScrollViewStatusModel *loadingModel = wself.loadingImageModelDic[indexStr];
-
+                
+                
                 if (loadingModel.opreation) {
                     [loadingModel.opreation cancel];
                     loadingModel.opreation = nil;
@@ -630,8 +661,9 @@ static CGFloat const itemSpace = 20.0;
                     }
                 }
             }
+            
             [wself.loadingImageModelDic removeAllObjects];
-            // 更新loadingImageModelDic 并且开始加载
+            // 更新loadingImageModelDic 并且开始加载 预加载的成为已加载的
             for (int i = leftCellIndex; i <= rightCellIndex; i++) {
                 LBScrollViewStatusModel *loadingModel = wself.models[i];
                 NSString *indexStr = [NSString stringWithFormat:@"%d",i];
@@ -662,12 +694,18 @@ static CGFloat const itemSpace = 20.0;
     self.pageControl.currentPage = page;
     [LBPhotoBrowserManager defaultManager].currentPage = page;
     LBNavigationBar *bar = (LBNavigationBar *)[LBPhotoBrowserManager defaultManager].navigationBar;
-    bar.titleLabel.text = [NSString stringWithFormat:@"%d/%lu",page + 1,(unsigned long)self.models.count];
+    NSString *pageStr = [NSString stringWithFormat:@"%d/%lu",page + 1,(unsigned long)self.models.count];
+    bar.titleLabel.text = pageStr;
     // 下载完成会走这个回调
+    if (_pageLabel) {
+        self.pageLabel.text = pageStr;
+    }
     if (![scrollView isKindOfClass:[UIScrollView class]]) {
         LBPhotoBrowserManager.defaultManager.currentDisplayModel = nil;
     }
-    LBPhotoBrowserManager.defaultManager.currentDisplayModel = self.models[page];
+    if (self.isShowing) {
+        LBPhotoBrowserManager.defaultManager.currentDisplayModel = self.models[page];
+    }
 }
 
 - (void)refreshStatusWithPage:(int)page {

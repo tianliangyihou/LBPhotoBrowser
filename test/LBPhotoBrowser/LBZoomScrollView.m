@@ -214,7 +214,8 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
     }
     self.imageViewIsMoving = YES;
     self.imageView.frame = self.oldFrame;
-
+    self.imageView.image = image;
+    [self setNeedsLayout];    
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         wself.imageView.frame = photoImageViewFrame;
         }completion:^(BOOL finished) {
@@ -224,9 +225,6 @@ static CGFloat scrollViewMaxZoomScale = 3.0;
                 completion();
             }
     }];
-    // if not clear this image ,gif image may have some thing wrong
-    self.imageView.image = image;
-    [self setNeedsLayout];
 }
 
 
