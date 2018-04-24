@@ -342,6 +342,7 @@
 				TargetAttributes = {
 					2657DB601E77BCDD00F324C3 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = M974WD5VWM;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
@@ -585,14 +586,37 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = M974WD5VWM;
 				INFOPLIST_FILE = test/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"FBAllocationTracker\"",
+					"-l\"FBMemoryProfiler\"",
+					"-l\"FBRetainCycleDetector\"",
+					"-l\"KMCGeigerCounter\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"OOMDetector\"",
+					"-l\"SDWebImage\"",
+					"-l\"c++\"",
+					"-l\"fishhook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"UIKit\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vcyber.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "44290f65-14f3-4c5a-bce8-f7896707fea4";
+				PROVISIONING_PROFILE_SPECIFIER = CYW_ALL_APP_Development;
 			};
 			name = Debug;
 		};
@@ -608,6 +632,29 @@
 				INFOPLIST_FILE = test/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"FBAllocationTracker\"",
+					"-l\"FBMemoryProfiler\"",
+					"-l\"FBRetainCycleDetector\"",
+					"-l\"KMCGeigerCounter\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"OOMDetector\"",
+					"-l\"SDWebImage\"",
+					"-l\"c++\"",
+					"-l\"fishhook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"UIKit\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vcyber.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

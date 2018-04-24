@@ -13,11 +13,8 @@
  
  ---> 是否增加 addViewBlock 自定义显示底部内容
  --->  添加source view不同父View跳转
---->
- LBPhotoLocalImage *lb_image = [[LBPhotoLocalImage alloc]initWithCGImage:localImage.CGImage];
  --->
  iPhone 11.3 gif无法读取
- 
  --->
  是否要针对没有小图的优化一下 大于10张图片
  SD的cancel 是否可以取消之前的下载 --》 没有就好了

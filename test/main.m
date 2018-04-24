@@ -16,9 +16,9 @@
 
 int main(int argc, char * argv[]) {
 #if DEBUG
-    [FBAssociationManager hook];
-    [[FBAllocationTrackerManager sharedManager] startTrackingAllocations];
-    [[FBAllocationTrackerManager sharedManager] enableGenerations];
+//    [FBAssociationManager hook];
+//    [[FBAllocationTrackerManager sharedManager] startTrackingAllocations];
+//    [[FBAllocationTrackerManager sharedManager] enableGenerations];
 #endif
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));

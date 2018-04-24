@@ -4,26 +4,33 @@ PODS:
     - FBAllocationTracker (~> 0.1)
     - FBRetainCycleDetector (~> 0.1)
   - FBRetainCycleDetector (0.1.4)
+  - fishhook (0.2)
   - KMCGeigerCounter (0.2.2)
   - MBProgressHUD (1.0.0)
+  - OOMDetector (1.3):
+    - fishhook (= 0.2)
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
 
 DEPENDENCIES:
   - FBMemoryProfiler
+  - fishhook (= 0.2)
   - KMCGeigerCounter
   - MBProgressHUD
+  - OOMDetector (= 1.3)
   - SDWebImage (~> 4.0.0)
 
 SPEC CHECKSUMS:
   FBAllocationTracker: dfdca3f71aceca6a85e95e3c6ec76a9785eba0f1
   FBMemoryProfiler: 623fc5f8a61f7d02ec75c87e3b97c90f621d8b02
   FBRetainCycleDetector: 46f8179bbb1c587deee3ea838a1a3ee02acf5015
+  fishhook: ea19933abfe8f2f52c55fd8b6e2718467d3ebc89
   KMCGeigerCounter: f8cc3c4aa19fc6f8cec168fb03b364b84c118a7a
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  OOMDetector: c23f4dfc969ea9bbd68a57cf7e5a3ca2169263cd
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
 
-PODFILE CHECKSUM: b44cadd6fe4b3382d4634bc482ad5ab563fc8542
+PODFILE CHECKSUM: dda359f3a8caf0dd84c81f8f6e551ad9c932a7a7
 
 COCOAPODS: 1.2.0

@@ -11,6 +11,7 @@
 #if DEBUG
 #import <FBMemoryProfiler/FBMemoryProfiler.h>
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#import <OOMDetector/OOMDetector.h>
 #endif
 
 @interface AppDelegate (){
@@ -27,9 +28,10 @@
     // Override point for customization after application launch.
     NSLog(@"%@",NSHomeDirectory());
 #if DEBUG
-    _memoryProfiler = [FBMemoryProfiler new];
-    [_memoryProfiler enable];
+//    _memoryProfiler = [FBMemoryProfiler new];
+//    [_memoryProfiler enable];
 #endif
+//    [[OOMDetector getInstance] setupWithDefaultConfig];
     return YES;
 }
 

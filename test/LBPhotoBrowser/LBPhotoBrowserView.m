@@ -581,7 +581,9 @@ static CGFloat const itemSpace = 20.0;
                 [UIView animateWithDuration:0 animations:^{
                     [wself.collectionView deleteItemsAtIndexPaths:@[indexPath]];
                 }completion:^(BOOL finished) {
-                    [wself scrollViewDidScroll:wself.collectionView];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [wself scrollViewDidScroll:wself.collectionView];
+                    });
                 }];
             }
         }

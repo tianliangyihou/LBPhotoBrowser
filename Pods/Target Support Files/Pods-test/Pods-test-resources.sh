@@ -78,9 +78,11 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "KMCGeigerCounter/KMCGeigerCounter/KMCGeigerCounterTick.aiff"
+  install_resource "OOMDetector/assets/oomgif.gif"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "KMCGeigerCounter/KMCGeigerCounter/KMCGeigerCounterTick.aiff"
+  install_resource "OOMDetector/assets/oomgif.gif"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

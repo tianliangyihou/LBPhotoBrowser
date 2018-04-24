@@ -5,5 +5,7 @@ pod "SDWebImage", "~> 4.0.0"
 pod 'MBProgressHUD'
 pod 'KMCGeigerCounter'
 pod 'FBMemoryProfiler'
+pod 'OOMDetector', '1.3'
+pod 'fishhook', '0.2'
 
 end
