@@ -236,7 +236,7 @@ static CGFloat const itemSpace = 20.0;
         label.textColor = [UIColor whiteColor];
         [self addSubview:label];
         _titleLabel = label;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     }
     return self;
 }
@@ -553,7 +553,14 @@ static CGFloat const itemSpace = 20.0;
     navbar.titleLabel.text = [NSString stringWithFormat:@"%d/%lu",index + 1,(unsigned long)self.models.count];
     [self addSubview:navbar];
     [LBPhotoBrowserManager defaultManager].navigationBar = navbar;
+    navbar.userInteractionEnabled = NO;
+    // 类似微信开始的动画
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        navbar.userInteractionEnabled = YES;
+        navbar.hidden = YES;
+    });
     weak_self;
+    // 处理逻辑
     [navbar setNavbarBtnOption:^(int tag) {
          NSArray *cells = [wself.collectionView visibleCells];
         if (cells.count > 1) return;
