@@ -14,9 +14,8 @@
 #import "LBStyle2VC.h"
 #import "LBStyle3VC.h"
 #import "LBTestVC.h"
-
+#import "LBProgressHUD.h"
 #import <KMCGeigerCounter/KMCGeigerCounter.h>
-#import "MBProgressHUD+EX.h"
 #import <SDWebImage/SDWebImageManager.h>
 
 static NSString *cellID = @"llb.cellID";
@@ -132,7 +131,7 @@ static NSString *cellID = @"llb.cellID";
         {
             [[SDWebImageManager sharedManager].imageCache clearMemory];
             [SDWebImageManager.sharedManager.imageCache clearDiskOnCompletion:^{
-                [MBProgressHUD showText:@"清除成功" toView:nil];
+                [LBProgressHUD showTest:@"清除成功"];
             }];
         }
             break;

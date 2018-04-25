@@ -8,7 +8,7 @@
 //
 
 #import "LBStyle3VC.h"
-#import "MBProgressHUD+EX.h"
+#import "LBProgressHUD.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 @interface LBStyle3VC ()
 @property (nonatomic , strong)ALAssetsLibrary *assetsLibrary;
@@ -71,7 +71,7 @@
                     if (error) {
                         LBPhotoBrowserLog(@"%@",error);
                     }else {
-                        [MBProgressHUD showText:@"保存gif成功" toView:nil];
+                        [LBProgressHUD showTest:@"保存gif成功"];
                     }
                 }];
             }
@@ -90,7 +90,7 @@
     if (error) {
         LBPhotoBrowserLog(@"%@",error);
     }else {
-        [MBProgressHUD showText:@"保存成功" toView:nil];
+        [LBProgressHUD showTest:@"保存成功"];
     }
 }
 

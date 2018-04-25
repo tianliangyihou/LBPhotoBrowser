@@ -213,7 +213,9 @@ static CGFloat const itemSpace = 20.0;
     if (self) {
         UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         leftBtn.frame = CGRectMake(10, 0, 40, 40);
-        [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+        LBPhotoBrowserManager *mgr = [LBPhotoBrowserManager defaultManager];
+        UIImage *dismissImage = [UIImage imageWithContentsOfFile:[mgr.lb_resourceBundle pathForResource:@"LBDismiss@3x.png" ofType:nil]];
+        [leftBtn setImage:dismissImage forState:UIControlStateNormal];
         leftBtn.tag = 0;
         [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         leftBtn.bottom = self.bottom - 2;
@@ -222,14 +224,15 @@ static CGFloat const itemSpace = 20.0;
         UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         rightBtn.frame = CGRectMake(SCREEN_WIDTH - 50, 0, 40, 40);
         rightBtn.bottom = self.bottom - 2;
-        [rightBtn setTitle:@"删除" forState:UIControlStateNormal];
+        UIImage *deleImage = [UIImage imageWithContentsOfFile:[mgr.lb_resourceBundle pathForResource:@"LBDelete@3x.png" ofType:nil]];
+        [rightBtn setImage:deleImage forState:UIControlStateNormal];
         rightBtn.tag = 1;
         [rightBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:rightBtn];
         
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH - 100, 40)];
         label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont systemFontOfSize:16];
+        label.font = [UIFont systemFontOfSize:18];
         label.left = leftBtn.right;
         label.bottom = self.bottom - 2;
         label.text = [NSString stringWithFormat:@"0/0"];

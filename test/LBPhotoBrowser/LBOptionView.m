@@ -111,7 +111,8 @@ static inline CGFloat getTableViewHeight() {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = photoBrowseManager().currentTitles[indexPath.row];
-    LBScrollViewStatusModel *statusModel = photoBrowseManager().currentDisplayModel;
+    NSArray *models = [photoBrowseManager().photoBrowserView valueForKeyPath:@"models"];
+    LBScrollViewStatusModel *statusModel = models[photoBrowseManager().currentPage];
     if (statusModel.currentPageImage.images.count > 1) {
         if (photoBrowseManager().titleClickBlock) {
             NSData *gifData = [statusModel diskImageDataBySearchingAllPathsForKey:statusModel.url.absoluteString]; photoBrowseManager().titleClickBlock(statusModel.currentPageImage,indexPath,title,YES,gifData);;
@@ -122,6 +123,6 @@ static inline CGFloat getTableViewHeight() {
         }
     }
     [self dismissOptionView];
-
+    
 }
 @end

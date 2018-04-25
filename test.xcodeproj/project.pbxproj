@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261F8548209073B70029A6AB /* LBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 261F8547209073B70029A6AB /* LBProgressHUD.m */; };
+		261F854A209074AA0029A6AB /* LBPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 261F8549209074AA0029A6AB /* LBPhotoBrowser.bundle */; };
 		262337C62074A82200FA6109 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 262337C42074A82200FA6109 /* ViewController.m */; };
 		26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D101FF1E6A1001DBE92 /* LBLocalImageVC.m */; };
 		26341D141FF1E6C5001DBE92 /* LBStyle1VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D131FF1E6C5001DBE92 /* LBStyle1VC.m */; };
@@ -15,7 +17,6 @@
 		26341D431FF2402B001DBE92 /* LBCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D421FF2402B001DBE92 /* LBCell.m */; };
 		26341D471FF244D4001DBE92 /* LBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D461FF244D4001DBE92 /* LBModel.m */; };
 		26341D5D1FF4955A001DBE92 /* placehold.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 26341D5C1FF49559001DBE92 /* placehold.jpeg */; };
-		2639F3B02047A3310099186E /* LBPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2639F3AF2047A3310099186E /* LBPhotoBrowser.bundle */; };
 		2657DB661E77BCDD00F324C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB651E77BCDD00F324C3 /* main.m */; };
 		2657DB691E77BCDD00F324C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2657DB681E77BCDD00F324C3 /* AppDelegate.m */; };
 		2657DB6F1E77BCDD00F324C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2657DB6D1E77BCDD00F324C3 /* Main.storyboard */; };
@@ -33,7 +34,6 @@
 		267D19F32015833700B87BE0 /* LBBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19EF2015833700B87BE0 /* LBBaseController.m */; };
 		267D19F92015839600B87BE0 /* LBLocalImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19F72015839600B87BE0 /* LBLocalImageCollectionViewVC.m */; };
 		267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 267D19FB2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m */; };
-		268C67472085C10500DEE8E6 /* MBProgressHUD+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = 268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */; };
 		32BF97956CD6003C5D78629E /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1472DF34D1E9CA8AAD44F40D /* libPods-test.a */; };
 		A489D58A208A4356001A3B75 /* LBTestVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A489D588208A4355001A3B75 /* LBTestVC.xib */; };
 		A489D58B208A4356001A3B75 /* LBTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A489D589208A4355001A3B75 /* LBTestVC.m */; };
@@ -41,6 +41,9 @@
 
 /* Begin PBXFileReference section */
 		1472DF34D1E9CA8AAD44F40D /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		261F8546209073B60029A6AB /* LBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBProgressHUD.h; sourceTree = "<group>"; };
+		261F8547209073B70029A6AB /* LBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBProgressHUD.m; sourceTree = "<group>"; };
+		261F8549209074AA0029A6AB /* LBPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LBPhotoBrowser.bundle; sourceTree = "<group>"; };
 		262337C42074A82200FA6109 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		262337C52074A82200FA6109 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		26341D0F1FF1E6A1001DBE92 /* LBLocalImageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBLocalImageVC.h; sourceTree = "<group>"; };
@@ -56,7 +59,6 @@
 		26341D451FF244D4001DBE92 /* LBModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBModel.h; sourceTree = "<group>"; };
 		26341D461FF244D4001DBE92 /* LBModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBModel.m; sourceTree = "<group>"; };
 		26341D5C1FF49559001DBE92 /* placehold.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placehold.jpeg; sourceTree = "<group>"; };
-		2639F3AF2047A3310099186E /* LBPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LBPhotoBrowser.bundle; sourceTree = "<group>"; };
 		2657DB611E77BCDD00F324C3 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2657DB651E77BCDD00F324C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2657DB671E77BCDD00F324C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -89,8 +91,6 @@
 		267D19F82015839600B87BE0 /* LBLocalImageCollectionViewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBLocalImageCollectionViewVC.h; sourceTree = "<group>"; };
 		267D19FA2015B1C500B87BE0 /* LBWebImageCollectionViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBWebImageCollectionViewVC.h; sourceTree = "<group>"; };
 		267D19FB2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBWebImageCollectionViewVC.m; sourceTree = "<group>"; };
-		268C67452085C10500DEE8E6 /* MBProgressHUD+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+EX.h"; sourceTree = "<group>"; };
-		268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+EX.m"; sourceTree = "<group>"; };
 		52839D449824474097575972 /* Pods-test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig"; sourceTree = "<group>"; };
 		7258DD35A57A1219D711F5E6 /* Pods-test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.release.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig"; sourceTree = "<group>"; };
 		A489D587208A4355001A3B75 /* LBTestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBTestVC.h; sourceTree = "<group>"; };
@@ -165,8 +165,8 @@
 			children = (
 				26341D411FF2402B001DBE92 /* LBCell.h */,
 				26341D421FF2402B001DBE92 /* LBCell.m */,
-				268C67452085C10500DEE8E6 /* MBProgressHUD+EX.h */,
-				268C67462085C10500DEE8E6 /* MBProgressHUD+EX.m */,
+				261F8546209073B60029A6AB /* LBProgressHUD.h */,
+				261F8547209073B70029A6AB /* LBProgressHUD.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -228,7 +228,7 @@
 		267AD87C1F5E3B3A00DC6D9F /* LBPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				2639F3AF2047A3310099186E /* LBPhotoBrowser.bundle */,
+				261F8549209074AA0029A6AB /* LBPhotoBrowser.bundle */,
 				267AD87F1F5E3B3A00DC6D9F /* LBLoadingView.h */,
 				267AD8801F5E3B3A00DC6D9F /* LBLoadingView.m */,
 				267AD8811F5E3B3A00DC6D9F /* LBOptionView.h */,
@@ -319,7 +319,6 @@
 				2657DB5D1E77BCDD00F324C3 /* Sources */,
 				2657DB5E1E77BCDD00F324C3 /* Frameworks */,
 				2657DB5F1E77BCDD00F324C3 /* Resources */,
-				531E7DEEA5B88625A7BAB665 /* [CP] Embed Pods Frameworks */,
 				8482C2E2B90CFBA88446AF51 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -376,7 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A489D58A208A4356001A3B75 /* LBTestVC.xib in Resources */,
-				2639F3B02047A3310099186E /* LBPhotoBrowser.bundle in Resources */,
+				261F854A209074AA0029A6AB /* LBPhotoBrowser.bundle in Resources */,
 				2657DB741E77BCDD00F324C3 /* LaunchScreen.storyboard in Resources */,
 				2657DB711E77BCDD00F324C3 /* Assets.xcassets in Resources */,
 				26341D5D1FF4955A001DBE92 /* placehold.jpeg in Resources */,
@@ -387,30 +386,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		531E7DEEA5B88625A7BAB665 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8482C2E2B90CFBA88446AF51 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-resources.sh",
+				"${PODS_ROOT}/KMCGeigerCounter/KMCGeigerCounter/KMCGeigerCounterTick.aiff",
+				"${PODS_ROOT}/OOMDetector/assets/oomgif.gif",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/KMCGeigerCounterTick.aiff",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/oomgif.gif",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -432,7 +421,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -451,7 +440,6 @@
 				267D19F92015839600B87BE0 /* LBLocalImageCollectionViewVC.m in Sources */,
 				26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */,
 				26341D431FF2402B001DBE92 /* LBCell.m in Sources */,
-				268C67472085C10500DEE8E6 /* MBProgressHUD+EX.m in Sources */,
 				26341D471FF244D4001DBE92 /* LBModel.m in Sources */,
 				267D19FC2015B1C500B87BE0 /* LBWebImageCollectionViewVC.m in Sources */,
 				267AD8961F5E3B3A00DC6D9F /* LBPhotoBrowserManager.m in Sources */,
@@ -465,6 +453,7 @@
 				26341D171FF1E6DD001DBE92 /* LBStyle2VC.m in Sources */,
 				267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */,
 				2657DB661E77BCDD00F324C3 /* main.m in Sources */,
+				261F8548209073B70029A6AB /* LBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
