@@ -8,21 +8,12 @@
 //
 
 #import "LBStyle3VC.h"
-#import "LBProgressHUD.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+
 @interface LBStyle3VC ()
-@property (nonatomic , strong)ALAssetsLibrary *assetsLibrary;
 
 @end
 
 @implementation LBStyle3VC
-
-- (ALAssetsLibrary *)assetsLibrary {
-    if (!_assetsLibrary) {
-        _assetsLibrary = [[ALAssetsLibrary alloc]init];
-    }
-    return _assetsLibrary;
-}
 
 - (void)viewDidLoad {
     self.lagerURLStrings = @[
@@ -51,7 +42,6 @@
     LBCell *cell = [tableView dequeueReusableCellWithIdentifier:ID forIndexPath:indexPath];
     cell.model = self.models[indexPath.row];
     __weak typeof(cell) wcell = cell;
-    __weak typeof(self) wself = self;
     [cell setCallBack:^(LBModel *cellModel, int tag) {
         NSMutableArray *items = [[NSMutableArray alloc]init];
         for (int i = 0 ; i < cellModel.urls.count; i++) {
@@ -65,15 +55,9 @@
             LBPhotoBrowserLog(@"%@",title);
             if(![title isEqualToString:@"保存"]) return;
             if (!isGif) {
-                UIImageWriteToSavedPhotosAlbum(image, wself, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                [[LBAlbumManager shareManager] saveImage:image];
             }else {
-                [wself.assetsLibrary writeImageDataToSavedPhotosAlbum:gifImageData metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
-                    if (error) {
-                        LBPhotoBrowserLog(@"%@",error);
-                    }else {
-                        [LBProgressHUD showTest:@"保存gif成功"];
-                    }
-                }];
+                [[LBAlbumManager shareManager] saveGifImageWithData:gifImageData];
             }
         }]addPhotoBrowserWillDismissBlock:^{
             LBPhotoBrowserLog(@"即将销毁");
@@ -85,14 +69,7 @@
     return cell;
 }
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
-    if (error) {
-        LBPhotoBrowserLog(@"%@",error);
-    }else {
-        [LBProgressHUD showTest:@"保存成功"];
-    }
-}
+
 
 
 

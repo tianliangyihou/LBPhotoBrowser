@@ -65,8 +65,12 @@
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
         
         [[[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"分享",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
-            LBPhotoBrowserLog(@"%@",title);
-        }]addPhotoBrowserWillDismissBlock:^{
+            if(![title isEqualToString:@"保存"]) return;
+            if (!isGif) {
+                [[LBAlbumManager shareManager] saveImage:image];
+            }else {
+                [[LBAlbumManager shareManager] saveGifImageWithData:gifImageData];
+            }        }]addPhotoBrowserWillDismissBlock:^{
             LBPhotoBrowserLog(@"PhotoBrowserWillDismiss");
         }]addPhotoBrowserDidDismissBlock:^{
             LBPhotoBrowserLog(@"PhotoBrowserDidDismiss");

@@ -21,6 +21,17 @@ DEPENDENCIES:
   - OOMDetector (= 1.3)
   - SDWebImage (~> 4.0.0)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - FBAllocationTracker
+    - FBMemoryProfiler
+    - FBRetainCycleDetector
+    - fishhook
+    - KMCGeigerCounter
+    - MBProgressHUD
+    - OOMDetector
+    - SDWebImage
+
 SPEC CHECKSUMS:
   FBAllocationTracker: dfdca3f71aceca6a85e95e3c6ec76a9785eba0f1
   FBMemoryProfiler: 623fc5f8a61f7d02ec75c87e3b97c90f621d8b02
@@ -31,6 +42,6 @@ SPEC CHECKSUMS:
   OOMDetector: c23f4dfc969ea9bbd68a57cf7e5a3ca2169263cd
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
 
-PODFILE CHECKSUM: dda359f3a8caf0dd84c81f8f6e551ad9c932a7a7
+PODFILE CHECKSUM: 61e845dd6151536c9f41c412d041ab18c413ef51
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.5.0

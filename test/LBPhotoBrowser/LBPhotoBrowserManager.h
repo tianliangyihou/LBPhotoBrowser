@@ -13,6 +13,7 @@
  
  ---> 是否增加 addViewBlock 自定义显示底部内容
  --->  添加source view不同父View跳转
+ /// 蒙版取消效果
  --->
  iPhone 11.3 gif无法读取
  --->

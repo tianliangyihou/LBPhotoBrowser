@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		261F8548209073B70029A6AB /* LBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 261F8547209073B70029A6AB /* LBProgressHUD.m */; };
 		261F854A209074AA0029A6AB /* LBPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 261F8549209074AA0029A6AB /* LBPhotoBrowser.bundle */; };
+		261F854E209076F70029A6AB /* LBAlbumManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 261F854D209076F70029A6AB /* LBAlbumManager.m */; };
 		262337C62074A82200FA6109 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 262337C42074A82200FA6109 /* ViewController.m */; };
 		26341D111FF1E6A1001DBE92 /* LBLocalImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D101FF1E6A1001DBE92 /* LBLocalImageVC.m */; };
 		26341D141FF1E6C5001DBE92 /* LBStyle1VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 26341D131FF1E6C5001DBE92 /* LBStyle1VC.m */; };
@@ -44,6 +45,8 @@
 		261F8546209073B60029A6AB /* LBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBProgressHUD.h; sourceTree = "<group>"; };
 		261F8547209073B70029A6AB /* LBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBProgressHUD.m; sourceTree = "<group>"; };
 		261F8549209074AA0029A6AB /* LBPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LBPhotoBrowser.bundle; sourceTree = "<group>"; };
+		261F854C209076F70029A6AB /* LBAlbumManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBAlbumManager.h; sourceTree = "<group>"; };
+		261F854D209076F70029A6AB /* LBAlbumManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBAlbumManager.m; sourceTree = "<group>"; };
 		262337C42074A82200FA6109 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		262337C52074A82200FA6109 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		26341D0F1FF1E6A1001DBE92 /* LBLocalImageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBLocalImageVC.h; sourceTree = "<group>"; };
@@ -110,6 +113,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		261F854B2090767A0029A6AB /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				261F854C209076F70029A6AB /* LBAlbumManager.h */,
+				261F854D209076F70029A6AB /* LBAlbumManager.m */,
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
 		26341D0B1FF1E5BD001DBE92 /* Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +286,7 @@
 		267D19F62015835B00B87BE0 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				261F854B2090767A0029A6AB /* Tool */,
 				267D19ED2015833700B87BE0 /* Controller */,
 				26341D441FF244B2001DBE92 /* Model */,
 				26341D401FF24015001DBE92 /* View */,
@@ -341,7 +354,6 @@
 				TargetAttributes = {
 					2657DB601E77BCDD00F324C3 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = M974WD5VWM;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
@@ -452,6 +464,7 @@
 				267AD8951F5E3B3A00DC6D9F /* LBPhotoBrowserConst.m in Sources */,
 				26341D171FF1E6DD001DBE92 /* LBStyle2VC.m in Sources */,
 				267AD89A1F5E3B3A00DC6D9F /* UIImage+LBDecoder.m in Sources */,
+				261F854E209076F70029A6AB /* LBAlbumManager.m in Sources */,
 				2657DB661E77BCDD00F324C3 /* main.m in Sources */,
 				261F8548209073B70029A6AB /* LBProgressHUD.m in Sources */,
 			);
@@ -575,7 +588,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = M974WD5VWM;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = test/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -604,8 +617,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vcyber.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "44290f65-14f3-4c5a-bce8-f7896707fea4";
-				PROVISIONING_PROFILE_SPECIFIER = CYW_ALL_APP_Development;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};

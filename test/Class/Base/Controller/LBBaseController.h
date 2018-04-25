@@ -10,6 +10,7 @@
 #import "LBCell.h"
 #import "LBModel.h"
 #import "LBPhotoBrowserManager.h"
+#import "LBAlbumManager.h"
 
 @interface LBBaseController : UITableViewController
 
