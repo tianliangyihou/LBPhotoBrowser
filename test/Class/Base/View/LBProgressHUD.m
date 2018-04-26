@@ -9,6 +9,7 @@
 #import "LBProgressHUD.h"
 
 @implementation LBProgressHUD
+
 + (void)showTest:(NSString *)text {
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:text delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil ];
     [alertView show];
@@ -16,4 +17,5 @@
         [alertView dismissWithClickedButtonIndex:0 animated:YES];
     });
 }
+
 @end

@@ -26,7 +26,7 @@
 		<true/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>请求使用图库</string>
+	<string>为了更好的问您服务,LBPhotoBrowser需要访问您的相册</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -44,6 +44,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>为了更好的问您服务,LBPhotoBrowser需要访问您的相册</string>
+	<string>为了更好的问您服务,LBPhotoBrowser需要访问您的相册(苹果最近对这个要求很高)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>为了更好的问您服务,LBPhotoBrowser需要访问您的相机</string>
 </dict>
 </plist>

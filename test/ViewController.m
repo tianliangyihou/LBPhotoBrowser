@@ -63,6 +63,7 @@ static NSString *cellID = @"llb.cellID";
                 ];
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self tableView];
+    
 }
 #pragma mark - dataSource && delegate
 

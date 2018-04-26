@@ -8,18 +8,51 @@
 
 #import "LBAlbumManager.h"
 #import "LBProgressHUD.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+
 #import <Photos/Photos.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <TZImagePickerController/TZImagePickerController.h>
 
 static LBAlbumManager *_mgr = nil;
 
-@interface LBAlbumManager ()
+@interface LBAlbumManager () <TZImagePickerControllerDelegate>
 
 @property (nonatomic , strong)ALAssetsLibrary *assetsLibrary;
+
+@property (nonatomic , strong)TZImagePickerController *imagePickerVC;
+
+@property (nonatomic , copy)void(^imageModelsBlock)(NSArray <LBImageAlbumModel *> *imageModels);
+
+@property (nonatomic , strong)NSMutableArray <LBImageAlbumModel *> *imageModels;
+
+@end
+
+
+
+@implementation LBImageAlbumModel
 
 @end
 
 @implementation LBAlbumManager
+
+
+- (NSMutableArray *)imageModels {
+    if (!_imageModels) {
+        _imageModels = [[NSMutableArray alloc]init];
+    }
+    return _imageModels;
+}
+
+- (TZImagePickerController *)imagePickerVC {
+    if (!_imagePickerVC) {
+        TZImagePickerController *imagePickerVC = [[TZImagePickerController alloc] initWithMaxImagesCount:9 delegate:self];
+        imagePickerVC.allowPickingGif = YES;
+        imagePickerVC.allowPickingOriginalPhoto = YES;
+        _imagePickerVC = imagePickerVC;
+    }
+    return _imagePickerVC;
+}
 
 - (ALAssetsLibrary *)assetsLibrary {
     if (!_assetsLibrary) {
@@ -34,13 +67,38 @@ static LBAlbumManager *_mgr = nil;
         _mgr = [[LBAlbumManager alloc]init];
     });
     return _mgr;
-    PHAsset *aseest = [[PHAsset alloc] init];
-    PHCachingImageManager *imageManager = [[PHCachingImageManager alloc] init];
-    [imageManager requestImageDataForAsset:aseest options:0 resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-        
-    }];
-
 }
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearMemory) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+}
+- (void)clearMemory {
+    self.assetsLibrary = nil;
+}
+
+#pragma mark - 选择图片
+- (void)selectImagesFromAlbumShow:(void(^)(UIViewController *needToPresentVC))presentBlock imageModels:(void(^)(NSArray <LBImageAlbumModel *> *imageModels))imageModelsBlock maxCount:(int)count{
+    if (!presentBlock) {
+        return;
+    }
+    self.imagePickerVC.maxImagesCount = count;
+    presentBlock(self.imagePickerVC);
+    if (!imageModelsBlock) {
+        return;
+    }
+    self.imageModelsBlock = imageModelsBlock;
+}
+
+#pragma mark - 保存图片
 
 - (void)saveImage:(UIImage *)image {
     if (!image) {
@@ -72,4 +130,80 @@ static LBAlbumManager *_mgr = nil;
         [LBProgressHUD showTest:@"保存成功"];
     }
 }
+#pragma mark - 图片选择器的delegate
+
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingGifImage:(UIImage *)animatedImage sourceAssets:(id)asset {
+    LBImageAlbumModel *model = [[LBImageAlbumModel alloc]init];
+    model.isGif = YES;
+    if (![asset isKindOfClass:[ALAsset class]]) {
+        PHAsset *ph_asset = (PHAsset *)asset;
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.version = PHImageRequestOptionsVersionCurrent;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        [[PHImageManager defaultManager] requestImageDataForAsset:ph_asset
+                                                          options:options
+                                                    resultHandler:
+         ^(NSData *imageData,
+           NSString *dataUTI,
+           UIImageOrientation orientation,
+           NSDictionary *info) {
+             model.gifImageData = imageData;
+             model.image = animatedImage.images.firstObject;
+             [self.imageModels addObject:model];
+             [self albumSelctedFinish];
+         }];
+    }else {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            ALAsset *al_asset = (ALAsset *)asset;
+            ALAssetRepresentation *assetRepresentation = [al_asset representationForUTI:(__bridge NSString *)kUTTypeGIF];;
+            NSUInteger size = (NSUInteger)assetRepresentation.size;
+            uint8_t *buffer = malloc(size);
+            NSError *error;
+            NSUInteger bytes = [assetRepresentation getBytes:buffer fromOffset:0 length:size error:&error];
+            NSData *data = [NSData dataWithBytes:buffer length:bytes];
+            if (data.length > 0) {
+                model.gifImageData = data;
+                model.isGif = YES;
+                model.image = animatedImage.images.firstObject;
+            }else {
+                model.isGif = NO;
+                model.image = animatedImage;
+            }
+            free(buffer);
+            [self.imageModels addObject:model];
+            [self albumSelctedFinish];
+
+        });
+    }
+}
+
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto {
+    [photos enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        LBImageAlbumModel *model = [[LBImageAlbumModel alloc]init];
+        model.isGif = NO;
+        model.image = obj;
+        [self.imageModels addObject:model];
+    }];
+    [self albumSelctedFinish];
+}
+
+- (void)albumSelctedFinish {
+    if ([[NSThread currentThread] isMainThread]) {
+        if (self.imageModelsBlock) {
+            self.imageModelsBlock(([self.imageModels copy]));
+        }
+        [self.imageModels removeAllObjects];
+        self.imagePickerVC = nil;
+    }else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.imageModelsBlock) {
+                self.imageModelsBlock(([self.imageModels copy]));
+            }
+            [self.imageModels removeAllObjects];
+            self.imagePickerVC = nil;
+        });
+    }
+}
+
+
 @end

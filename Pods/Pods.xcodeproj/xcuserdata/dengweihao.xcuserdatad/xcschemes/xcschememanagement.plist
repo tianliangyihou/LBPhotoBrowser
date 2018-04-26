@@ -4,7 +4,32 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>FBAllocationTracker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FBMemoryProfiler.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FBRetainCycleDetector.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>KMCGeigerCounter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>OOMDetector.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -19,8 +44,69 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>TZImagePickerController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>fishhook.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
-	<dict/>
+	<dict>
+		<key>04E0E7A2B33BC0D24C83A16EE9C83F59</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>080FBBCBC183F2232C82B58A7FA241E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>176E5BF709B43FC4301EF2C7A369286D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>39FF4552F574CA30CFC8B6288C9BF88C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>586F2DFA9BDCC6675C2546793A69E5CC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BC0D1201E37C274B694B91CA71AD0823</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C65013B96B303F1E8398C38A31644608</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D1AA95A8DA436B45CD0E63B9C81A39FD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E04AE33FC92C7A0FD0B28FD48F050932</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F81E52EAF1FCEA14C984BC8CE201C209</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
 </dict>
 </plist>

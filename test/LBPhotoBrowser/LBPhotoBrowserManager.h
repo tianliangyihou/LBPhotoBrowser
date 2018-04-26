@@ -10,21 +10,15 @@
 #import "LBPhotoBrowserView.h"
 
 /**
- 
  ---> 是否增加 addViewBlock 自定义显示底部内容
  --->  添加source view不同父View跳转
- /// 蒙版取消效果
- --->
- iPhone 11.3 gif无法读取
- --->
- 是否要针对没有小图的优化一下 大于10张图片
- SD的cancel 是否可以取消之前的下载 --》 没有就好了
- if (![LBPhotoBrowserManager defaultManager].needPreloading) return;
- 
- --->
-  GPU,CPU的性能测试 ，gif的播放
+ --->  添加 pageController 是否需要变化情况
+ --->  播放本地Gif图片
+ --->  同一个URL的预加载机制
+ --->  大于10张图片的优化
+ --->  gif的播放
+ --->  GPU,CPU的性能测试
  */
-
 /**
                             控件的基本结构
  |-------------------------LBTapDetectingImageView------------------------| (最上层)

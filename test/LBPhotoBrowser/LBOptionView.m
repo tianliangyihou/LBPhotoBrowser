@@ -20,7 +20,7 @@ static inline LBPhotoBrowserManager * photoBrowseManager() {
 static inline CGFloat getTableViewHeight() {
     return [photoBrowseManager() currentTitles].count * cellHeight;
 }
-@interface LBOptionView ()<UITableViewDelegate,UITableViewDataSource>
+@interface LBOptionView ()<UITableViewDelegate,UITableViewDataSource ,UIGestureRecognizerDelegate>
 
 @property (nonatomic , weak)UITableView *tableView;
 
@@ -65,13 +65,20 @@ static inline CGFloat getTableViewHeight() {
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         self.frame = [UIScreen mainScreen].bounds;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(maskViewTap:)];
+        [self addGestureRecognizer:tap];
+        tap.delegate = self;
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(maskViewPan:)];
+        [self addGestureRecognizer:pan];
+
     }
     return self;
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+- (void)maskViewTap:(UITapGestureRecognizer *)tap {
     [self dismissOptionView];
 }
+- (void)maskViewPan:(UIPanGestureRecognizer *)pan {}
 
 #pragma mark - bgView的点击事件
 
@@ -125,4 +132,13 @@ static inline CGFloat getTableViewHeight() {
     [self dismissOptionView];
     
 }
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch  {
+    if ([NSStringFromClass([touch.view class]) isEqualToString:@"LBOptionView"]) {
+        return YES;
+    }
+    return NO;
+}
+
+
+
 @end
