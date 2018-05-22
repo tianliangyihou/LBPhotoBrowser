@@ -5,12 +5,7 @@
 简书地址:[https://www.jianshu.com/p/baaab7bd47f3](https://www.jianshu.com/p/baaab7bd47f3)
 
 ```
-目前正在全力调试新的版本,做了较大的改动和优化
-
-如果使用的话请下载release版本
-
-如果你当前使用的版本遇到问题的话 及时issue me 一定及时回复
-
+新版本已经基本完成，下面的文档还没有更新，实际使用参考demo为准
 ```
 # 概览(Overview)
 
