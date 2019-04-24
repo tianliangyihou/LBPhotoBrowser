@@ -348,7 +348,7 @@ static CGFloat const itemSpace = 20.0;
 
 - (UIPageControl *)pageControl {
     if (!_pageControl) {
-        UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 10)];
+        UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(40, 0, SCREEN_WIDTH - 80, 10)];
         pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
         pageControl.pageIndicatorTintColor = [UIColor grayColor];
         pageControl.numberOfPages = self.dataArr.count;
@@ -515,10 +515,6 @@ static CGFloat const itemSpace = 20.0;
         model.index = i;
         [self.models addObject:model];
     }
-    if (self.models.count > 9) {
-        self.pageControl.hidden = YES;
-        self.pageLabel.text = [NSString stringWithFormat:@"%d/%lu",index+1,(unsigned long)self.models.count];
-    }
     self.collectionView.alwaysBounceHorizontal = urls.count == 1? NO : YES;
     [self.collectionView reloadData];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
@@ -563,7 +559,7 @@ static CGFloat const itemSpace = 20.0;
         navbar.hidden = YES;
     });
     weak_self;
-    // 处理逻辑
+//     处理逻辑
     [navbar setNavbarBtnOption:^(int tag) {
          NSArray *cells = [wself.collectionView visibleCells];
         if (cells.count > 1) return;
@@ -697,6 +693,17 @@ static CGFloat const itemSpace = 20.0;
     loadingModel.loadFinsihed = NO;
 }
 
+- (void)pageStyleChange {
+    if (LBPhotoBrowserManager.defaultManager.pageStyle == LBPhotoBrowserViewPageStyleUIPageLabel) {
+        self.pageControl.hidden = YES;
+        self.pageLabel.hidden = NO;
+        self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",(long)LBPhotoBrowserManager.defaultManager.currentPage + 1,(unsigned long)self.models.count];
+
+    }else {
+        self.pageControl.hidden = NO;
+        self.pageLabel.hidden = YES;
+    }
+}
 #pragma mark - 处理cell中图片的显示
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

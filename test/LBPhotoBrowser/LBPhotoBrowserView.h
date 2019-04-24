@@ -16,6 +16,8 @@
 
 - (void)showImageViewsWithImages:(LBImagesMutableArray *)images andSeletedIndex:(int)index;
 
+- (void)pageStyleChange;
+
 @end
 
 
@@ -40,4 +42,5 @@
 - (void)loadImageWithCompletedBlock:(void (^)(LBScrollViewStatusModel *loadModel,UIImage *image, NSData *data, NSError *  error, BOOL finished, NSURL *imageURL))completedBlock;
 
 - (NSData *)diskImageDataBySearchingAllPathsForKey:( NSString *)key;
+
 @end

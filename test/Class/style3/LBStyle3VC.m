@@ -50,7 +50,9 @@
             LBPhotoWebItem *item = [[LBPhotoWebItem alloc]initWithURLString:urlModel.largeURLString frame:imageView.frame];
             [items addObject:item];
         }
+        
         [LBPhotoBrowserManager.defaultManager showImageWithWebItems:items selectedIndex:tag fromImageViewSuperView:wcell.contentView].lowGifMemory = YES;
+
         [[[LBPhotoBrowserManager.defaultManager addLongPressShowTitles:@[@"保存",@"识别二维码",@"取消"]] addTitleClickCallbackBlock:^(UIImage *image, NSIndexPath *indexPath, NSString *title, BOOL isGif, NSData *gifImageData) {
             LBPhotoBrowserLog(@"%@",title);
             if(![title isEqualToString:@"保存"]) return;
@@ -65,12 +67,9 @@
         [[LBPhotoBrowserManager defaultManager] addPlaceholdImageCallBackBlock:^UIImage *(NSIndexPath *indexPath) {
             return [UIImage imageNamed:@"placehold.jpeg"];
         }];
+        [LBPhotoBrowserManager defaultManager].pageStyle = LBPhotoBrowserViewPageStyleUIPageLabel;
     }];
     return cell;
 }
-
-
-
-
 
 @end

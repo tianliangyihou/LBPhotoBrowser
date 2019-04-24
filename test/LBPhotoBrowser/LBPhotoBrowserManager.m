@@ -206,6 +206,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
         _lock = dispatch_semaphore_create(1);
         _needPreloading = YES;
         _destroyImageNotNeedShow = NO;
+        _pageStyle = LBPhotoBrowserViewPageStyleUIPageControl;
     }
     return self;
 }
@@ -394,6 +395,7 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     self.needPreloading = YES;
     self.lowGifMemory = NO;
     self.destroyImageNotNeedShow = NO;
+    self.pageStyle = LBPhotoBrowserViewPageStyleUIPageControl;
     _photoBrowserView.hidden = YES;
     _photoBrowserView = nil;
     [self.linkageInfo removeAllObjects];
@@ -422,7 +424,6 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _titles = @[];
     _deleteItemBlock = nil;
 }
-
 
 - (void)changeKeyframe:(CADisplayLink *)displayLink
 {
@@ -493,6 +494,12 @@ static inline void resetManagerData(LBPhotoBrowserView *photoBrowseView, LBUrlsM
     _currentGifImage  = currentGifImage;
 }
 
+- (void)setPageStyle:(LBPhotoBrowserViewPageStyle)pageStyle {
+    _pageStyle = pageStyle;
+    if (_photoBrowserView) {
+        [_photoBrowserView pageStyleChange];
+    }
+}
 
 @end
 

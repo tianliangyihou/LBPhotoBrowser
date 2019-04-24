@@ -32,6 +32,11 @@
  |-------------------------LBPhotoBrowseView------------------------|       (最下层)
  */
 
+typedef NS_ENUM(NSInteger, LBPhotoBrowserViewPageStyle) {
+    LBPhotoBrowserViewPageStyleUIPageControl, // ·······
+    LBPhotoBrowserViewPageStyleUIPageLabel,  // 15/24
+};
+
 @interface LBPhotoWebItem : NSObject
 // 加载图片的url
 @property (nonatomic , copy)NSString *urlString;
@@ -126,6 +131,11 @@
 @property (nonatomic , strong, readonly)NSBundle *lb_resourceBundle;
 
 /**
+ 页码实现的style 默认LBPhotoBrowserViewPageStyleUIPageControl
+ */
+@property (nonatomic , assign)LBPhotoBrowserViewPageStyle pageStyle;
+
+/**
  返回当前的一个单例(不完全单利)
  */
 + (instancetype)defaultManager;
@@ -196,4 +206,5 @@
 - (UIView *(^)(UIImage *,NSIndexPath *))longPressCustomViewBlock;
 
 - (void (^)(NSIndexPath *, UIImage *))deleteItemBlock;
+
 @end
